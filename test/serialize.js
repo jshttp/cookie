@@ -1,24 +1,45 @@
 // builtin
 var assert = require('assert');
 
-var crumbs = require('..');
+var cookie = require('..');
 
-test('serialize', function() {
-    assert.equal('foo=bar', crumbs.serialize('foo', 'bar'));
+suite('serialize');
 
-    assert.equal('foo=bar; Path=/', crumbs.serialize('foo', 'bar', {
+test('basic', function() {
+    assert.equal('foo=bar', cookie.serialize('foo', 'bar'));
+    assert.equal('foo=bar%20baz', cookie.serialize('foo', 'bar baz'));
+});
+
+test('path', function() {
+    assert.equal('foo=bar; Path=/', cookie.serialize('foo', 'bar', {
         path: '/'
     }));
+});
 
-    assert.equal('foo=bar; Secure', crumbs.serialize('foo', 'bar', {
+test('secure', function() {
+    assert.equal('foo=bar; Secure', cookie.serialize('foo', 'bar', {
         secure: true
     }));
 
-    assert.equal('foo=bar; Domain=example.com', crumbs.serialize('foo', 'bar', {
+    assert.equal('foo=bar', cookie.serialize('foo', 'bar', {
+        secure: false
+    }));
+});
+
+test('domain', function() {
+    assert.equal('foo=bar; Domain=example.com', cookie.serialize('foo', 'bar', {
         domain: 'example.com'
     }));
+});
 
-    assert.equal('foo=bar; HttpOnly', crumbs.serialize('foo', 'bar', {
+test('httpOnly', function() {
+    assert.equal('foo=bar; HttpOnly', cookie.serialize('foo', 'bar', {
         httpOnly: true
     }));
 });
+
+test('parse->serialize', function() {
+    assert.deepEqual({ cat: 'foo=123&name=baz five' }, cookie.parse(
+      cookie.serialize('cat', 'foo=123&name=baz five')));
+});
+
