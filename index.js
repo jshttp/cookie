@@ -13,7 +13,7 @@ var serialize = function(name, val, opt){
     var pairs = [name + '=' + encodeURIComponent(val)];
     opt = opt || {};
 
-    if (opt.maxAge) pais.push('Max-Age=' + opt.maxAge);
+    if (opt.maxAge) pairs.push('Max-Age=' + opt.maxAge);
     if (opt.domain) pairs.push('Domain=' + opt.domain);
     if (opt.path) pairs.push('Path=' + opt.path);
     if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
