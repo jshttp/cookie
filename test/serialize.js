@@ -38,6 +38,12 @@ test('httpOnly', function() {
     }));
 });
 
+test('maxAge', function() {
+    assert.equal('foo=bar; Max-Age=1000', cookie.serialize('foo', 'bar', {
+        maxAge: 1000
+    }));
+});
+
 test('parse->serialize', function() {
     assert.deepEqual({ cat: 'foo=123&name=baz five' }, cookie.parse(
       cookie.serialize('cat', 'foo=123&name=baz five')));
