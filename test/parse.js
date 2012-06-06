@@ -16,10 +16,10 @@ test('ignore spaces', function() {
 });
 
 test('escaping', function() {
-    assert.deepEqual({ foo: 'bar=123456789&name=Magic Mouse' },
+    assert.deepEqual({ foo: 'bar=123456789&name=Magic+Mouse' },
             cookie.parse('foo="bar=123456789&name=Magic+Mouse"'));
 
-    assert.deepEqual({ email: 'foo+bar@baz.com' },
-            cookie.parse('email=foo%2Bbar@baz.com'));
+    assert.deepEqual({ email: ' ",;/' },
+            cookie.parse('email=%20%22%2c%3b%2f'));
 });
 

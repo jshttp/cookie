@@ -10,7 +10,7 @@
 /// @param {Object} options
 /// @return {String}
 var serialize = function(name, val, opt){
-    var pairs = [name + '=' + encodeURIComponent(val)];
+    var pairs = [name + '=' + encode(val)];
     opt = opt || {};
 
     if (opt.maxAge) pairs.push('Max-Age=' + opt.maxAge);
@@ -43,20 +43,38 @@ var parse = function(str) {
 
         // only assign once
         if (undefined == obj[key]) {
-            val = val.replace(/\+/g, ' ');
-            try {
-                obj[key] = decodeURIComponent(val);
-            } catch (err) {
-                if (err instanceof URIError) {
-                    obj[key] = val;
-                } else {
-                    throw err;
-                }
-            }
+            obj[key] = decode(val);
         }
     });
 
     return obj;
+};
+
+var encode = function(str) {
+    return str.replace(/[ ",;/]/g, function(val) {
+        switch(val) {
+        case ' ': return '%20';
+        case '"': return '%22';
+        case ',': return '%2c';
+        case '/': return '%2f';
+        case ';': return '%3b';
+        }
+    });
+};
+
+var decode = function(str) {
+    return str.replace(/(%2[02cfCF])|(%3[bB])/g, function(val) {
+        switch(val) {
+        case '%20': return ' ';
+        case '%22': return '"';
+        case '%2C':
+        case '%2c': return ',';
+        case '%2F':
+        case '%2f': return '/';
+        case '%3B':
+        case '%3b': return ';';
+        }
+    });
 };
 
 module.exports.serialize = serialize;

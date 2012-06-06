@@ -44,8 +44,16 @@ test('maxAge', function() {
     }));
 });
 
+test('escaping', function() {
+    assert.deepEqual('cat=+%20', cookie.serialize('cat', '+ '));
+});
+
 test('parse->serialize', function() {
+
     assert.deepEqual({ cat: 'foo=123&name=baz five' }, cookie.parse(
       cookie.serialize('cat', 'foo=123&name=baz five')));
+
+    assert.deepEqual({ cat: ' ";/' }, cookie.parse(
+      cookie.serialize('cat', ' ";/')));
 });
 
