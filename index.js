@@ -29,7 +29,7 @@ var serialize = function(name, val, opt){
 /// @return {Object}
 var parse = function(str) {
     var obj = {}
-    var pairs = str.split(/[;,] */);
+    var pairs = str.split(/[;] */);
 
     pairs.forEach(function(pair) {
         var eq_idx = pair.indexOf('=')
