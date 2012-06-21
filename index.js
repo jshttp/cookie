@@ -50,32 +50,8 @@ var parse = function(str) {
     return obj;
 };
 
-var encode = function(str) {
-    return str.replace(/[ ",;/]/g, function(val) {
-        switch(val) {
-        case ' ': return '%20';
-        case '"': return '%22';
-        case ',': return '%2c';
-        case '/': return '%2f';
-        case ';': return '%3b';
-        }
-    });
-};
-
-var decode = function(str) {
-    return str.replace(/(%2[02cfCF])|(%3[bB])/g, function(val) {
-        switch(val) {
-        case '%20': return ' ';
-        case '%22': return '"';
-        case '%2C':
-        case '%2c': return ',';
-        case '%2F':
-        case '%2f': return '/';
-        case '%3B':
-        case '%3b': return ';';
-        }
-    });
-};
+var encode = encodeURIComponent;
+var decode = decodeURIComponent;
 
 module.exports.serialize = serialize;
 module.exports.parse = parse;

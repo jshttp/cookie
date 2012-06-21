@@ -45,7 +45,7 @@ test('maxAge', function() {
 });
 
 test('escaping', function() {
-    assert.deepEqual('cat=+%20', cookie.serialize('cat', '+ '));
+    assert.deepEqual('cat=%2B%20', cookie.serialize('cat', '+ '));
 });
 
 test('parse->serialize', function() {
