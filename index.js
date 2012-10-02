@@ -1,4 +1,3 @@
-
 /// Serialize the a name value pair into a cookie string suitable for
 /// http headers. An optional options object specified cookie parameters
 ///
@@ -43,7 +42,10 @@ var parse = function(str) {
 
         // only assign once
         if (undefined == obj[key]) {
+            try{
             obj[key] = decode(val);
+            }
+            catch(err){}
         }
     });
 
