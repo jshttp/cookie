@@ -43,7 +43,11 @@ var parse = function(str) {
 
         // only assign once
         if (undefined == obj[key]) {
-            obj[key] = decode(val);
+            try {
+                obj[key] = decode(val);
+            } catch (e) {
+                obj[key] = val;
+            }
         }
     });
 
