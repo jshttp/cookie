@@ -23,3 +23,6 @@ test('escaping', function() {
             cookie.parse('email=%20%22%2c%3b%2f'));
 });
 
+test('ignore escaping error and return original value', function() {
+    assert.deepEqual({ foo: '%1', bar: 'bar' }, cookie.parse('foo=%1;bar=bar'));
+});
