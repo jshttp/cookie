@@ -23,6 +23,11 @@ test('escaping', function() {
             cookie.parse('email=%20%22%2c%3b%2f'));
 });
 
+test('parse limit', function() {
+    assert.deepEqual({ bar: '123456789' },
+            cookie.parse('bar=123456789; name=Magic+Mouse', 1));
+});
+
 test('ignore escaping error and return original value', function() {
     assert.deepEqual({ foo: '%1', bar: 'bar' }, cookie.parse('foo=%1;bar=bar'));
 });
