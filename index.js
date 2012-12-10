@@ -26,10 +26,11 @@ var serialize = function(name, val, opt){
 /// Parse the given cookie header string into an object
 /// The object has the various cookies as keys(names) => values
 /// @param {String} str
+//  @param {Number} limit ,the max cookie pair to parse
 /// @return {Object}
-var parse = function(str) {
-    var obj = {}
-    var pairs = str.split(/[;,] */);
+var parse = function(str, limit) {
+    var obj = {};
+    var pairs = str.split(/[;,] */, limit ? limit : maxCookies);
 
     pairs.forEach(function(pair) {
         var eq_idx = pair.indexOf('=')
@@ -57,5 +58,11 @@ var parse = function(str) {
 var encode = encodeURIComponent;
 var decode = decodeURIComponent;
 
+var maxCookies = 1000;
+var setMaxCookies = function (n) {
+  maxCookies = n;
+};
+
 module.exports.serialize = serialize;
 module.exports.parse = parse;
+module.exports.setMaxCookies = setMaxCookies;

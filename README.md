@@ -18,6 +18,9 @@ var hdr = cookie.serialize('foo', 'bar');
 
 var cookies = cookie.parse('foo=bar; cat=meow; dog=ruff');
 // cookies = { foo: 'bar', cat: 'meow', dog: 'ruff' };
+
+var cookies = cookie.parse('foo=bar; cat=meow; dog=ruff', 2);
+// cookies = { foo: 'bar', cat: 'meow'};
 ```
 
 ## more
