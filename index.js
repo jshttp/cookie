@@ -11,8 +11,8 @@
 /// @return {String}
 var serialize = function(name, val, opt){
     opt = opt || {};
-    opt.encode = opt.encode || encode;
-    var pairs = [name + '=' + opt.encode(val)];
+    var enc = opt.encode || encode;
+    var pairs = [name + '=' + enc(val)];
 
     if (opt.maxAge) pairs.push('Max-Age=' + opt.maxAge);
     if (opt.domain) pairs.push('Domain=' + opt.domain);
@@ -29,10 +29,10 @@ var serialize = function(name, val, opt){
 /// @param {String} str
 /// @return {Object}
 var parse = function(str, opt) {
+    opt = opt || {};
     var obj = {}
     var pairs = str.split(/[;,] */);
-    opt = opt || {};
-    opt.decode = opt.decode || decode;
+    var dec = opt.decode || decode;
 
     pairs.forEach(function(pair) {
         var eq_idx = pair.indexOf('=')
@@ -53,7 +53,7 @@ var parse = function(str, opt) {
         // only assign once
         if (undefined == obj[key]) {
             try {
-                obj[key] = opt.decode(val);
+                obj[key] = dec(val);
             } catch (e) {
                 obj[key] = val;
             }
