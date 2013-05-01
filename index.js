@@ -10,8 +10,9 @@
 /// @param {Object} options
 /// @return {String}
 var serialize = function(name, val, opt){
-    var pairs = [name + '=' + encode(val)];
     opt = opt || {};
+    opt.encode = opt.encode || encode;
+    var pairs = [name + '=' + opt.encode(val)];
 
     if (opt.maxAge) pairs.push('Max-Age=' + opt.maxAge);
     if (opt.domain) pairs.push('Domain=' + opt.domain);
@@ -27,9 +28,11 @@ var serialize = function(name, val, opt){
 /// The object has the various cookies as keys(names) => values
 /// @param {String} str
 /// @return {Object}
-var parse = function(str) {
+var parse = function(str, opt) {
     var obj = {}
     var pairs = str.split(/[;,] */);
+    opt = opt || {};
+    opt.decode = opt.decode || decode;
 
     pairs.forEach(function(pair) {
         var eq_idx = pair.indexOf('=')
@@ -50,7 +53,7 @@ var parse = function(str) {
         // only assign once
         if (undefined == obj[key]) {
             try {
-                obj[key] = decode(val);
+                obj[key] = opt.decode(val);
             } catch (e) {
                 obj[key] = val;
             }
