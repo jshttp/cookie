@@ -24,7 +24,7 @@
   [ { "type" : "MIT"
     , "url" : "https://raw.github.com/shtylman/node-cookie/master/LICENSE"
     }
-  ]  
+  ], 
   "engines": {
     "node": "*"
   }
