@@ -20,6 +20,11 @@
     "mocha": "1.x.x"
   },
   "optionalDependencies": {},
+  "licenses" :
+  [ { "type" : "MIT"
+    , "url" : "https://raw.github.com/shtylman/node-cookie/master/LICENSE"
+    }
+  ]  
   "engines": {
     "node": "*"
   }
