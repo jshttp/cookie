@@ -24,6 +24,14 @@ var serialize = function(name, val, opt){
     return pairs.join('; ');
 };
 
+var regexTrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+var trim = function (str){
+    if(str.trim){
+        return str.trim();
+    }
+    return str.replace(regexTrim, "");
+}
+
 /// Parse the given cookie header string into an object
 /// The object has the various cookies as keys(names) => values
 /// @param {String} str
@@ -34,16 +42,18 @@ var parse = function(str, opt) {
     var pairs = str.split(/[;,] */);
     var dec = opt.decode || decode;
 
-    pairs.forEach(function(pair) {
+    var len = pairs.length;
+    for(var i = 0; i < len ; i++){
+        var pair = pairs[i];
         var eq_idx = pair.indexOf('=')
 
         // skip things that don't look like key=value
         if (eq_idx < 0) {
-            return;
+            continue;
         }
 
-        var key = pair.substr(0, eq_idx).trim()
-        var val = pair.substr(++eq_idx, pair.length).trim();
+        var key = trim(pair.substr(0, eq_idx));
+        var val = trim(pair.substr(++eq_idx, pair.length));
 
         // quoted values
         if ('"' == val[0]) {
@@ -58,7 +68,7 @@ var parse = function(str, opt) {
                 obj[key] = val;
             }
         }
-    });
+    };
 
     return obj;
 };
