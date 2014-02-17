@@ -41,4 +41,11 @@ test('unencoded', function() {
             cookie.parse('email=%20%22%2c%3b%2f',{
                 decode: function(value) { return value; }
             }));
+});
+
+test('dates', function() {
+    assert.deepEqual({ priority: 'true', Path: '/', expires: 'Wed, 29 Jan 2014 17:43:25 GMT' },
+            cookie.parse('priority=true; expires=Wed, 29 Jan 2014 17:43:25 GMT; Path=/',{
+                decode: function(value) { return value; }
+            }));
 })
