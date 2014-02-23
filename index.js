@@ -14,7 +14,12 @@ var serialize = function(name, val, opt){
     var enc = opt.encode || encode;
     var pairs = [name + '=' + enc(val)];
 
-    if (opt.maxAge) pairs.push('Max-Age=' + opt.maxAge);
+    if (null != opt.maxAge) {
+        var maxAge = opt.maxAge - 0;
+        if (isNaN(maxAge)) throw new Error('maxAge should be convertable to Number');
+        pairs.push('Max-Age=' + maxAge);
+    }
+
     if (opt.domain) pairs.push('Domain=' + opt.domain);
     if (opt.path) pairs.push('Path=' + opt.path);
     if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());

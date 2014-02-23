@@ -42,6 +42,10 @@ test('maxAge', function() {
     assert.equal('foo=bar; Max-Age=1000', cookie.serialize('foo', 'bar', {
         maxAge: 1000
     }));
+
+    assert.equal('foo=bar; Max-Age=0', cookie.serialize('foo', 'bar', {
+        maxAge: 0
+    }));
 });
 
 test('escaping', function() {
