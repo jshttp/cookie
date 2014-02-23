@@ -16,7 +16,7 @@ var serialize = function(name, val, opt){
 
     if (null != opt.maxAge) {
         var maxAge = opt.maxAge - 0;
-        if (isNaN(maxAge)) throw new Error('maxAge should be convertable to Number');
+        if (isNaN(maxAge)) throw new Error('maxAge should be convertible to Number');
         pairs.push('Max-Age=' + maxAge);
     }
 
