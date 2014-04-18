@@ -14,17 +14,24 @@ var serialize = function(name, val, opt){
     var enc = opt.encode || encode;
     var pairs = [name + '=' + enc(val)];
 
-    if (null != opt.maxAge) {
-        var maxAge = opt.maxAge - 0;
+    var maxAge = null != opt.maxAge ? opt.maxAge : opt.MaxAge;
+    if (null != maxAge) {
+        maxAge = maxAge - 0;
         if (isNaN(maxAge)) throw new Error('maxAge should be a Number');
         pairs.push('Max-Age=' + maxAge);
     }
 
-    if (opt.domain) pairs.push('Domain=' + opt.domain);
-    if (opt.path) pairs.push('Path=' + opt.path);
-    if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
-    if (opt.httpOnly) pairs.push('HttpOnly');
-    if (opt.secure) pairs.push('Secure');
+    var domain = opt.domain || opt.Domain;
+    var path = opt.path || opt.Path;
+    var expires = opt.expires || opt.Expires;
+    var httpOnly = opt.httpOnly || opt.HttpOnly;
+    var secure = opt.secure || opt.Secure;
+
+    if (domain) pairs.push('Domain=' + domain);
+    if (path) pairs.push('Path=' + path);
+    if (expires) pairs.push('Expires=' + expires.toUTCString());
+    if (httpOnly) pairs.push('HttpOnly');
+    if (secure) pairs.push('Secure');
 
     return pairs.join('; ');
 };
@@ -40,14 +47,19 @@ var parse = function(str, opt) {
     var dec = opt.decode || decode;
 
     pairs.forEach(function(pair) {
-        var eq_idx = pair.indexOf('=')
+        var eq_idx = pair.indexOf('=');
 
-        // skip things that don't look like key=value
+        // skip things that don't look like key=value unless they're Secure or httpOnly
         if (eq_idx < 0) {
+            if (pair.match(/^secure(;|$)/i))
+                obj['secure'] = true;
+            else if (pair.match(/^httponly(;|$)/i))
+                obj['httpOnly'] = true;
+
             return;
         }
 
-        var key = pair.substr(0, eq_idx).trim()
+        var key = pair.substr(0, eq_idx).trim();
         var val = pair.substr(++eq_idx, pair.length).trim();
 
         // quoted values
