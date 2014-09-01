@@ -5,7 +5,7 @@
   "version": "0.1.2",
   "repository": {
     "type": "git",
-    "url": "git://github.com/shtylman/node-cookie.git"
+    "url": "git://github.com/jshttp/cookie.git"
   },
   "keywords": [
     "cookie",
