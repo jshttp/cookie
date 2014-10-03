@@ -36,7 +36,7 @@ var serialize = function(name, val, opt){
 var parse = function(str, opt) {
     opt = opt || {};
     var obj = {}
-    var pairs = str.split(/; */);
+    var pairs = (str || "").split(/; */);
     var dec = opt.decode || decode;
 
     pairs.forEach(function(pair) {
