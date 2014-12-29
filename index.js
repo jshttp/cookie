@@ -9,67 +9,93 @@
 /// @param {String} val
 /// @param {Object} options
 /// @return {String}
-var serialize = function(name, val, opt){
-    opt = opt || {};
-    var enc = opt.encode || encode;
-    var pairs = [name + '=' + enc(val)];
+function serialize(name, val, opt) {
+  var enc = (opt && opt.encode) || encode,
+      ret,
+      val;
 
-    if (null != opt.maxAge) {
-        var maxAge = opt.maxAge - 0;
-        if (isNaN(maxAge)) throw new Error('maxAge should be a Number');
-        pairs.push('Max-Age=' + maxAge);
+  ret = name;
+  ret += '=';
+  ret += enc(val);
+
+  if (opt) {
+    if (opt.maxAge != null) {
+      var maxAge = opt.maxAge - 0;
+      if (isNaN(maxAge))
+        throw new Error('maxAge should be a Number');
+      ret += '; Max-Age=';
+      ret += maxAge;
     }
+    if (val = opt.domain) {
+      ret += '; Domain=';
+      ret += val;
+    }
+    if (val = opt.path) {
+      ret += '; Path=';
+      ret += val;
+    }
+    if (val = opt.expires) {
+      ret += '; Expires=';
+      ret += val.toUTCString();
+    }
+    if (opt.httpOnly)
+      ret += '; HttpOnly';
+    if (opt.secure)
+      ret += '; Secure';
+  }
 
-    if (opt.domain) pairs.push('Domain=' + opt.domain);
-    if (opt.path) pairs.push('Path=' + opt.path);
-    if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
-    if (opt.httpOnly) pairs.push('HttpOnly');
-    if (opt.secure) pairs.push('Secure');
-
-    return pairs.join('; ');
-};
+  return ret;
+}
 
 /// Parse the given cookie header string into an object
 /// The object has the various cookies as keys(names) => values
 /// @param {String} str
 /// @return {Object}
-var parse = function(str, opt) {
-    opt = opt || {};
-    var obj = {}
-    var pairs = str.split(/; */);
-    var dec = opt.decode || decode;
+var RE_SEP = /; */;
+function parse(str, opt) {
+  var pairs = str.split(RE_SEP),
+      dec = (opt && opt.decode) || decode,
+      obj = {},
+      pair,
+      key,
+      val,
+      eq;
 
-    pairs.forEach(function(pair) {
-        var eq_idx = pair.indexOf('=')
+  for (var i = 0, len = pairs.length; i < len; ++i) {
+    pair = pairs[i];
+    eq = pair.indexOf('=');
 
-        // skip things that don't look like key=value
-        if (eq_idx < 0) {
-            return;
-        }
+    if (~eq) {
+      key = pair.substring(0, eq);
+      val = pair.substring(++eq);
 
-        var key = pair.substr(0, eq_idx).trim()
-        var val = pair.substr(++eq_idx, pair.length).trim();
+      if (val[0] === '"')
+        val = val.slice(1, -1);
 
-        // quoted values
-        if ('"' == val[0]) {
-            val = val.slice(1, -1);
-        }
+      if (obj[key] === undefined) {
+        if (~val.indexOf('%'))
+          obj[key] = tryDecode(val, dec);
+        else
+          obj[key] = val;
+      }
+    }
+  }
 
-        // only assign once
-        if (undefined == obj[key]) {
-            try {
-                obj[key] = dec(val);
-            } catch (e) {
-                obj[key] = val;
-            }
-        }
-    });
+  return obj;
+}
 
-    return obj;
-};
+function tryDecode(v, dec) {
+  var ret;
+  try {
+    ret = dec(v);
+  } catch (e) {
+    ret = v;
+  }
+  return ret;
+}
 
-var encode = encodeURIComponent;
-var decode = decodeURIComponent;
+var decode = decodeURIComponent,
+    encode = encodeURIComponent;
 
-module.exports.serialize = serialize;
-module.exports.parse = parse;
+exports.serialize = serialize;
+exports.parse = parse;
