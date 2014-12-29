@@ -56,11 +56,7 @@ function parse(str, options) {
 
     // only assign once
     if (undefined == obj[key]) {
-      try {
-        obj[key] = dec(val);
-      } catch (e) {
-        obj[key] = val;
-      }
+      obj[key] = tryDecode(val, dec);
     }
   });
 
@@ -101,4 +97,20 @@ function serialize(name, val, options) {
   if (opt.secure) pairs.push('Secure');
 
   return pairs.join('; ');
+}
+
+/**
+ * Try decoding a string using a decoding function.
+ *
+ * @param {string} str
+ * @param {function} decode
+ * @private
+ */
+
+function tryDecode(str, decode) {
+  try {
+    return decode(str);
+  } catch (e) {
+    return str;
+  }
 }
