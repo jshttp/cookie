@@ -2,6 +2,7 @@ unreleased
 ==========
 
   * perf: enable strict mode
+  * perf: use string concatination for serialization
 
 0.2.3 / 2015-10-25
 ==================

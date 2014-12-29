@@ -111,12 +111,12 @@ function serialize(name, val, options) {
     throw new TypeError('argument val is invalid');
   }
 
-  var pairs = [name + '=' + value];
+  var str = name + '=' + value;
 
   if (null != opt.maxAge) {
     var maxAge = opt.maxAge - 0;
     if (isNaN(maxAge)) throw new Error('maxAge should be a Number');
-    pairs.push('Max-Age=' + Math.floor(maxAge));
+    str += '; Max-Age=' + Math.floor(maxAge);
   }
 
   if (opt.domain) {
@@ -124,7 +124,7 @@ function serialize(name, val, options) {
       throw new TypeError('option domain is invalid');
     }
 
-    pairs.push('Domain=' + opt.domain);
+    str += '; Domain=' + opt.domain;
   }
 
   if (opt.path) {
@@ -132,15 +132,26 @@ function serialize(name, val, options) {
       throw new TypeError('option path is invalid');
     }
 
-    pairs.push('Path=' + opt.path);
+    str += '; Path=' + opt.path;
   }
 
-  if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
-  if (opt.httpOnly) pairs.push('HttpOnly');
-  if (opt.secure) pairs.push('Secure');
-  if (opt.firstPartyOnly) pairs.push('First-Party-Only');
+  if (opt.expires) {
+    str += '; Expires=' + opt.expires.toUTCString();
+  }
 
-  return pairs.join('; ');
+  if (opt.httpOnly) {
+    str += '; HttpOnly';
+  }
+
+  if (opt.secure) {
+    str += '; Secure';
+  }
+
+  if (opt.firstPartyOnly) {
+    str += '; First-Party-Only';
+  }
+
+  return str;
 }
 
 /**
