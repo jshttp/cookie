@@ -3,6 +3,7 @@ unreleased
 
   * Add `firstPartyOnly` option
   * Throw better error for invalid argument to parse
+  * perf: hoist regular expression
 
 0.1.3 / 2015-05-19
 ==================

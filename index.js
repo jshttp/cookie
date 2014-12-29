@@ -19,6 +19,7 @@ exports.serialize = serialize;
 
 var decode = decodeURIComponent;
 var encode = encodeURIComponent;
+var pairSplitRegExp = /; */;
 
 /**
  * Parse a cookie header.
@@ -39,7 +40,7 @@ function parse(str, options) {
 
   var obj = {}
   var opt = options || {};
-  var pairs = str.split(/; */);
+  var pairs = str.split(pairSplitRegExp);
   var dec = opt.decode || decode;
 
   pairs.forEach(function(pair) {
