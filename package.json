@@ -1,27 +1,21 @@
 {
-  "author": "Roman Shtylman <shtylman@gmail.com>",
   "name": "cookie",
   "description": "cookie parsing and serialization",
   "version": "0.1.2",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jshttp/cookie.git"
-  },
+  "author": "Roman Shtylman <shtylman@gmail.com>",
+  "license": "MIT",
   "keywords": [
     "cookie",
     "cookies"
   ],
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha"
-  },
-  "dependencies": {},
+  "repository": "jshttp/cookie",
   "devDependencies": {
     "mocha": "1.x.x"
   },
-  "optionalDependencies": {},
   "engines": {
     "node": "*"
   },
-  "license": "MIT"
+  "scripts": {
+    "test": "mocha"
+  }
 }
