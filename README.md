@@ -1,4 +1,9 @@
-# cookie [![Build Status](https://secure.travis-ci.org/jshttp/cookie.svg?branch=master)](http://travis-ci.org/jshttp/cookie) #
+# cookie
+
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+[![Node.js Version][node-version-image]][node-version-url]
+[![Build Status][travis-image]][travis-url]
 
 cookie is a basic cookie parser and serializer. It doesn't make assumptions about how you are going to deal with your cookies. It basically just provides a way to read and write the HTTP cookie headers.
 
@@ -42,3 +47,15 @@ The serialize function takes a third parameter, an object, to set cookie options
 ### httpOnly
 > true or false
 
+## License
+
+[MIT](LICENSE)
+
+[npm-image]: https://img.shields.io/npm/v/cookie.svg
+[npm-url]: https://npmjs.org/package/cookie
+[node-version-image]: https://img.shields.io/node/v/cookie.svg
+[node-version-url]: http://nodejs.org/download/
+[travis-image]: https://img.shields.io/travis/jshttp/cookie/master.svg
+[travis-url]: https://travis-ci.org/jshttp/cookie
+[downloads-image]: https://img.shields.io/npm/dm/cookie.svg
+[downloads-url]: https://npmjs.org/package/cookie
