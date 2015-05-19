@@ -10,11 +10,6 @@ test('basic', function() {
     assert.deepEqual({ foo: '123' }, cookie.parse('foo=123'));
 });
 
-test('ignore spaces', function() {
-    assert.deepEqual({ FOO: 'bar', baz: 'raz' },
-            cookie.parse('FOO    = bar;   baz  =   raz'));
-});
-
 test('escaping', function() {
     assert.deepEqual({ foo: 'bar=123456789&name=Magic+Mouse' },
             cookie.parse('foo="bar=123456789&name=Magic+Mouse"'));
