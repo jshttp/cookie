@@ -12,6 +12,11 @@
   "devDependencies": {
     "mocha": "1.x.x"
   },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "index.js"
+  ],
   "engines": {
     "node": "*"
   },
