@@ -27,14 +27,14 @@ var encode = encodeURIComponent;
  * The object has the various cookies as keys(names) => values
  *
  * @param {string} str
- * @param {object} [opt]
+ * @param {object} [options]
  * @return {string}
  * @public
  */
 
-function parse(str, opt) {
-  opt = opt || {};
+function parse(str, options) {
   var obj = {}
+  var opt = options || {};
   var pairs = str.split(/; */);
   var dec = opt.decode || decode;
 
@@ -78,13 +78,13 @@ function parse(str, opt) {
  *
  * @param {string} name
  * @param {string} val
- * @param {object} [opt]
+ * @param {object} [options]
  * @return {string}
  * @public
  */
 
-function serialize(name, val, opt) {
-  opt = opt || {};
+function serialize(name, val, options) {
+  var opt = options || {};
   var enc = opt.encode || encode;
   var pairs = [name + '=' + enc(val)];
 
