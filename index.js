@@ -99,6 +99,7 @@ function serialize(name, val, options) {
   if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
   if (opt.httpOnly) pairs.push('HttpOnly');
   if (opt.secure) pairs.push('Secure');
+  if (opt.firstPartyOnly) pairs.push('First-Party-Only');
 
   return pairs.join('; ');
 }
