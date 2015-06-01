@@ -48,6 +48,16 @@ test('maxAge', function() {
     }));
 });
 
+test('firstPartyOnly', function() {
+    assert.equal('foo=bar; First-Party-Only', cookie.serialize('foo', 'bar', {
+        firstPartyOnly: true
+    }));
+    
+    assert.equal('foo=bar', cookie.serialize('foo', 'bar', {
+        firstPartyOnly: false
+    }));
+});
+
 test('escaping', function() {
     assert.deepEqual('cat=%2B%20', cookie.serialize('cat', '+ '));
 });
