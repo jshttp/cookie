@@ -33,6 +33,10 @@ var encode = encodeURIComponent;
  */
 
 function parse(str, options) {
+  if (typeof str !== 'string') {
+    throw new TypeError('argument str must be a string');
+  }
+
   var obj = {}
   var opt = options || {};
   var pairs = str.split(/; */);

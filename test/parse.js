@@ -5,6 +5,11 @@ var cookie = require('..');
 
 suite('parse');
 
+test('argument validation', function() {
+    assert.throws(cookie.parse.bind(), /argument str must be a string/);
+    assert.throws(cookie.parse.bind(null, 42), /argument str must be a string/);
+});
+
 test('basic', function() {
     assert.deepEqual({ foo: 'bar' }, cookie.parse('foo=bar'));
     assert.deepEqual({ foo: '123' }, cookie.parse('foo=123'));
