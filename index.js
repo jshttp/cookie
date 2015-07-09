@@ -28,7 +28,7 @@ var encode = encodeURIComponent;
  *
  * @param {string} str
  * @param {object} [options]
- * @return {string}
+ * @return {object}
  * @public
  */
 
@@ -37,20 +37,20 @@ function parse(str, options) {
     throw new TypeError('argument str must be a string');
   }
 
-  var obj = {}
-  var opt = options || {};
+  var obj = {};
+  var opt = typeof options === 'object' ? options : {};
   var pairs = str.split(/; */);
-  var dec = opt.decode || decode;
+  var dec = typeof opt.decode === 'function' ? opt.decode : decode;
 
   pairs.forEach(function(pair) {
-    var eq_idx = pair.indexOf('=')
+    var eq_idx = pair.indexOf('=');
 
     // skip things that don't look like key=value
     if (eq_idx < 0) {
       return;
     }
 
-    var key = pair.substr(0, eq_idx).trim()
+    var key = pair.substr(0, eq_idx).trim();
     var val = pair.substr(++eq_idx, pair.length).trim();
 
     // quoted values
@@ -59,7 +59,7 @@ function parse(str, options) {
     }
 
     // only assign once
-    if (undefined == obj[key]) {
+    if (!obj.hasOwnProperty(key)) {
       obj[key] = tryDecode(val, dec);
     }
   });
@@ -84,21 +84,25 @@ function parse(str, options) {
  */
 
 function serialize(name, val, options) {
-  var opt = options || {};
-  var enc = opt.encode || encode;
-  var pairs = [name + '=' + enc(val)];
-
-  if (null != opt.maxAge) {
-    var maxAge = opt.maxAge - 0;
-    if (isNaN(maxAge)) throw new Error('maxAge should be a Number');
-    pairs.push('Max-Age=' + maxAge);
+  if (typeof name !== 'string') {
+    throw new Error('argument name must be a string');
+  }
+  if (typeof val !== 'string') {
+    throw new Error('argument val must be a string');
   }
 
-  if (opt.domain) pairs.push('Domain=' + opt.domain);
-  if (opt.path) pairs.push('Path=' + opt.path);
-  if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
-  if (opt.httpOnly) pairs.push('HttpOnly');
-  if (opt.secure) pairs.push('Secure');
+  var opt = typeof options === 'object' ? options : {};
+  var enc = typeof opt.encode === 'function' ? opt.encode : encode;
+  var pairs = [name + '=' + enc(val)];
+
+  (typeof opt.maxAge === 'number' || opt.maxAge === '0' || ~~opt.maxAge !== 0)
+    && pairs.push('Max-Age=' + ~~opt.maxAge);
+  typeof opt.domain === 'string' && pairs.push('Domain=' + opt.domain);
+  typeof opt.path === 'string' && pairs.push('Path=' + opt.path);
+  Date.parse(opt.expires)
+    && pairs.push('Expires=' + (new Date(opt.expires)).toUTCString());
+  opt.httpOnly && pairs.push('HttpOnly');
+  opt.secure && pairs.push('Secure');
 
   return pairs.join('; ');
 }
