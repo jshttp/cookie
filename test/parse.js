@@ -53,4 +53,13 @@ test('dates', function() {
             cookie.parse('priority=true; expires=Wed, 29 Jan 2014 17:43:25 GMT; Path=/',{
                 decode: function(value) { return value; }
             }));
-})
+});
+
+test('assign only once', function() {
+    assert.deepEqual({ foo: '%1', bar: 'bar' },
+        cookie.parse('foo=%1;bar=bar;foo=boo'));
+    assert.deepEqual({ foo: 'false', bar: 'bar' },
+        cookie.parse('foo=false;bar=bar;foo=true'));
+    assert.deepEqual({ foo: '', bar: 'bar' },
+        cookie.parse('foo=;bar=bar;foo=boo'));
+});
