@@ -28,7 +28,7 @@ var encode = encodeURIComponent;
  *
  * @param {string} str
  * @param {object} [options]
- * @return {string}
+ * @return {object}
  * @public
  */
 
