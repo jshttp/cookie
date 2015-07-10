@@ -11,6 +11,7 @@ test('basic', function() {
     assert.equal('foo=', cookie.serialize('foo', ''));
     assert.throws(cookie.serialize.bind(cookie, 'foo\n', 'bar'), /argument name is invalid/);
     assert.throws(cookie.serialize.bind(cookie, 'foo\u280a', 'bar'), /argument name is invalid/);
+    assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {encode: 42}), /option encode is invalid/);
 });
 
 test('path', function() {

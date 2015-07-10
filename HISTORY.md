@@ -3,6 +3,7 @@ unreleased
 
   * Add `sameSite` option
     - Replaces `firstPartyOnly` option, never implemented by browsers
+  * Improve error message when `encode` is not a function
 
 0.2.4 / 2016-05-20
 ==================

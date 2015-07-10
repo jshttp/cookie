@@ -102,6 +102,10 @@ function serialize(name, val, options) {
   var opt = options || {};
   var enc = opt.encode || encode;
 
+  if (typeof enc !== 'function') {
+    throw new TypeError('option encode is invalid');
+  }
+
   if (!fieldContentRegExp.test(name)) {
     throw new TypeError('argument name is invalid');
   }
