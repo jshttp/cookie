@@ -65,4 +65,4 @@ test('unencoded', function() {
     assert.deepEqual('cat=+ ', cookie.serialize('cat', '+ ', {
         encode: function(value) { return value; }
     }));
-})
+});
