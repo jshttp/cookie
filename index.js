@@ -84,6 +84,13 @@ function parse(str, options) {
  */
 
 function serialize(name, val, options) {
+  if (typeof name !== 'string') {
+    throw new TypeError('argument name must be a string');
+  }
+  if (typeof val !== 'string') {
+    throw new TypeError('argument val must be a string');
+  }
+
   var opt = options || {};
   var enc = opt.encode || encode;
   var pairs = [name + '=' + enc(val)];

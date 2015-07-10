@@ -6,8 +6,21 @@ var cookie = require('..');
 suite('parse');
 
 test('argument validation', function() {
-    assert.throws(cookie.parse.bind(), /argument str must be a string/);
-    assert.throws(cookie.parse.bind(null, 42), /argument str must be a string/);
+  var errMessage = /argument str must be a string/;
+
+  assert.throws(cookie.parse.bind(), errMessage);
+
+  assert.throws(cookie.parse.bind(null, 1010), errMessage);
+
+  assert.throws(cookie.parse.bind(null, true), errMessage);
+
+  assert.throws(cookie.parse.bind(null, (function() {return;})), errMessage);
+
+  assert.throws(cookie.parse.bind(null, new Date()), errMessage);
+
+  assert.throws(cookie.parse.bind(null, []), errMessage);
+
+  assert.throws(cookie.parse.bind(null, {}), errMessage);
 });
 
 test('basic', function() {
