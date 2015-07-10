@@ -141,6 +141,10 @@ function serialize(name, val, options) {
   }
 
   if (opt.expires) {
+    if (typeof opt.expires.toUTCString !== 'function') {
+      throw new TypeError('option expires is invalid');
+    }
+
     str += '; Expires=' + opt.expires.toUTCString();
   }
 

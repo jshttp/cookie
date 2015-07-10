@@ -90,6 +90,10 @@ test('expires', function() {
     assert.equal('foo=bar; Expires=Sun, 24 Dec 2000 10:30:59 GMT', cookie.serialize('foo', 'bar', {
         expires: new Date(Date.UTC(2000, 11, 24, 10, 30, 59, 900))
     }));
+
+    assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {
+        expires: Date.now()
+    }), /option expires is invalid/);
 });
 
 test('sameSite', function() {
