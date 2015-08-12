@@ -96,7 +96,7 @@ function serialize(name, val, options) {
 
   if (opt.domain) pairs.push('Domain=' + opt.domain);
   if (opt.path) pairs.push('Path=' + opt.path);
-  if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
+  if (opt.expires) pairs.push('Expires=' + new Date(opt.expires).toUTCString());
   if (opt.httpOnly) pairs.push('HttpOnly');
   if (opt.secure) pairs.push('Secure');
 
