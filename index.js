@@ -96,9 +96,13 @@ function serialize(name, val, options) {
 
   if (opt.domain) pairs.push('Domain=' + opt.domain);
   if (opt.path) pairs.push('Path=' + opt.path);
-  var now = new Date(opt.expires);
-  var utc = new Date(now.getTime() + now.getTimezoneOffset() * 60 * 1000);
-  if (opt.expires) pairs.push('Expires=' + utc.toUTCString());
+  if (opt.expires) 
+  {
+      var now = new Date(opt.expires);
+      if (now + '' === 'Invalid Date') throw new Error('expires should be a valid datestring, unix timestamp or Date object');
+      var utc = new Date(now.getTime() - now.getTimezoneOffset() * 60 * 1000);
+      pairs.push('Expires=' + utc.toUTCString());
+  }
   if (opt.httpOnly) pairs.push('HttpOnly');
   if (opt.secure) pairs.push('Secure');
 

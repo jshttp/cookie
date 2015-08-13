@@ -68,73 +68,82 @@ test('unencoded', function() {
 })
 
 test('opt.expires as Date', function() {
-    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 10:00:00 GMT', cookie.serialize('foo', 'bar', {
+    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
         expires: new Date('08 12 2015')
     }));
 })
 
 test('opt.expires as Unix Timestamp', function() {
-    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 10:00:00 GMT', cookie.serialize('foo', 'bar', {
+    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
         expires: +new Date('08 12 2015')
     }));
 })
 
 test('opt.expires as Date String (mm dd yyyy)', function() {
-    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 10:00:00 GMT', cookie.serialize('foo', 'bar', {
+    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
         expires: '08 12 2015'
     }));
 })
 
 test('opt.expires as Date String (dd MMM yy)', function() {
-    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 10:00:00 GMT', cookie.serialize('foo', 'bar', {
+    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
         expires: '12 Aug 15'
     }));
 })
 
 test('opt.expires as Date String (dd-MMM-yy)', function() {
-    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 10:00:00 GMT', cookie.serialize('foo', 'bar', {
+    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
         expires: '12-Aug-15'
     }));
 })
 
 test('opt.expires as Date String (dd/MMM/yy)', function() {
-    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 10:00:00 GMT', cookie.serialize('foo', 'bar', {
+    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
         expires: '12-Aug-15'
     }));
 })
 
 test('opt.expires as Date String (RFC2822-formatted)', function() {
-    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 10:00:00 GMT', cookie.serialize('foo', 'bar', {
+    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
         expires: 'Wed, 12 Aug 2015 05:00:00 EDT +0000'
     }));
 })
 
 test('opt.expires as Date String (RFC2822-formatted am/pm)', function() {
-    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 10:00:00 GMT', cookie.serialize('foo', 'bar', {
+    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
         expires: '12 August, 2015 0:00:00 Am'
     }));
 })
 
 test('opt.expires as Datetime String (mm dd yyyy hh:mm:ss)', function() {
-    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 10:00:00 GMT', cookie.serialize('foo', 'bar', {
+    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
         expires: '08 12 2015 00:00:00'
     }));
 })
 
 test('opt.expires as Datetime String (MM dd, yyyy hh:mm:dd)', function() {
-    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 10:00:00 GMT', cookie.serialize('foo', 'bar', {
+    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
         expires: 'August 12, 2015 00:00:00'
     }));
 })
 
 test('opt.expires as Datetime String (ISO)', function() {
-    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 10:00:00 GMT', cookie.serialize('foo', 'bar', {
+    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
         expires: '2015-08-12T05:00:00'
     }));
 })
 
 test('opt.expires as Datetime String (ISO w/milliseconds)', function() {
-    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 10:00:00 GMT', cookie.serialize('foo', 'bar', {
+    assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
         expires: '2015-08-12T05:00:00.000Z'
     }));
+})
+
+test('opt.expires as foo', function() {
+    assert.throws(
+        function () {
+            cookie.serialize('foo', 'bar', {expires: 'foo'})
+        },
+        'expire should be a valid datestring, unix timestamp or Date object'
+    )
 })
