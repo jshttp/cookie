@@ -98,10 +98,10 @@ function serialize(name, val, options) {
   if (opt.path) pairs.push('Path=' + opt.path);
   if (opt.expires) 
   {
-      var now = new Date(opt.expires);
-      if (now + '' === 'Invalid Date') throw new Error('expires should be a valid datestring, unix timestamp or Date object');
-      var utc = new Date(now.getTime() - now.getTimezoneOffset() * 60 * 1000);
-      pairs.push('Expires=' + utc.toUTCString());
+    var now = new Date(opt.expires);
+    if (now + '' === 'Invalid Date') throw new Error('expires should be a valid datestring, unix timestamp or Date object');
+    var utc = new Date(now.getTime() - now.getTimezoneOffset() * 60 * 1000);
+    pairs.push('Expires=' + utc.toUTCString());
   }
   if (opt.httpOnly) pairs.push('HttpOnly');
   if (opt.secure) pairs.push('Secure');

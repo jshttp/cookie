@@ -105,7 +105,7 @@ test('opt.expires as Date String (dd/MMM/yy)', function() {
 
 test('opt.expires as Date String (RFC2822-formatted)', function() {
     assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
-        expires: 'Wed, 12 Aug 2015 05:00:00 EDT +0000'
+        expires: 'Wed, 12 Aug 2015 00:00:00 EDT +0000'
     }));
 })
 
@@ -129,13 +129,13 @@ test('opt.expires as Datetime String (MM dd, yyyy hh:mm:dd)', function() {
 
 test('opt.expires as Datetime String (ISO)', function() {
     assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
-        expires: '2015-08-12T05:00:00'
+        expires: '2015-08-12T00:00:00'
     }));
 })
 
 test('opt.expires as Datetime String (ISO w/milliseconds)', function() {
     assert.deepEqual('foo=bar; Expires=Wed, 12 Aug 2015 00:00:00 GMT', cookie.serialize('foo', 'bar', {
-        expires: '2015-08-12T05:00:00.000Z'
+        expires: '2015-08-12T00:00:00.000Z'
     }));
 })
 
