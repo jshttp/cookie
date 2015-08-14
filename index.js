@@ -38,9 +38,9 @@ function parse(str, options) {
   }
 
   var obj = {}
-  var opt = options || {};
+  var opt = typeof options === 'object' ? options : {};
   var pairs = str.split(/; */);
-  var dec = opt.decode || decode;
+  var dec = typeof opt.decode !== 'undefined' ? opt.decode : decode;
 
   pairs.forEach(function(pair) {
     var eq_idx = pair.indexOf('=')
@@ -84,8 +84,11 @@ function parse(str, options) {
  */
 
 function serialize(name, val, options) {
-  var opt = options || {};
-  var enc = opt.encode || encode;
+  var opt = typeof options === 'object' ? options : {};
+  var enc = typeof opt.encode !== 'undefined' ? opt.encode : encode;
+  if (typeof enc !== 'function') {
+    throw new TypeError('encode option must be a function');
+  }
   var pairs = [name + '=' + enc(val)];
 
   if (null != opt.maxAge) {
@@ -94,9 +97,10 @@ function serialize(name, val, options) {
     pairs.push('Max-Age=' + maxAge);
   }
 
-  if (opt.domain) pairs.push('Domain=' + opt.domain);
-  if (opt.path) pairs.push('Path=' + opt.path);
-  if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
+  if (typeof opt.domain === 'string') pairs.push('Domain=' + opt.domain);
+  if (typeof opt.path === 'string') pairs.push('Path=' + opt.path);
+  if (Date.parse(opt.expires)) pairs.push('Expires=' +
+    (new Date(opt.expires)).toUTCString());
   if (opt.httpOnly) pairs.push('HttpOnly');
   if (opt.secure) pairs.push('Secure');
 
