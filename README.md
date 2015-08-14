@@ -30,6 +30,8 @@ var cookies = cookie.parse('foo=bar; cat=meow; dog=ruff');
 
 The serialize function takes a third parameter, an object, to set cookie options. See the RFC for valid values.
 
+`cookie.expires` can be a Date object, a unix timestamp or a date string in [ISO 8601 format](http://www.w3.org/TR/NOTE-datetime) or using the [RFC2822 / IETF date syntax (RFC2822 Section 3.3)](http://tools.ietf.org/html/rfc2822#page-14).
+
 ### path
 > cookie path
 
