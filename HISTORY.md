@@ -1,5 +1,5 @@
-unreleased
-==========
+0.2.0 / 2015-08-13
+==================
 
   * Add `firstPartyOnly` option
   * Throw better error for invalid argument to parse
