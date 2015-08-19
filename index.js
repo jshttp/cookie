@@ -89,12 +89,8 @@ function serialize(name, val, options) {
   var enc = opt.encode || encode;
   var pairs = [name + '=' + enc(val)];
 
-  if (null != opt.maxAge) {
-    var maxAge = opt.maxAge - 0;
-    if (isNaN(maxAge)) throw new Error('maxAge should be a Number');
-    pairs.push('Max-Age=' + maxAge);
-  }
-
+  if (typeof opt.maxAge === 'number' || opt.maxAge === '0' ||
+    ~~opt.maxAge !== 0) pairs.push('Max-Age=' + ~~opt.maxAge);
   if (opt.domain) pairs.push('Domain=' + opt.domain);
   if (opt.path) pairs.push('Path=' + opt.path);
   if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
