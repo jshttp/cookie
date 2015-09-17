@@ -1,5 +1,5 @@
-unreleased
-==========
+0.2.1 / 2015-09-17
+==================
 
   * Throw on invalid values provided to `serialize`
     - Ensures the resulting string is a valid HTTP header value
