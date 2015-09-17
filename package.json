@@ -3,6 +3,9 @@
   "description": "cookie parsing and serialization",
   "version": "0.1.3",
   "author": "Roman Shtylman <shtylman@gmail.com>",
+  "contributors": [
+    "Douglas Christopher Wilson <doug@somethingdoug.com>"
+  ],
   "license": "MIT",
   "keywords": [
     "cookie",
