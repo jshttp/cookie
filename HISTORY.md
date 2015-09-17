@@ -3,6 +3,7 @@ unreleased
 
   * Fix regression when setting empty cookie value
     - Ease the new restriction, which is just basic header-level validation
+  * Fix typo in invalid value errors
 
 0.1.4 / 2015-09-17
 ==================

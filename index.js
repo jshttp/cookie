@@ -99,7 +99,7 @@ function serialize(name, val, options) {
   var enc = opt.encode || encode;
 
   if (!fieldContentRegExp.test(name)) {
-    throw new TypeError('argument name is invaid');
+    throw new TypeError('argument name is invalid');
   }
 
   var value = enc(val);
@@ -118,7 +118,7 @@ function serialize(name, val, options) {
 
   if (opt.domain) {
     if (!fieldContentRegExp.test(opt.domain)) {
-      throw new TypeError('option domain is invaid');
+      throw new TypeError('option domain is invalid');
     }
 
     pairs.push('Domain=' + opt.domain);
@@ -126,7 +126,7 @@ function serialize(name, val, options) {
 
   if (opt.path) {
     if (!fieldContentRegExp.test(opt.path)) {
-      throw new TypeError('option path is invaid');
+      throw new TypeError('option path is invalid');
     }
 
     pairs.push('Path=' + opt.path);
