@@ -1,5 +1,5 @@
-unreleased
-==========
+0.1.4 / 2015-09-17
+==================
 
   * Throw better error for invalid argument to parse
   * Throw on invalid values provided to `serialize`
