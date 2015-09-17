@@ -3,6 +3,9 @@
   "description": "cookie parsing and serialization",
   "version": "0.2.0",
   "author": "Roman Shtylman <shtylman@gmail.com>",
+  "contributors": [
+    "Douglas Christopher Wilson <doug@somethingdoug.com>"
+  ],
   "license": "MIT",
   "keywords": [
     "cookie",
@@ -10,7 +13,7 @@
   ],
   "repository": "jshttp/cookie",
   "devDependencies": {
-    "istanbul": "0.3.17",
+    "istanbul": "0.3.20",
     "mocha": "1.21.5"
   },
   "files": [

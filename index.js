@@ -1,6 +1,7 @@
 /*!
  * cookie
  * Copyright(c) 2012-2014 Roman Shtylman
+ * Copyright(c) 2015 Douglas Christopher Wilson
  * MIT Licensed
  */
 
@@ -20,6 +21,16 @@ exports.serialize = serialize;
 var decode = decodeURIComponent;
 var encode = encodeURIComponent;
 var pairSplitRegExp = /; */;
+
+/**
+ * RegExp to match field-content in RFC 7230 sec 3.2
+ *
+ * field-content = field-vchar [ 1*( SP / HTAB ) field-vchar ]
+ * field-vchar   = VCHAR / obs-text
+ * obs-text      = %x80-FF
+ */
+
+var fieldContentRegExp = /^[\u0009\u0020-\u007e\u0080-\u00ff]+$/;
 
 /**
  * Parse a cookie header.
@@ -87,7 +98,18 @@ function parse(str, options) {
 function serialize(name, val, options) {
   var opt = options || {};
   var enc = opt.encode || encode;
-  var pairs = [name + '=' + enc(val)];
+
+  if (!fieldContentRegExp.test(name)) {
+    throw new TypeError('argument name is invaid');
+  }
+
+  var value = enc(val);
+
+  if (!fieldContentRegExp.test(value)) {
+    throw new TypeError('argument val is invalid');
+  }
+
+  var pairs = [name + '=' + value];
 
   if (null != opt.maxAge) {
     var maxAge = opt.maxAge - 0;
@@ -95,8 +117,22 @@ function serialize(name, val, options) {
     pairs.push('Max-Age=' + maxAge);
   }
 
-  if (opt.domain) pairs.push('Domain=' + opt.domain);
-  if (opt.path) pairs.push('Path=' + opt.path);
+  if (opt.domain) {
+    if (!fieldContentRegExp.test(opt.domain)) {
+      throw new TypeError('option domain is invaid');
+    }
+
+    pairs.push('Domain=' + opt.domain);
+  }
+
+  if (opt.path) {
+    if (!fieldContentRegExp.test(opt.path)) {
+      throw new TypeError('option path is invaid');
+    }
+
+    pairs.push('Path=' + opt.path);
+  }
+
   if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
   if (opt.httpOnly) pairs.push('HttpOnly');
   if (opt.secure) pairs.push('Secure');

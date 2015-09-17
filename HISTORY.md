@@ -1,9 +1,22 @@
+unreleased
+==========
+
+  * Throw on invalid values provided to `serialize`
+    - Ensures the resulting string is a valid HTTP header value
+
 0.2.0 / 2015-08-13
 ==================
 
   * Add `firstPartyOnly` option
   * Throw better error for invalid argument to parse
   * perf: hoist regular expression
+
+0.1.4 / 2015-09-17
+==================
+
+  * Throw better error for invalid argument to parse
+  * Throw on invalid values provided to `serialize`
+    - Ensures the resulting string is a valid HTTP header value
 
 0.1.3 / 2015-05-19
 ==================

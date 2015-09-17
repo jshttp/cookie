@@ -8,12 +8,18 @@ suite('serialize');
 test('basic', function() {
     assert.equal('foo=bar', cookie.serialize('foo', 'bar'));
     assert.equal('foo=bar%20baz', cookie.serialize('foo', 'bar baz'));
+    assert.throws(cookie.serialize.bind(cookie, 'foo\n', 'bar'), /argument name is invaid/);
+    assert.throws(cookie.serialize.bind(cookie, 'foo\u280a', 'bar'), /argument name is invaid/);
 });
 
 test('path', function() {
     assert.equal('foo=bar; Path=/', cookie.serialize('foo', 'bar', {
         path: '/'
     }));
+
+    assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {
+        path: '/\n'
+    }), /option path is invaid/);
 });
 
 test('secure', function() {
@@ -30,6 +36,10 @@ test('domain', function() {
     assert.equal('foo=bar; Domain=example.com', cookie.serialize('foo', 'bar', {
         domain: 'example.com'
     }));
+
+    assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {
+        domain: 'example.com\n'
+    }), /option domain is invaid/);
 });
 
 test('httpOnly', function() {
@@ -75,4 +85,8 @@ test('unencoded', function() {
     assert.deepEqual('cat=+ ', cookie.serialize('cat', '+ ', {
         encode: function(value) { return value; }
     }));
+
+    assert.throws(cookie.serialize.bind(cookie, 'cat', '+ \n', {
+        encode: function(value) { return value; }
+    }), /argument val is invalid/);
 })
