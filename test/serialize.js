@@ -8,8 +8,9 @@ suite('serialize');
 test('basic', function() {
     assert.equal('foo=bar', cookie.serialize('foo', 'bar'));
     assert.equal('foo=bar%20baz', cookie.serialize('foo', 'bar baz'));
-    assert.throws(cookie.serialize.bind(cookie, 'foo\n', 'bar'), /argument name is invaid/);
-    assert.throws(cookie.serialize.bind(cookie, 'foo\u280a', 'bar'), /argument name is invaid/);
+    assert.equal('foo=', cookie.serialize('foo', ''));
+    assert.throws(cookie.serialize.bind(cookie, 'foo\n', 'bar'), /argument name is invalid/);
+    assert.throws(cookie.serialize.bind(cookie, 'foo\u280a', 'bar'), /argument name is invalid/);
 });
 
 test('path', function() {
@@ -19,7 +20,7 @@ test('path', function() {
 
     assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {
         path: '/\n'
-    }), /option path is invaid/);
+    }), /option path is invalid/);
 });
 
 test('secure', function() {
@@ -39,7 +40,7 @@ test('domain', function() {
 
     assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {
         domain: 'example.com\n'
-    }), /option domain is invaid/);
+    }), /option domain is invalid/);
 });
 
 test('httpOnly', function() {

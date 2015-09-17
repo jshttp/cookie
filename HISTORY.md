@@ -1,3 +1,10 @@
+unreleased
+==========
+
+  * Fix regression when setting empty cookie value
+    - Ease the new restriction, which is just basic header-level validation
+  * Fix typo in invalid value errors
+
 0.2.1 / 2015-09-17
 ==================
 
@@ -10,6 +17,13 @@
   * Add `firstPartyOnly` option
   * Throw better error for invalid argument to parse
   * perf: hoist regular expression
+
+0.1.5 / 2015-09-17
+==================
+
+  * Fix regression when setting empty cookie value
+    - Ease the new restriction, which is just basic header-level validation
+  * Fix typo in invalid value errors
 
 0.1.4 / 2015-09-17
 ==================
