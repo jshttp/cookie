@@ -2,6 +2,8 @@ unreleased
 ==========
 
   * Throw better error for invalid argument to parse
+  * Throw on invalid values provided to `serialize`
+    - Ensures the resulting string is a valid HTTP header value
 
 0.1.3 / 2015-05-19
 ==================
