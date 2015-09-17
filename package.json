@@ -1,7 +1,7 @@
 {
   "name": "cookie",
   "description": "cookie parsing and serialization",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": "Roman Shtylman <shtylman@gmail.com>",
   "contributors": [
     "Douglas Christopher Wilson <doug@somethingdoug.com>"
