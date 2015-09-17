@@ -104,7 +104,7 @@ function serialize(name, val, options) {
 
   var value = enc(val);
 
-  if (!fieldContentRegExp.test(value)) {
+  if (value && !fieldContentRegExp.test(value)) {
     throw new TypeError('argument val is invalid');
   }
 
