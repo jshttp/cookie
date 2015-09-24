@@ -49,30 +49,36 @@ function parse(str, options) {
     throw new TypeError('argument str must be a string');
   }
 
-  var obj = {}
+  var obj = {};
   var opt = options || {};
   var pairs = str.split(pairSplitRegExp);
   var dec = opt.decode || decode;
 
   pairs.forEach(function(pair) {
-    var eq_idx = pair.indexOf('=')
+    var eq_idx = pair.indexOf('=');
+    var key, val;
 
-    // skip things that don't look like key=value
-    if (eq_idx < 0) {
-      return;
+    // things like key=value
+    if (eq_idx >= 0) {
+      key = pair.substr(0, eq_idx).trim();
+      val = pair.substr(++eq_idx, pair.length).trim();
+
+      // quoted values
+      if ('"' == val[0]) {
+        val = val.slice(1, -1);
+      }
+
+      // only assign once
+      if (undefined == obj[key]) {
+        obj[key] = tryDecode(val, dec);
+      }
     }
-
-    var key = pair.substr(0, eq_idx).trim()
-    var val = pair.substr(++eq_idx, pair.length).trim();
-
-    // quoted values
-    if ('"' == val[0]) {
-      val = val.slice(1, -1);
-    }
-
-    // only assign once
-    if (undefined == obj[key]) {
-      obj[key] = tryDecode(val, dec);
+    // things with implicit boolean value like HttpOnly and Secure
+    else {
+      key = pair.trim();
+      if (key === 'HttpOnly' || key === 'Secure') {
+        obj[key] = true;
+      }
     }
   });
 

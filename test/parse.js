@@ -32,8 +32,12 @@ test('ignore escaping error and return original value', function() {
     assert.deepEqual({ foo: '%1', bar: 'bar' }, cookie.parse('foo=%1;bar=bar'));
 });
 
-test('ignore non values', function() {
-    assert.deepEqual({ foo: '%1', bar: 'bar' }, cookie.parse('foo=%1;bar=bar;HttpOnly;Secure'));
+test('httpOnly', function() {
+    assert.deepEqual({ foo: 'foo', HttpOnly: true }, cookie.parse('foo=foo;HttpOnly'));
+});
+
+test('secure', function() {
+    assert.deepEqual({ foo: 'foo', Secure: true }, cookie.parse('foo=foo;Secure'));
 });
 
 test('unencoded', function() {
