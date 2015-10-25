@@ -32,6 +32,11 @@ test('path', function() {
     assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {
         path: '/\n'
     }), /option path is invalid/);
+
+    assert.throws(cookie.serialize.bind(cookie,
+      { foo: 'bar' },
+      {  path: '/\n' }),
+      /option path is invalid/);
 });
 
 test('secure', function() {
@@ -67,6 +72,11 @@ test('domain', function() {
     assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {
         domain: 'example.com\n'
     }), /option domain is invalid/);
+
+    assert.throws(cookie.serialize.bind(cookie,
+       { foo: 'bar' },
+       { domain: 'example.com\n' }),
+       /option domain is invalid/);
 });
 
 test('httpOnly', function() {
@@ -119,8 +129,8 @@ test('firstPartyOnly', function() {
     }));
 
     assert.equal('foo=bar; First-Party-Only', cookie.serialize(
-      {foo: 'bar'},
-      {firstPartyOnly: true}
+      { foo: 'bar' },
+      { firstPartyOnly: true }
     ));
 
     assert.equal('foo=bar', cookie.serialize(
@@ -131,8 +141,8 @@ test('firstPartyOnly', function() {
 
 test('escaping', function() {
     assert.deepEqual('cat=%2B%20', cookie.serialize('cat', '+ '));
-    assert.deepEqual('cat=%2B%20', cookie.serialize({cat: '+ '}));
-    assert.deepEqual('cat=%2B%20; dog=%2C%20', cookie.serialize({cat: '+ ', dog: ', '}));
+    assert.deepEqual('cat=%2B%20', cookie.serialize({ cat: '+ ' }));
+    assert.deepEqual('cat=%2B%20; dog=%2C%20', cookie.serialize({ cat: '+ ', dog: ', ' }));
 });
 
 test('parse->serialize', function() {
@@ -181,9 +191,14 @@ test('unencoded', function() {
       { cat: '+ ', dog: ', ' },
       { encode: function(value) { return value; }
     }));
+
+    assert.throws(cookie.serialize.bind(cookie,
+        { cat: '+ \n' },
+        { encode: function(value) { return value; } }),
+        /argument val is invalid/);
 });
 
-test('too many options', function() {
+test('many cookies many options', function() {
 
   assert.equal('foo=bar; cat=meow; dog=ruff', cookie.serialize(
     { foo: 'bar', cat: 'meow', dog: 'ruff' },
