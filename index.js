@@ -79,8 +79,6 @@ function parse(str, options) {
   return obj;
 }
 
-
-
 /**
  * Serialize data into a cookie header.
  *
@@ -107,6 +105,7 @@ function parse(str, options) {
  * @return {string}
  * @public
  */
+
 function serialize(name, val, options) {
   if( typeof name === 'object') {
     var cookies = name;
@@ -135,7 +134,6 @@ function serialize(name, val, options) {
   }
 }
 
-
 /**
  * Serialize name value pair into a cookie header.
  *
@@ -151,6 +149,7 @@ function serialize(name, val, options) {
  * @return {string}
  * @private
  */
+
 function serializeNameValue(name, val, options) {
   var opt = options || {};
   var enc = opt.encode || encode;
