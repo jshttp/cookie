@@ -13,19 +13,24 @@
   ],
   "repository": "jshttp/cookie",
   "devDependencies": {
+    "browserify": "11.2.0",
     "istanbul": "0.3.22",
-    "mocha": "1.21.5"
+    "mocha": "1.21.5",
+    "uglify-js": "2.5.0"
   },
   "files": [
     "HISTORY.md",
     "LICENSE",
     "README.md",
+    "dist/",
     "index.js"
   ],
   "engines": {
     "node": ">= 0.6"
   },
   "scripts": {
+    "bundle": "mkdir -p dist && browserify index.js -s cookie -o dist/cookie.js",
+    "minify": "uglifyjs dist/cookie.js -o dist/cookie.min.js --source-map dist/cookie.min.map -p relative",
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-ci": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/",
     "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/"
