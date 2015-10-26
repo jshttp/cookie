@@ -104,10 +104,30 @@ test('maxAge', function() {
         maxAge: 1000
     }));
 
+    assert.equal('foo=bar; Max-Age=1000', cookie.serialize('foo', 'bar', {
+        maxAge: '1000'
+    }));
+
     assert.equal('foo=bar; Max-Age=0', cookie.serialize('foo', 'bar', {
         maxAge: 0
     }));
 
+    assert.equal('foo=bar; Max-Age=0', cookie.serialize('foo', 'bar', {
+        maxAge: '0'
+    }));
+
+    assert.equal('foo=bar', cookie.serialize('foo', 'bar', {
+        maxAge: null
+    }));
+
+    assert.equal('foo=bar', cookie.serialize('foo', 'bar', {
+        maxAge: undefined
+    }));
+
+    assert.equal('foo=bar; Max-Age=3', cookie.serialize('foo', 'bar', {
+        maxAge: 3.14
+    }));
+    
     assert.deepEqual(['foo=bar; Max-Age=1000'], cookie.serialize(
       { foo: 'bar' },
       { maxAge: 1000 }

@@ -1,3 +1,8 @@
+0.2.3 / 2015-10-25
+==================
+
+  * Fix cookie `Max-Age` to never be a floating point number
+
 0.2.2 / 2015-09-17
 ==================
 

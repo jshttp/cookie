@@ -160,7 +160,7 @@ function serializeNameValue(name, val, options) {
   if (null != opt.maxAge) {
     var maxAge = opt.maxAge - 0;
     if (isNaN(maxAge)) throw new Error('maxAge should be a Number');
-    pairs.push('Max-Age=' + maxAge);
+    pairs.push('Max-Age=' + Math.floor(maxAge));
   }
 
   if (opt.domain) {
