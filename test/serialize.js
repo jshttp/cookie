@@ -12,11 +12,11 @@ test('basic', function() {
     assert.throws(cookie.serialize.bind(cookie, 'foo\n', 'bar'), /argument name is invalid/);
     assert.throws(cookie.serialize.bind(cookie, 'foo\u280a', 'bar'), /argument name is invalid/);
 
-    assert.equal('foo=bar', cookie.serialize({ foo: 'bar' }));
-    assert.equal('foo=bar; cat=meow; dog=ruff', cookie.serialize({ foo: 'bar', cat: 'meow', dog: 'ruff' }));
-    assert.equal('foo=', cookie.serialize({ foo: '' }));
-    assert.equal('foo=; cat=meow', cookie.serialize({ foo: '', cat: 'meow' }));
-    assert.equal('', cookie.serialize({}));
+    assert.deepEqual(['foo=bar'], cookie.serialize({ foo: 'bar' }));
+    assert.deepEqual(['foo=bar', 'cat=meow', 'dog=ruff'], cookie.serialize({ foo: 'bar', cat: 'meow', dog: 'ruff' }));
+    assert.deepEqual(['foo='], cookie.serialize({ foo: '' }));
+    assert.deepEqual(['foo=','cat=meow'], cookie.serialize({ foo: '', cat: 'meow' }));
+    assert.equal(undefined, cookie.serialize({}));
 });
 
 test('path', function() {
@@ -24,7 +24,7 @@ test('path', function() {
         path: '/'
     }));
 
-    assert.equal('foo=bar; Path=/', cookie.serialize(
+    assert.deepEqual(['foo=bar; Path=/'], cookie.serialize(
       { foo: 'bar' },
       { path: '/' }
     ));
@@ -48,12 +48,12 @@ test('secure', function() {
         secure: false
     }));
 
-    assert.equal('foo=bar; Secure', cookie.serialize(
+    assert.deepEqual(['foo=bar; Secure'], cookie.serialize(
       { foo: 'bar' },
       { secure: true }
     ));
 
-    assert.equal('foo=bar', cookie.serialize(
+    assert.deepEqual(['foo=bar'], cookie.serialize(
       { foo: 'bar' },
       { secure: false }
     ));
@@ -64,7 +64,7 @@ test('domain', function() {
         domain: 'example.com'
     }));
 
-    assert.equal('foo=bar; Domain=example.com', cookie.serialize(
+    assert.deepEqual(['foo=bar; Domain=example.com'], cookie.serialize(
       { foo: 'bar' },
       { domain: 'example.com' }
     ));
@@ -88,12 +88,12 @@ test('httpOnly', function() {
         httpOnly: false
     }));
 
-    assert.equal('foo=bar; HttpOnly', cookie.serialize(
+    assert.deepEqual(['foo=bar; HttpOnly'], cookie.serialize(
       { foo: 'bar' },
       { httpOnly: true }
     ));
 
-    assert.equal('foo=bar', cookie.serialize(
+    assert.deepEqual(['foo=bar'], cookie.serialize(
       { foo: 'bar' },
       { httpOnly: false }
     ));
@@ -108,12 +108,12 @@ test('maxAge', function() {
         maxAge: 0
     }));
 
-    assert.equal('foo=bar; Max-Age=1000', cookie.serialize(
+    assert.deepEqual(['foo=bar; Max-Age=1000'], cookie.serialize(
       { foo: 'bar' },
       { maxAge: 1000 }
     ));
 
-    assert.equal('foo=bar; Max-Age=0', cookie.serialize(
+    assert.deepEqual(['foo=bar; Max-Age=0'], cookie.serialize(
       { foo: 'bar' },
       { maxAge: 0 }
     ));
@@ -128,12 +128,12 @@ test('firstPartyOnly', function() {
         firstPartyOnly: false
     }));
 
-    assert.equal('foo=bar; First-Party-Only', cookie.serialize(
+    assert.deepEqual(['foo=bar; First-Party-Only'], cookie.serialize(
       { foo: 'bar' },
       { firstPartyOnly: true }
     ));
 
-    assert.equal('foo=bar', cookie.serialize(
+    assert.deepEqual(['foo=bar'], cookie.serialize(
       { foo: 'bar' },
       { firstPartyOnly: false }
     ));
@@ -141,8 +141,8 @@ test('firstPartyOnly', function() {
 
 test('escaping', function() {
     assert.deepEqual('cat=%2B%20', cookie.serialize('cat', '+ '));
-    assert.deepEqual('cat=%2B%20', cookie.serialize({ cat: '+ ' }));
-    assert.deepEqual('cat=%2B%20; dog=%2C%20', cookie.serialize({ cat: '+ ', dog: ', ' }));
+    assert.deepEqual(['cat=%2B%20'], cookie.serialize({ cat: '+ ' }));
+    assert.deepEqual(['cat=%2B%20', 'dog=%2C%20'], cookie.serialize({ cat: '+ ', dog: ', ' }));
 });
 
 test('parse->serialize', function() {
@@ -154,21 +154,21 @@ test('parse->serialize', function() {
       cookie.serialize('cat', ' ";/')));
 
     assert.deepEqual({ cat: 'foo=123&name=baz five' }, cookie.parse(
-      cookie.serialize({ cat: 'foo=123&name=baz five' })));
+      cookie.serialize({ cat: 'foo=123&name=baz five' })[0]));
 
     assert.deepEqual({ cat: ' ";/' }, cookie.parse(
-      cookie.serialize({ cat: ' ";/' })));
+      cookie.serialize({ cat: ' ";/' })[0]));
 });
 
 test('serialize->parse', function() {
 
-  assert.equal('foo=bar; cat=meow; dog=ruff', cookie.serialize(
+  assert.deepEqual(['foo=bar', 'cat=meow', 'dog=ruff'], cookie.serialize(
     cookie.parse('foo=bar; cat=meow; dog=ruff')));
 
-  assert.equal('foo=bar', cookie.serialize(
+  assert.deepEqual(['foo=bar'], cookie.serialize(
     cookie.parse('foo=bar')));
 
-  assert.equal('foo=; cat=meow', cookie.serialize(
+  assert.deepEqual(['foo=', 'cat=meow'], cookie.serialize(
     cookie.parse('foo=; cat=meow')));
 
 });
@@ -182,12 +182,12 @@ test('unencoded', function() {
         encode: function(value) { return value; }
     }), /argument val is invalid/);
 
-    assert.deepEqual('cat=+ ', cookie.serialize(
+    assert.deepEqual(['cat=+ '], cookie.serialize(
       { cat: '+ ' },
       { encode: function(value) { return value; }
     }));
 
-    assert.deepEqual('cat=+ ; dog=, ', cookie.serialize(
+    assert.deepEqual(['cat=+ ', 'dog=, '], cookie.serialize(
       { cat: '+ ', dog: ', ' },
       { encode: function(value) { return value; }
     }));
@@ -200,11 +200,14 @@ test('unencoded', function() {
 
 test('many cookies many options', function() {
 
-  assert.equal('foo=bar; cat=meow; dog=ruff', cookie.serialize(
-    { foo: 'bar', cat: 'meow', dog: 'ruff' },
-    { domain: 'example.com' }));
+  assert.deepEqual(
+    ['foo=bar; Domain=example.com', 'cat=meow; Domain=example.com', 'dog=ruff; Domain=example.com'],
+    cookie.serialize(
+      { foo: 'bar', cat: 'meow', dog: 'ruff' },
+      { domain: 'example.com' }
+    ));
 
-  assert.equal('cat=+ ; dog=, ', cookie.serialize(
+  assert.deepEqual(['cat=+ ; Domain=example.com', 'dog=, ; Domain=example.com'], cookie.serialize(
     { cat: '+ ', dog: ', ' },
     { domain: 'example.com', encode: function(value) { return value; } }));
 

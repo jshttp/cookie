@@ -22,8 +22,8 @@ var cookie = require('cookie');
 var hdr = cookie.serialize('foo', 'bar');
 // hdr = 'foo=bar';
 
-var hdr = cookie.serialize({ foo: 'bar', cat: 'meow', dog: 'ruff' })
-// hdr = 'foo=bar; cat=meow; dog=ruff'
+var hdrs = cookie.serialize({ foo: 'bar', cat: 'meow', dog: 'ruff' })
+// hdrs = ['foo=bar', 'cat=meow', 'dog=ruff']
 
 var cookies = cookie.parse('foo=bar; cat=meow; dog=ruff');
 // cookies = { foo: 'bar', cat: 'meow', dog: 'ruff' };

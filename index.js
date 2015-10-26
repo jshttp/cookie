@@ -83,11 +83,9 @@ function parse(str, options) {
  * Serialize data into a cookie header.
  *
  * If the first parameter is an object, serialize the key-value pairs
- * in the object into a cookie string suitable for http headers. An
- * optional options object can be used to specify the encoding. If only
- * one key-value pair is in the first parmater, then the options object can also
- * specify cookie parameters. If more than one key-value pairs are in the
- * first parameter, then the options object may only specify an encoding.
+ * in the object into an array of cookie strings suitable for http headers.
+ * An optional options object can be used to specify the encoding and cookie
+ * parameters.
  *
  * If the first parameter is a string, serialize the name value pair
  * into a cookie string suitable for http headers. An optional options
@@ -96,8 +94,8 @@ function parse(str, options) {
  * serialize('foo', 'bar', { httpOnly: true })
  *   => "foo=bar; httpOnly"
  *
- * serialize({ foo: 'bar', cat: 'meow' })
- *  => "foo=bar; cat=meow"
+ * serialize({ foo: 'bar', cat: 'meow' }, { httpOnly: true })
+ *  => ["foo=bar; httpOnly", "cat=meow; httpOnly"]
  *
  * @param {string} name
  * @param {string} val
@@ -113,22 +111,15 @@ function serialize(name, val, options) {
 
     var cookieNames = Object.keys(cookies);
     if(0 === cookieNames.length) {
-      return '';
-    } else if(cookieNames.length > 1) {
-      // If there are more than one cookies to serialize, only allow
-      // an encoding option to be set
-      var opt = serializeOptions || {};
-      serializeOptions = {
-        encode: opt.encode || encode
-      };
+      return undefined;
+    } else {
+      var serializedCookies = new Array(cookieNames.length);
+      for(var i=0; i<cookieNames.length; i++) {
+          serializedCookies[i] = serializeNameValue(cookieNames[i], cookies[cookieNames[i]], serializeOptions);
+      }
+
+      return serializedCookies;
     }
-
-    var serializedCookies = [];
-    cookieNames.forEach(function(cookieName) {
-        serializedCookies.push(serializeNameValue(cookieName, cookies[cookieName], serializeOptions));
-    });
-
-    return serializedCookies.join('; ');
   } else {
     return serializeNameValue(name, val, options);
   }
