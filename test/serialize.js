@@ -105,6 +105,10 @@ test('sameSite', function() {
     assert.equal('foo=bar', cookie.serialize('foo', 'bar', {
         sameSite: false
     }));
+
+    assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {
+        sameSite: ''
+    }), /option sameSite is invalid/);
 });
 
 test('escaping', function() {
