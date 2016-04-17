@@ -89,6 +89,24 @@ test('firstPartyOnly', function() {
     }));
 });
 
+test('sameSite', function() {
+    assert.equal('foo=bar; SameSite', cookie.serialize('foo', 'bar', {
+        sameSite: true
+    }));
+
+    assert.equal('foo=bar; SameSite=Strict', cookie.serialize('foo', 'bar', {
+        sameSite: 'Strict'
+    }));
+
+    assert.equal('foo=bar; SameSite=Lax', cookie.serialize('foo', 'bar', {
+        sameSite: 'Lax'
+    }));
+
+    assert.equal('foo=bar', cookie.serialize('foo', 'bar', {
+        sameSite: false
+    }));
+});
+
 test('escaping', function() {
     assert.deepEqual('cat=%2B%20', cookie.serialize('cat', '+ '));
 });

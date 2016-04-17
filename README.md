@@ -51,6 +51,9 @@ The serialize function takes a third parameter, an object, to set cookie options
 ### firstPartyOnly
 > true or false
 
+### sameSite
+> true, false, 'Strict' or 'Lax'
+
 ## License
 
 [MIT](LICENSE)

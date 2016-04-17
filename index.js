@@ -133,6 +133,19 @@ function serialize(name, val, options) {
     pairs.push('Path=' + opt.path);
   }
 
+  if (null != opt.sameSite) {
+    if(opt.sameSite !== true && opt.sameSite !== false && opt.sameSite !== 'Strict' && opt.sameSite !== 'Lax'){
+      throw new TypeError('option sameSite is invalid');
+    }
+
+    if(opt.sameSite === true) {
+      pairs.push('SameSite');
+    }
+    else if(opt.sameSite === 'Strict' || opt.sameSite === 'Lax') {
+      pairs.push('SameSite=' + opt.sameSite);
+    }
+  }
+
   if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
   if (opt.httpOnly) pairs.push('HttpOnly');
   if (opt.secure) pairs.push('Secure');
