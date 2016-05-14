@@ -85,6 +85,12 @@ test('maxAge', function() {
     }));
 });
 
+test('expires', function() {
+    assert.equal('foo=bar; Expires=Sun, 24 Dec 2000 10:30:59 GMT', cookie.serialize('foo', 'bar', {
+        expires: new Date(Date.UTC(2000, 11, 24, 10, 30, 59, 900))
+    }));
+});
+
 test('firstPartyOnly', function() {
     assert.equal('foo=bar; First-Party-Only', cookie.serialize('foo', 'bar', {
         firstPartyOnly: true
