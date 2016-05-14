@@ -56,12 +56,13 @@ function parse(str, options) {
   var pairs = str.split(pairSplitRegExp);
   var dec = opt.decode || decode;
 
-  pairs.forEach(function(pair) {
-    var eq_idx = pair.indexOf('=')
+  for (var i = 0; i < pairs.length; i++) {
+    var pair = pairs[i];
+    var eq_idx = pair.indexOf('=');
 
     // skip things that don't look like key=value
     if (eq_idx < 0) {
-      return;
+      continue;
     }
 
     var key = pair.substr(0, eq_idx).trim()
@@ -76,7 +77,7 @@ function parse(str, options) {
     if (undefined == obj[key]) {
       obj[key] = tryDecode(val, dec);
     }
-  });
+  }
 
   return obj;
 }
