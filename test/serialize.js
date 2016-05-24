@@ -50,6 +50,12 @@ test('httpOnly', function() {
 });
 
 test('maxAge', function() {
+    assert.throws(function () {
+        cookie.serialize('foo', 'bar', {
+            maxAge: 'buzz'
+        });
+    }, /maxAge should be a Number/);
+
     assert.equal('foo=bar; Max-Age=1000', cookie.serialize('foo', 'bar', {
         maxAge: 1000
     }));
@@ -76,6 +82,12 @@ test('maxAge', function() {
 
     assert.equal('foo=bar; Max-Age=3', cookie.serialize('foo', 'bar', {
         maxAge: 3.14
+    }));
+});
+
+test('expires', function() {
+    assert.equal('foo=bar; Expires=Sun, 24 Dec 2000 10:30:59 GMT', cookie.serialize('foo', 'bar', {
+        expires: new Date(Date.UTC(2000, 11, 24, 10, 30, 59, 900))
     }));
 });
 

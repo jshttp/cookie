@@ -5,6 +5,8 @@
  * MIT Licensed
  */
 
+'use strict';
+
 /**
  * Module exports.
  * @public
@@ -54,12 +56,13 @@ function parse(str, options) {
   var pairs = str.split(pairSplitRegExp);
   var dec = opt.decode || decode;
 
-  pairs.forEach(function(pair) {
-    var eq_idx = pair.indexOf('=')
+  for (var i = 0; i < pairs.length; i++) {
+    var pair = pairs[i];
+    var eq_idx = pair.indexOf('=');
 
     // skip things that don't look like key=value
     if (eq_idx < 0) {
-      return;
+      continue;
     }
 
     var key = pair.substr(0, eq_idx).trim()
@@ -74,7 +77,7 @@ function parse(str, options) {
     if (undefined == obj[key]) {
       obj[key] = tryDecode(val, dec);
     }
-  });
+  }
 
   return obj;
 }
@@ -109,12 +112,12 @@ function serialize(name, val, options) {
     throw new TypeError('argument val is invalid');
   }
 
-  var pairs = [name + '=' + value];
+  var str = name + '=' + value;
 
   if (null != opt.maxAge) {
     var maxAge = opt.maxAge - 0;
     if (isNaN(maxAge)) throw new Error('maxAge should be a Number');
-    pairs.push('Max-Age=' + Math.floor(maxAge));
+    str += '; Max-Age=' + Math.floor(maxAge);
   }
 
   if (opt.domain) {
@@ -122,7 +125,7 @@ function serialize(name, val, options) {
       throw new TypeError('option domain is invalid');
     }
 
-    pairs.push('Domain=' + opt.domain);
+    str += '; Domain=' + opt.domain;
   }
 
   if (opt.path) {
@@ -130,7 +133,7 @@ function serialize(name, val, options) {
       throw new TypeError('option path is invalid');
     }
 
-    pairs.push('Path=' + opt.path);
+    str += '; Path=' + opt.path;
   }
 
   if (null != opt.sameSite) {
@@ -141,19 +144,30 @@ function serialize(name, val, options) {
     }
 
     if(opt.sameSite === true) {
-      pairs.push('SameSite');
+      str += '; SameSite';
     }
     else if(sameSiteRegExp.test(opt.sameSite)) {
-      pairs.push('SameSite=' + opt.sameSite);
+      str += '; SameSite=' + opt.sameSite;
     }
   }
 
-  if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
-  if (opt.httpOnly) pairs.push('HttpOnly');
-  if (opt.secure) pairs.push('Secure');
-  if (opt.firstPartyOnly) pairs.push('First-Party-Only');
+  if (opt.expires) {
+    str += '; Expires=' + opt.expires.toUTCString();
+  }
 
-  return pairs.join('; ');
+  if (opt.httpOnly) {
+    str += '; HttpOnly';
+  }
+
+  if (opt.secure) {
+    str += '; Secure';
+  }
+
+  if (opt.firstPartyOnly) {
+    str += '; First-Party-Only';
+  }
+
+  return str;
 }
 
 /**

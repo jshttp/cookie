@@ -1,3 +1,10 @@
+0.2.4 / 2016-05-20
+==================
+
+  * perf: enable strict mode
+  * perf: use for loop in parse
+  * perf: use string concatination for serialization
+
 0.2.3 / 2015-10-25
 ==================
 
