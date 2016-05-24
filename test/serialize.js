@@ -91,14 +91,34 @@ test('expires', function() {
     }));
 });
 
-test('firstPartyOnly', function() {
-    assert.equal('foo=bar; First-Party-Only', cookie.serialize('foo', 'bar', {
-        firstPartyOnly: true
+test('sameSite', function() {
+    assert.equal('foo=bar; SameSite', cookie.serialize('foo', 'bar', {
+        sameSite: true
+    }));
+
+    assert.equal('foo=bar; SameSite=Strict', cookie.serialize('foo', 'bar', {
+        sameSite: 'Strict'
+    }));
+
+    assert.equal('foo=bar; SameSite=Strict', cookie.serialize('foo', 'bar', {
+        sameSite: 'strict'
+    }));
+
+    assert.equal('foo=bar; SameSite=Lax', cookie.serialize('foo', 'bar', {
+        sameSite: 'Lax'
+    }));
+
+    assert.equal('foo=bar; SameSite=Lax', cookie.serialize('foo', 'bar', {
+        sameSite: 'lax'
     }));
 
     assert.equal('foo=bar', cookie.serialize('foo', 'bar', {
-        firstPartyOnly: false
+        sameSite: false
     }));
+
+    assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {
+        sameSite: 'foo'
+    }), /option sameSite is invalid/);
 });
 
 test('escaping', function() {

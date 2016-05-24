@@ -148,8 +148,23 @@ function serialize(name, val, options) {
     str += '; Secure';
   }
 
-  if (opt.firstPartyOnly) {
-    str += '; First-Party-Only';
+  if (opt.sameSite) {
+    var sameSite = typeof opt.sameSite === 'string'
+      ? opt.sameSite.toLowerCase() : opt.sameSite;
+
+    switch (sameSite) {
+      case true:
+        str += '; SameSite';
+        break;
+      case 'lax':
+        str += '; SameSite=Lax';
+        break;
+      case 'strict':
+        str += '; SameSite=Strict';
+        break;
+      default:
+        throw new TypeError('option sameSite is invalid');
+    }
   }
 
   return str;
