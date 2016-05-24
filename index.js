@@ -35,6 +35,11 @@ var pairSplitRegExp = /; */;
 var fieldContentRegExp = /^[\u0009\u0020-\u007e\u0080-\u00ff]+$/;
 
 /**
+ * RegExp to match samesite-value in https://tools.ietf.org/html/draft-west-first-party-cookies-07
+ */
+var sameSiteRegExp = /^(strict|lax)$/i;
+
+/**
  * Parse a cookie header.
  *
  * Parse the given cookie header string into an object
@@ -137,8 +142,6 @@ function serialize(name, val, options) {
   }
 
   if (null != opt.sameSite) {
-    var sameSiteRegExp = new RegExp(/^(strict|lax)$/i);
-    
     if(opt.sameSite !== true && opt.sameSite !== false && !sameSiteRegExp.test(opt.sameSite)) {
       throw new TypeError('option sameSite is invalid');
     }
