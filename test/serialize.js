@@ -98,8 +98,16 @@ test('sameSite', function() {
         sameSite: 'Strict'
     }));
 
+    assert.equal('foo=bar; SameSite=strict', cookie.serialize('foo', 'bar', {
+        sameSite: 'strict'
+    }));
+
     assert.equal('foo=bar; SameSite=Lax', cookie.serialize('foo', 'bar', {
         sameSite: 'Lax'
+    }));
+
+    assert.equal('foo=bar; SameSite=lax', cookie.serialize('foo', 'bar', {
+        sameSite: 'lax'
     }));
 
     assert.equal('foo=bar', cookie.serialize('foo', 'bar', {
