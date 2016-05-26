@@ -1,6 +1,6 @@
 {
   "name": "cookie",
-  "description": "cookie parsing and serialization",
+  "description": "HTTP server cookie parsing and serialization",
   "version": "0.2.4",
   "author": "Roman Shtylman <shtylman@gmail.com>",
   "contributors": [
