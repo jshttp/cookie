@@ -1,5 +1,5 @@
-unreleased
-==========
+0.3.0 / 2016-05-26
+==================
 
   * Add `sameSite` option
     - Replaces `firstPartyOnly` option, never implemented by browsers
