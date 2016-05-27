@@ -1,5 +1,5 @@
-unreleased
-==========
+0.3.1 / 2016-05-26
+==================
 
   * Fix `sameSite: true` to work with draft-7 clients
     - `true` now sends `SameSite=Strict` instead of `SameSite`
