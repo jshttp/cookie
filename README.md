@@ -114,8 +114,7 @@ a web browser application.
 
 Specifies the `boolean` or `string` to be the value for the [`SameSite` `Set-Cookie` attribute][draft-west-first-party-cookies-07].
 
-  - `true` will set the `SameSite` attribute, with no value. This leaves the enforcement value
-    up to the client.
+  - `true` will set the `SameSite` attribute to `Strict` for strict same site enforcement.
   - `false` will not set the `SameSite` attribute.
   - `'lax'` will set the `SameSite` attribute to `Lax` for lax same site enforcement.
   - `'strict'` will set the `SameSite` attribute to `Strict` for strict same site enforcement.

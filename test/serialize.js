@@ -97,7 +97,7 @@ test('expires', function() {
 });
 
 test('sameSite', function() {
-    assert.equal('foo=bar; SameSite', cookie.serialize('foo', 'bar', {
+    assert.equal('foo=bar; SameSite=Strict', cookie.serialize('foo', 'bar', {
         sameSite: true
     }));
 

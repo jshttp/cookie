@@ -162,7 +162,7 @@ function serialize(name, val, options) {
 
     switch (sameSite) {
       case true:
-        str += '; SameSite';
+        str += '; SameSite=Strict';
         break;
       case 'lax':
         str += '; SameSite=Lax';
