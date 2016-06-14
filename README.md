@@ -83,7 +83,7 @@ By default, no expiration is set, and most clients will consider this a "non-per
 will delete it on a condition like exiting a web browser application.
 
 **note** the [cookie storage model specification][rfc-6266-5.3] states that if both `expires` and
-`magAge` are set, then `maxAge` takes precedence, but it is possiblke not all clients by obey this,
+`magAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
 so if both are set, they should point to the same date and time.
 
 ##### httpOnly
@@ -100,7 +100,7 @@ Specifies the `number` (in seconds) to be the value for the [`Max-Age` `Set-Cook
 The given number will be converted to an integer by rounding down. By default, no maximum age is set.
 
 **note** the [cookie storage model specification][rfc-6266-5.3] states that if both `expires` and
-`magAge` are set, then `maxAge` takes precedence, but it is possiblke not all clients by obey this,
+`magAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
 so if both are set, they should point to the same date and time.
 
 ##### path
