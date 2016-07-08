@@ -64,7 +64,7 @@ var setCookie = cookie.serialize('foo', 'bar');
 
 ##### domain
 
-Specifies the value for the [`Domain` `Set-Cookie` attribute][rfc-6266-5.2.3]. By default, no
+Specifies the value for the [`Domain` `Set-Cookie` attribute][rfc-6265-5.2.3]. By default, no
 domain is set, and most clients will consider the cookie to apply to only the current domain.
 
 ##### encode
@@ -78,17 +78,17 @@ into UTF-8 byte sequences and then URL-encode any that fall outside of the cooki
 
 ##### expires
 
-Specifies the `Date` object to be the value for the [`Expires` `Set-Cookie` attribute][rfc-6266-5.2.1].
+Specifies the `Date` object to be the value for the [`Expires` `Set-Cookie` attribute][rfc-6265-5.2.1].
 By default, no expiration is set, and most clients will consider this a "non-persistent cookie" and
 will delete it on a condition like exiting a web browser application.
 
-**note** the [cookie storage model specification][rfc-6266-5.3] states that if both `expires` and
+**note** the [cookie storage model specification][rfc-6265-5.3] states that if both `expires` and
 `magAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
 so if both are set, they should point to the same date and time.
 
 ##### httpOnly
 
-Specifies the `boolean` value for the [`HttpOnly` `Set-Cookie` attribute][rfc-6266-5.2.6]. When truthy,
+Specifies the `boolean` value for the [`HttpOnly` `Set-Cookie` attribute][rfc-6265-5.2.6]. When truthy,
 the `HttpOnly` attribute is set, otherwise it is not. By default, the `HttpOnly` attribute is not set.
 
 **note** be careful when setting this to `true`, as compliant clients will not allow client-side
@@ -96,17 +96,17 @@ JavaScript to see the cookie in `document.cookie`.
 
 ##### maxAge
 
-Specifies the `number` (in seconds) to be the value for the [`Max-Age` `Set-Cookie` attribute][rfc-6266-5.2.2].
+Specifies the `number` (in seconds) to be the value for the [`Max-Age` `Set-Cookie` attribute][rfc-6265-5.2.2].
 The given number will be converted to an integer by rounding down. By default, no maximum age is set.
 
-**note** the [cookie storage model specification][rfc-6266-5.3] states that if both `expires` and
+**note** the [cookie storage model specification][rfc-6265-5.3] states that if both `expires` and
 `magAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
 so if both are set, they should point to the same date and time.
 
 ##### path
 
-Specifies the value for the [`Path` `Set-Cookie` attribute][rfc-6266-5.2.4]. By default, the path
-is considered the ["default path"][rfc-6266-5.1.4]. By default, no maximum age is set, and most
+Specifies the value for the [`Path` `Set-Cookie` attribute][rfc-6265-5.2.4]. By default, the path
+is considered the ["default path"][rfc-6265-5.1.4]. By default, no maximum age is set, and most
 clients will consider this a "non-persistent cookie" and will delete it on a condition like exiting
 a web browser application.
 
@@ -127,7 +127,7 @@ This also means many clients may ignore this attribute until they understand it.
 
 ##### secure
 
-Specifies the `boolean` value for the [`Secure` `Set-Cookie` attribute][rfc-6266-5.2.5]. When truthy,
+Specifies the `boolean` value for the [`Secure` `Set-Cookie` attribute][rfc-6265-5.2.5]. When truthy,
 the `Secure` attribute is set, otherwise it is not. By default, the `Secure` attribute is not set.
 
 **note** be careful when setting this to `true`, as compliant clients will not send the cookie back to
@@ -192,17 +192,17 @@ $ npm test
 
 ## References
 
-- [RFC 6266: HTTP State Management Mechanism][rfc-6266]
+- [RFC 6265: HTTP State Management Mechanism][rfc-6265]
 - [Same-site Cookies][draft-west-first-party-cookies-07]
 
 [draft-west-first-party-cookies-07]: https://tools.ietf.org/html/draft-west-first-party-cookies-07
-[rfc-6266]: https://tools.ietf.org/html/rfc6266
-[rfc-6266-5.1.4]: https://tools.ietf.org/html/rfc6266#section-5.1.4
-[rfc-6266-5.2.1]: https://tools.ietf.org/html/rfc6266#section-5.2.1
-[rfc-6266-5.2.2]: https://tools.ietf.org/html/rfc6266#section-5.2.2
-[rfc-6266-5.2.3]: https://tools.ietf.org/html/rfc6266#section-5.2.3
-[rfc-6266-5.2.4]: https://tools.ietf.org/html/rfc6266#section-5.2.4
-[rfc-6266-5.3]: https://tools.ietf.org/html/rfc6266#section-5.3
+[rfc-6265]: https://tools.ietf.org/html/rfc6265
+[rfc-6265-5.1.4]: https://tools.ietf.org/html/rfc6265#section-5.1.4
+[rfc-6265-5.2.1]: https://tools.ietf.org/html/rfc6265#section-5.2.1
+[rfc-6265-5.2.2]: https://tools.ietf.org/html/rfc6265#section-5.2.2
+[rfc-6265-5.2.3]: https://tools.ietf.org/html/rfc6265#section-5.2.3
+[rfc-6265-5.2.4]: https://tools.ietf.org/html/rfc6265#section-5.2.4
+[rfc-6265-5.3]: https://tools.ietf.org/html/rfc6265#section-5.3
 
 ## License
 
