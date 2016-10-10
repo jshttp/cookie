@@ -112,7 +112,7 @@ a web browser application.
 
 ##### sameSite
 
-Specifies the `boolean` or `string` to be the value for the [`SameSite` `Set-Cookie` attribute][draft-west-first-party-cookies-07].
+Specifies the `boolean` or `string` to be the value for the [`SameSite` `Set-Cookie` attribute][draft-ietf-httpbis-cookie-same-site-00].
 
   - `true` will set the `SameSite` attribute to `Strict` for strict same site enforcement.
   - `false` will not set the `SameSite` attribute.
@@ -120,7 +120,7 @@ Specifies the `boolean` or `string` to be the value for the [`SameSite` `Set-Coo
   - `'strict'` will set the `SameSite` attribute to `Strict` for strict same site enforcement.
 
 More information about the different enforcement levels can be found in the specification
-https://tools.ietf.org/html/draft-west-first-party-cookies-07#section-4.1.1
+https://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site-00#section-4.1.1
 
 **note** This is an attribute that has not yet been fully standardized, and may change in the future.
 This also means many clients may ignore this attribute until they understand it.
@@ -193,9 +193,9 @@ $ npm test
 ## References
 
 - [RFC 6265: HTTP State Management Mechanism][rfc-6265]
-- [Same-site Cookies][draft-west-first-party-cookies-07]
+- [Same-site Cookies][draft-ietf-httpbis-cookie-same-site-00]
 
-[draft-west-first-party-cookies-07]: https://tools.ietf.org/html/draft-west-first-party-cookies-07
+[draft-ietf-httpbis-cookie-same-site-00]: https://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site-00
 [rfc-6265]: https://tools.ietf.org/html/rfc6265
 [rfc-6265-5.1.4]: https://tools.ietf.org/html/rfc6265#section-5.1.4
 [rfc-6265-5.2.1]: https://tools.ietf.org/html/rfc6265#section-5.2.1
