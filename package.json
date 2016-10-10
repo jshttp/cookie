@@ -13,7 +13,7 @@
   ],
   "repository": "jshttp/cookie",
   "devDependencies": {
-    "istanbul": "0.4.4",
+    "istanbul": "0.4.5",
     "mocha": "1.21.5"
   },
   "files": [
