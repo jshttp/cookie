@@ -204,6 +204,9 @@ $ npm test
 [rfc-6265-5.2.4]: https://tools.ietf.org/html/rfc6265#section-5.2.4
 [rfc-6265-5.3]: https://tools.ietf.org/html/rfc6265#section-5.3
 
+### sameSite
+> true, false, 'Strict' or 'Lax'
+
 ## License
 
 [MIT](LICENSE)
