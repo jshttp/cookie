@@ -22,7 +22,7 @@ exports.serialize = serialize;
 
 var decode = decodeURIComponent;
 var encode = encodeURIComponent;
-var pairSplitRegExp = /; */;
+var pairSplitRegExp = /[;,] */;
 
 /**
  * RegExp to match field-content in RFC 7230 sec 3.2
