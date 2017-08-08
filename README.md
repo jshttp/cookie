@@ -96,7 +96,7 @@ JavaScript to see the cookie in `document.cookie`.
 
 ##### maxAge
 
-Specifies the `number` (in seconds) to be the value for the [`Max-Age` `Set-Cookie` attribute][rfc-6265-5.2.2].
+Specifies the `number` (in milliseconds) to be the value for the [`Max-Age` `Set-Cookie` attribute][rfc-6265-5.2.2] (The API uses milliseconds, to make it easy to use with other JavaScript APIs taking milliseconds, the RFC uses seconds ).
 The given number will be converted to an integer by rounding down. By default, no maximum age is set.
 
 **note** the [cookie storage model specification][rfc-6265-5.3] states that if both `expires` and
