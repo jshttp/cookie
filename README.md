@@ -73,7 +73,7 @@ Specifies a function that will be used to encode a cookie's value. Since value o
 has a limited character set (and must be a simple string), this function can be used to encode
 a value into a string suited for a cookie's value.
 
-The default function is the global `ecodeURIComponent`, which will encode a JavaScript string
+The default function is the global `encodeURIComponent`, which will encode a JavaScript string
 into UTF-8 byte sequences and then URL-encode any that fall outside of the cookie range.
 
 ##### expires
