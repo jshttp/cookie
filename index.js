@@ -162,13 +162,11 @@ function serialize(name, val, options) {
 
     switch (sameSite) {
       case true:
+      case 'strict':
         str += '; SameSite=Strict';
         break;
       case 'lax':
         str += '; SameSite=Lax';
-        break;
-      case 'strict':
-        str += '; SameSite=Strict';
         break;
       default:
         throw new TypeError('option sameSite is invalid');
