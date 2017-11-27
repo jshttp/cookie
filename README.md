@@ -107,9 +107,7 @@ so if both are set, they should point to the same date and time.
 ##### path
 
 Specifies the value for the [`Path` `Set-Cookie` attribute][rfc-6265-5.2.4]. By default, the path
-is considered the ["default path"][rfc-6265-5.1.4]. By default, no maximum age is set, and most
-clients will consider this a "non-persistent cookie" and will delete it on a condition like exiting
-a web browser application.
+is considered the ["default path"][rfc-6265-5.1.4].
 
 ##### sameSite
 
