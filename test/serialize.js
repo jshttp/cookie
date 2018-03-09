@@ -5,6 +5,31 @@ var cookie = require('..');
 
 suite('serialize');
 
+test('argument validation', function() {
+    var nameErrMessage = /argument name must be a string/;
+    var valErrMessage = /argument val must be a string/;
+
+    assert.throws(cookie.serialize.bind(), nameErrMessage);
+
+    assert.throws(cookie.serialize.bind(null, 1010), nameErrMessage);
+    assert.throws(cookie.serialize.bind(null, 'foo', 1010), valErrMessage);
+
+    assert.throws(cookie.serialize.bind(null, true), nameErrMessage);
+    assert.throws(cookie.serialize.bind(null, 'foo', true), valErrMessage);
+
+    assert.throws(cookie.serialize.bind(null, (function() {return;})), nameErrMessage);
+    assert.throws(cookie.serialize.bind(null, 'foo', (function() {return;})), valErrMessage);
+
+    assert.throws(cookie.serialize.bind(null, new Date()), nameErrMessage);
+    assert.throws(cookie.serialize.bind(null, 'foo', new Date()), valErrMessage);
+
+    assert.throws(cookie.serialize.bind(null, []), nameErrMessage);
+    assert.throws(cookie.serialize.bind(null, 'foo', []), valErrMessage);
+
+    assert.throws(cookie.serialize.bind(null, {}), nameErrMessage);
+    assert.throws(cookie.serialize.bind(null, 'foo', {}), valErrMessage);
+});
+
 test('basic', function() {
     assert.equal('foo=bar', cookie.serialize('foo', 'bar'));
     assert.equal('foo=bar%20baz', cookie.serialize('foo', 'bar baz'));
