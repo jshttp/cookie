@@ -177,7 +177,7 @@ function onRequest(req, res) {
 
   res.write('<form method="GET">');
   res.write('<input placeholder="enter your name" name="name"> <input type="submit" value="Set Name">');
-  res.end('</form');
+  res.end('</form>');
 }
 
 http.createServer(onRequest).listen(3000);
