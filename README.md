@@ -189,6 +189,38 @@ http.createServer(onRequest).listen(3000);
 $ npm test
 ```
 
+## Benchmark
+
+```
+$ npm run bench
+
+> cookie@0.3.1 bench cookie
+> node benchmark/index.js
+
+  http_parser@2.8.0
+  node@6.14.2
+  v8@5.1.281.111
+  uv@1.16.1
+  zlib@1.2.11
+  ares@1.10.1-DEV
+  icu@58.2
+  modules@48
+  napi@3
+  openssl@1.0.2o
+
+> node benchmark/parse.js
+
+  cookie.parse
+
+  5 tests completed.
+
+  simple      x 1,219,426 ops/sec ±0.91% (190 runs sampled)
+  decode      x 1,058,195 ops/sec ±1.27% (189 runs sampled)
+  unquote     x 1,131,299 ops/sec ±1.27% (188 runs sampled)
+  10 cookies  x   149,357 ops/sec ±0.53% (188 runs sampled)
+  100 cookies x    14,670 ops/sec ±0.87% (188 runs sampled)
+```
+
 ## References
 
 - [RFC 6265: HTTP State Management Mechanism][rfc-6265]
