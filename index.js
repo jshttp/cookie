@@ -21,8 +21,6 @@ exports.serialize = serialize;
  */
 
 var __toString = Object.prototype.toString
-var decode = decodeURIComponent;
-var encode = encodeURIComponent;
 
 /**
  * RegExp to match field-content in RFC 7230 sec 3.2
@@ -217,6 +215,30 @@ function serialize(name, val, options) {
   }
 
   return str;
+}
+
+/**
+ * URL-decode string value. Optimized to skip native call when no %.
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+
+function decode (str) {
+  return str.indexOf('%') !== -1
+    ? decodeURIComponent(str)
+    : str
+}
+
+/**
+ * URL-encode value.
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+
+function encode (val) {
+  return encodeURIComponent(val)
 }
 
 /**
