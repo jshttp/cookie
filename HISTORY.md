@@ -3,6 +3,7 @@ unreleased
 
   * Add `priority` option
   * Fix `expires` option to reject invalid dates
+  * pref: remove slow string split in parse
 
 0.4.2 / 2022-02-02
 ==================

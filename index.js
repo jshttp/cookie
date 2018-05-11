@@ -53,31 +53,42 @@ function parse(str, options) {
 
   var obj = {}
   var opt = options || {};
-  var pairs = str.split(';')
   var dec = opt.decode || decode;
 
-  for (var i = 0; i < pairs.length; i++) {
-    var pair = pairs[i];
-    var index = pair.indexOf('=')
+  var index = 0
+  while (index < str.length) {
+    var eqIdx = str.indexOf('=', index)
 
-    // skip things that don't look like key=value
-    if (index < 0) {
-      continue;
+    // no more cookie pairs
+    if (eqIdx === -1) {
+      break
     }
 
-    var key = pair.substring(0, index).trim()
+    var endIdx = str.indexOf(';', index)
+
+    if (endIdx === -1) {
+      endIdx = str.length
+    } else if (endIdx < eqIdx) {
+      // backtrack on prior semicolon
+      index = str.lastIndexOf(';', eqIdx - 1) + 1
+      continue
+    }
+
+    var key = str.slice(index, eqIdx).trim()
 
     // only assign once
-    if (undefined == obj[key]) {
-      var val = pair.substring(index + 1, pair.length).trim()
+    if (undefined === obj[key]) {
+      var val = str.slice(eqIdx + 1, endIdx).trim()
 
       // quoted values
-      if (val[0] === '"') {
+      if (val.charCodeAt(0) === 0x22) {
         val = val.slice(1, -1)
       }
 
       obj[key] = tryDecode(val, dec);
     }
+
+    index = endIdx + 1
   }
 
   return obj;
