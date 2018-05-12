@@ -32,6 +32,12 @@ suite.add({
 })
 
 suite.add({
+  name: 'duplicates',
+  minSamples: 100,
+  fn: 'var val = cookie.parse(' + JSON.stringify(gencookies(2) + '; ' + gencookies(2)) + ')'
+})
+
+suite.add({
   name: '10 cookies',
   minSamples: 100,
   fn: 'var val = cookie.parse(' + JSON.stringify(gencookies(10)) + ')'

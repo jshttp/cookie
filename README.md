@@ -211,13 +211,14 @@ $ npm run bench
 
   cookie.parse
 
-  5 tests completed.
+  6 tests completed.
 
-  simple      x 1,219,426 ops/sec ±0.91% (190 runs sampled)
-  decode      x 1,058,195 ops/sec ±1.27% (189 runs sampled)
-  unquote     x 1,131,299 ops/sec ±1.27% (188 runs sampled)
-  10 cookies  x   149,357 ops/sec ±0.53% (188 runs sampled)
-  100 cookies x    14,670 ops/sec ±0.87% (188 runs sampled)
+  simple      x 1,200,691 ops/sec ±1.12% (189 runs sampled)
+  decode      x 1,012,994 ops/sec ±0.97% (186 runs sampled)
+  unquote     x 1,074,174 ops/sec ±2.43% (186 runs sampled)
+  duplicates  x   438,424 ops/sec ±2.17% (184 runs sampled)
+  10 cookies  x   147,154 ops/sec ±1.01% (186 runs sampled)
+  100 cookies x    14,274 ops/sec ±1.07% (187 runs sampled)
 ```
 
 ## References
