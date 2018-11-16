@@ -1,7 +1,7 @@
 # cookie
 
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
+[![NPM Version][npm-version-image]][npm-url]
+[![NPM Downloads][npm-downloads-image]][npm-url]
 [![Node.js Version][node-version-image]][node-version-url]
 [![Build Status][travis-image]][travis-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
@@ -241,13 +241,12 @@ $ npm run bench
 
 [MIT](LICENSE)
 
-[npm-image]: https://img.shields.io/npm/v/cookie.svg
-[npm-url]: https://npmjs.org/package/cookie
-[node-version-image]: https://img.shields.io/node/v/cookie.svg
-[node-version-url]: https://nodejs.org/en/download
-[travis-image]: https://img.shields.io/travis/jshttp/cookie/master.svg
-[travis-url]: https://travis-ci.org/jshttp/cookie
-[coveralls-image]: https://img.shields.io/coveralls/jshttp/cookie/master.svg
+[coveralls-image]: https://badgen.net/coveralls/c/github/jshttp/cookie/master
 [coveralls-url]: https://coveralls.io/r/jshttp/cookie?branch=master
-[downloads-image]: https://img.shields.io/npm/dm/cookie.svg
-[downloads-url]: https://npmjs.org/package/cookie
+[node-version-image]: https://badgen.net/npm/node/cookie
+[node-version-url]: https://nodejs.org/en/download
+[npm-downloads-image]: https://badgen.net/npm/dm/cookie
+[npm-url]: https://npmjs.org/package/cookie
+[npm-version-image]: https://badgen.net/npm/v/cookie
+[travis-image]: https://badgen.net/travis/jshttp/cookie/master
+[travis-url]: https://travis-ci.org/jshttp/cookie
