@@ -1,3 +1,6 @@
+parserOptions:
+  ecmaVersion: 6
+  sourceType: module
 rules:
   eol-last: error
   indent: ["error", 2, { "SwitchCase": 1 }]

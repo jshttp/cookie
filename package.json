@@ -13,6 +13,11 @@
   ],
   "repository": "jshttp/cookie",
   "devDependencies": {
+    "@pika/pack": "^0.3.2",
+    "@pika/plugin-build-node": "^0.3.11",
+    "@pika/plugin-build-web": "^0.3.11",
+    "@pika/plugin-standard-pkg": "^0.3.11",
+    "@pika/plugin-build-types": "^0.3.11",
     "beautify-benchmark": "0.2.4",
     "benchmark": "2.1.4",
     "eslint": "4.19.1",
@@ -24,7 +29,7 @@
     "HISTORY.md",
     "LICENSE",
     "README.md",
-    "index.js"
+    "src/index.js"
   ],
   "engines": {
     "node": ">= 0.6"
@@ -34,6 +39,15 @@
     "lint": "eslint --plugin markdown --ext js,md .",
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-ci": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/",
-    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/"
+    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/",
+    "build": "pack build"
+  },
+  "@pika/pack": {
+    "pipeline": [
+      ["@pika/plugin-standard-pkg"],
+      ["@pika/plugin-build-node"],
+      ["@pika/plugin-build-web"],
+      ["@pika/plugin-build-types"]
+    ]
   }
 }

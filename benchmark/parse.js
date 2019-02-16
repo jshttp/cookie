@@ -9,7 +9,7 @@ var benchmarks = require('beautify-benchmark')
  * Globals for benchmark.js
  */
 
-global.cookie = require('..')
+global.cookie = require('../pkg')
 
 var suite = new benchmark.Suite()
 

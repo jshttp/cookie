@@ -65,7 +65,8 @@ before_install:
       npm prune
       npm rebuild
     fi
-
+before_script:
+  - npm run build
 script:
   - |
     # Run test script, depending on istanbul install

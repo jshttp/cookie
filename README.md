@@ -16,8 +16,22 @@ $ npm install cookie
 
 ## API
 
+### CommonJS syntax
+
 ```js
 var cookie = require('cookie');
+```
+
+### ES module syntax
+
+```js
+import * as cookie from 'cookie';
+```
+
+or
+
+```js
+import { serialize, parse } from 'cookie';
 ```
 
 ### cookie.parse(str, options)
@@ -180,6 +194,12 @@ function onRequest(req, res) {
 }
 
 http.createServer(onRequest).listen(3000);
+```
+
+## Building
+
+```sh
+$ npm run build
 ```
 
 ## Testing

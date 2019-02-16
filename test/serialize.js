@@ -1,7 +1,7 @@
 // builtin
 var assert = require('assert');
 
-var cookie = require('..');
+var cookie = require('../pkg');
 
 suite('serialize');
 
