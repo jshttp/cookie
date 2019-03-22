@@ -18,7 +18,7 @@
     "eslint": "5.15.3",
     "eslint-plugin-markdown": "1.0.0",
     "istanbul": "0.4.5",
-    "mocha": "5.2.0"
+    "mocha": "6.0.2"
   },
   "files": [
     "HISTORY.md",
