@@ -117,6 +117,14 @@ test('sameSite', function() {
     sameSite: 'lax'
   }));
 
+  assert.equal('foo=bar; SameSite=None', cookie.serialize('foo', 'bar', {
+    sameSite: 'None'
+  }));
+
+  assert.equal('foo=bar; SameSite=None', cookie.serialize('foo', 'bar', {
+    sameSite: 'none'
+  }));
+
   assert.equal('foo=bar', cookie.serialize('foo', 'bar', {
     sameSite: false
   }));
