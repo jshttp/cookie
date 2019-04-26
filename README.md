@@ -110,15 +110,16 @@ is considered the ["default path"][rfc-6265-5.1.4].
 
 ##### sameSite
 
-Specifies the `boolean` or `string` to be the value for the [`SameSite` `Set-Cookie` attribute][draft-ietf-httpbis-cookie-same-site-00].
+Specifies the `boolean` or `string` to be the value for the [`SameSite` `Set-Cookie` attribute][rfc-6265bis-03-4.1.2.7].
 
   - `true` will set the `SameSite` attribute to `Strict` for strict same site enforcement.
   - `false` will not set the `SameSite` attribute.
   - `'lax'` will set the `SameSite` attribute to `Lax` for lax same site enforcement.
+  - `'none'` will set the `SameSite` attribute to `None` for an explicit cross-site cookie.
   - `'strict'` will set the `SameSite` attribute to `Strict` for strict same site enforcement.
 
-More information about the different enforcement levels can be found in the specification
-https://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site-00#section-4.1.1
+More information about the different enforcement levels can be found in
+[the specification][rfc-6265bis-03-4.1.2.7].
 
 **note** This is an attribute that has not yet been fully standardized, and may change in the future.
 This also means many clients may ignore this attribute until they understand it.
@@ -224,9 +225,9 @@ $ npm run bench
 ## References
 
 - [RFC 6265: HTTP State Management Mechanism][rfc-6265]
-- [Same-site Cookies][draft-ietf-httpbis-cookie-same-site-00]
+- [Same-site Cookies][rfc-6265bis-03-4.1.2.7]
 
-[draft-ietf-httpbis-cookie-same-site-00]: https://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site-00
+[rfc-6265bis-03-4.1.2.7]: https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-03#section-4.1.2.7
 [rfc-6265]: https://tools.ietf.org/html/rfc6265
 [rfc-6265-5.1.4]: https://tools.ietf.org/html/rfc6265#section-5.1.4
 [rfc-6265-5.2.1]: https://tools.ietf.org/html/rfc6265#section-5.2.1
