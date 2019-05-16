@@ -1,5 +1,5 @@
-unreleased
-==========
+0.4.0 / 2019-05-15
+==================
 
   * Add `SameSite=None` support
 
