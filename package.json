@@ -13,6 +13,7 @@
   ],
   "repository": "jshttp/cookie",
   "module": "index.js",
+  "types": "index.d.ts",
   "devDependencies": {
     "beautify-benchmark": "0.2.4",
     "benchmark": "2.1.4",
@@ -25,7 +26,8 @@
     "HISTORY.md",
     "LICENSE",
     "README.md",
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "engines": {
     "node": ">= 10.16"
