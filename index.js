@@ -2,6 +2,7 @@
  * cookie
  * Copyright(c) 2012-2014 Roman Shtylman
  * Copyright(c) 2015 Douglas Christopher Wilson
+ * Copyright(c) 2019 Mark Kennedy
  * MIT Licensed
  */
 
