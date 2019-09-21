@@ -12,6 +12,7 @@
     "cookies"
   ],
   "repository": "jshttp/cookie",
+  "module": "index.js",
   "devDependencies": {
     "beautify-benchmark": "0.2.4",
     "benchmark": "2.1.4",
@@ -27,7 +28,7 @@
     "index.js"
   ],
   "engines": {
-    "node": ">= 0.6"
+    "node": ">= 10.16"
   },
   "scripts": {
     "bench": "node benchmark/index.js",

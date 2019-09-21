@@ -8,14 +8,6 @@
 'use strict';
 
 /**
- * Module exports.
- * @public
- */
-
-exports.parse = parse;
-exports.serialize = serialize;
-
-/**
  * Module variables.
  * @private
  */
@@ -46,7 +38,7 @@ var fieldContentRegExp = /^[\u0009\u0020-\u007e\u0080-\u00ff]+$/;
  * @public
  */
 
-function parse(str, options) {
+export function parse(str, options) {
   if (typeof str !== 'string') {
     throw new TypeError('argument str must be a string');
   }
@@ -98,7 +90,7 @@ function parse(str, options) {
  * @public
  */
 
-function serialize(name, val, options) {
+export function serialize(name, val, options) {
   var opt = options || {};
   var enc = opt.encode || encode;
 
