@@ -11,25 +11,28 @@ Basic HTTP cookie parser and serializer for HTTP servers.
 ## Installation
 
 ```sh
-$ npm install cookie
+npm install cookie
+```
+
+## Basic Example
+
+```js
+import {parse, serialize } from 'cookie';
+// parse a cookie string
+const cookies = parse('foo=bar; equation=E%3Dmc%5E2'); 
+console.log(cookies); // { foo: 'bar', equation: 'E=mc^2' }
+
+// set a foo cookie to bar
+serialize('foo', 'bar');
 ```
 
 ## API
-
-```js
-var cookie = require('cookie');
-```
 
 ### cookie.parse(str, options)
 
 Parse an HTTP `Cookie` header string and returning an object of all cookie name-value pairs.
 The `str` argument is the string representing a `Cookie` header value and `options` is an
 optional object containing additional parsing options.
-
-```js
-var cookies = cookie.parse('foo=bar; equation=E%3Dmc%5E2');
-// { foo: 'bar', equation: 'E=mc^2' }
-```
 
 #### Options
 
@@ -53,10 +56,6 @@ Serialize a cookie name-value pair into a `Set-Cookie` header string. The `name`
 name for the cookie, the `value` argument is the value to set the cookie to, and the `options`
 argument is an optional object containing additional serialization options.
 
-```js
-var setCookie = cookie.serialize('foo', 'bar');
-// foo=bar
-```
 
 #### Options
 
@@ -132,24 +131,24 @@ the `Secure` attribute is set, otherwise it is not. By default, the `Secure` att
 **note** be careful when setting this to `true`, as compliant clients will not send the cookie back to
 the server in the future if the browser does not have an HTTPS connection.
 
-## Example
+## Advanced Example
 
 The following example uses this module in conjunction with the Node.js core HTTP server
 to prompt a user for their name and display it back on future visits.
 
 ```js
-var cookie = require('cookie');
-var escapeHtml = require('escape-html');
-var http = require('http');
-var url = require('url');
+import { serialize, parse } from 'cookie-esm';
+const escapeHtml = require('escape-html');
+const http = require('http');
+const url = require('url');
 
 function onRequest(req, res) {
   // Parse the query string
-  var query = url.parse(req.url, true, true).query;
+  const query = url.parse(req.url, true, true).query;
 
   if (query && query.name) {
     // Set a new cookie with the name
-    res.setHeader('Set-Cookie', cookie.serialize('name', String(query.name), {
+    res.setHeader('Set-Cookie', serialize('name', String(query.name), {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 7 // 1 week
     }));
@@ -162,10 +161,10 @@ function onRequest(req, res) {
   }
 
   // Parse the cookies on the request
-  var cookies = cookie.parse(req.headers.cookie || '');
+  const cookies = parse(req.headers.cookie || '');
 
   // Get the visitor name set in the cookie
-  var name = cookies.name;
+  const { name } = cookies;
 
   res.setHeader('Content-Type', 'text/html; charset=UTF-8');
 
