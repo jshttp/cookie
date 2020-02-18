@@ -132,6 +132,17 @@ the `Secure` attribute is set, otherwise it is not. By default, the `Secure` att
 **note** be careful when setting this to `true`, as compliant clients will not send the cookie back to
 the server in the future if the browser does not have an HTTPS connection.
 
+### cookie.serializeObject(cookies, options)
+
+Serialize an object of multiple cookie name-value pairs into an array of `Set-Cookie` header strings. The `cookies` argument is an
+object containing cookie name-value pairs and the `options` argument is a set of options that will be passed to `cookie.serialize`
+and applied to each cookie name-value pair in `cookies`.
+
+```js
+var cookies = cookie.serializeObject({foo: 'bar', bar: 'foo'}, {httpOnly: true});
+// ['foo=bar; HttpOnly', 'bar=foo; HttpOnly']
+```
+
 ## Example
 
 The following example uses this module in conjunction with the Node.js core HTTP server

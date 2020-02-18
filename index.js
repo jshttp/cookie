@@ -14,6 +14,7 @@
 
 exports.parse = parse;
 exports.serialize = serialize;
+exports.serializeObject = serializeObject;
 
 /**
  * Module variables.
@@ -85,8 +86,8 @@ function parse(str, options) {
 /**
  * Serialize data into a cookie header.
  *
- * Serialize the a name value pair into a cookie string suitable for
- * http headers. An optional options object specified cookie parameters.
+ * Serialize a name value pair into a cookie string suitable for
+ * http headers. An optional options object specifies cookie parameters.
  *
  * serialize('foo', 'bar', { httpOnly: true })
  *   => "foo=bar; httpOnly"
@@ -179,6 +180,37 @@ function serialize(name, val, options) {
   }
 
   return str;
+}
+
+/**
+ * Serialize multiple cookies.
+ *
+ * Serialize an object of multiple name value pairs into cookie strings suitable for
+ * http headers. An optional options object specifies cookie parameters
+ * and will be applied to each name value pair.
+ *
+ * serializeObjet({foo: 'bar', bar: 'foo'}, { httpOnly: true })
+ *   => ["foo=bar; httpOnly", "bar=foo; httpOnly"]
+ *
+ * @param {object} cookies
+ * @param {object} [options]
+ * @return {array}
+ * @public
+ */
+
+function serializeObject(cookies, options) {
+  if (typeof cookies !== 'object') {
+    throw new TypeError('cookies must be an object');
+  }
+
+  var cookieArray = Object.keys(cookies);
+
+  for (var i = 0; i < cookieArray.length; i++) {
+    var name = cookieArray[i];
+    cookieArray[i] = serialize(name, cookies[name], options);
+  }
+
+  return cookieArray;
 }
 
 /**
