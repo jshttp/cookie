@@ -16,7 +16,7 @@
     "beautify-benchmark": "0.2.4",
     "benchmark": "2.1.4",
     "eslint": "6.8.0",
-    "eslint-plugin-markdown": "1.0.1",
+    "eslint-plugin-markdown": "1.0.2",
     "istanbul": "0.4.5",
     "mocha": "7.0.0"
   },
