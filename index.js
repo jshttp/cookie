@@ -173,6 +173,9 @@ function serialize(name, val, options) {
       case 'none':
         str += '; SameSite=None';
         break;
+      case 'Unset':
+        str += '; SameSite=None';
+        break;
       default:
         throw new TypeError('option sameSite is invalid');
     }
