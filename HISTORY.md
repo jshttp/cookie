@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Fix `maxAge` option to reject invalid values
+
 0.4.0 / 2019-05-15
 ==================
 

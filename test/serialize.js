@@ -55,7 +55,13 @@ test('maxAge', function() {
     cookie.serialize('foo', 'bar', {
       maxAge: 'buzz'
     });
-  }, /maxAge should be a Number/);
+  }, /option maxAge is invalid/)
+
+  assert.throws(function () {
+    cookie.serialize('foo', 'bar', {
+      maxAge: Infinity
+    })
+  }, /option maxAge is invalid/)
 
   assert.equal('foo=bar; Max-Age=1000', cookie.serialize('foo', 'bar', {
     maxAge: 1000
