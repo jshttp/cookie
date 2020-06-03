@@ -70,3 +70,18 @@ test('assign only once', function() {
   assert.deepEqual({ foo: '', bar: 'bar' },
     cookie.parse('foo=;bar=bar;foo=boo'));
 });
+
+test('multiValuedCookies flag', function () {
+  assert.deepEqual(
+    { foo: ["%1", "boo"], bar: "bar" },
+    cookie.parse("foo=%1;bar=bar;foo=boo", {
+      multiValuedCookies: true
+    })
+  );
+  assert.deepEqual(
+    { foo: ["", "boo"], bar: "bar" },
+    cookie.parse("foo=;bar=bar;foo=boo", {
+      multiValuedCookies: true,
+    })
+  );
+});
