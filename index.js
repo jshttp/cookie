@@ -80,7 +80,7 @@ function parse(str, options) {
       if (typeof obj[key] === 'string') {
         obj[key] = [obj[key], tryDecode(val, dec)];
       } else {
-        obj[key] = obj[key].push(tryDecode(val, dec));
+        obj[key].push(tryDecode(val, dec));
       }
     }
   }
