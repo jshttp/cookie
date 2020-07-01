@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+'use strict';
+
+/**
+ * This file serves as the pre-build step during Terrapin npm package builds.
+ * 
+ * Its function is to clean the `integrity` fields from `package-lock.js` files, so that the build
+ * can use Terrapin-built artifacts that might have different hashes and 
+ * remove `private` field from `package.json` file to resolve the build failure 
+ * caused by private npm pakages.
+ */ 
+
+function visitDependencies(node, cb) {
+	if (!node.hasOwnProperty("dependencies"))
+		return;
+
+	for (var depKey in node.dependencies) {
+		var depNode = node.dependencies[depKey];
+		visitDependencies(depNode, cb);
+		cb(depNode);
+	}
+}
+
+function saveJsonFile(fileData, fileName) {
+	let fileText = JSON.stringify(fileData, null, 2);
+	fs.writeFileSync(fileName, fileText);
+	console.log(`Wrote ${fileName}`);
+}
+
+const fs = require('fs');
+
+const lockFileName = 'package-lock.json';
+const packageFileName = 'package.json';
+const integrityField = 'integrity';
+const privateField = 'private';
+
+if (fs.existsSync(lockFileName)) {
+	console.log(`Cleaning ${lockFileName} from all '${integrityField}' fields, to allow Terrapin-built artifacts to be consumed`);
+	let lockFileText = fs.readFileSync(lockFileName);
+
+	let lockData = JSON.parse(lockFileText);
+	var i = 0;
+	visitDependencies(lockData, function (dep) {
+		if (dep[integrityField]) {
+			++i;
+			delete dep[integrityField];
+		}
+	});
+	console.log(`Cleaned ${i} '${integrityField}' fields`);
+
+	saveJsonFile(lockData, lockFileName);
+}
+else {
+	console.log('Lock file not found');
+}
