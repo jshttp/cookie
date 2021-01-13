@@ -5,8 +5,6 @@
  * MIT Licensed
  */
 
-'use strict';
-
 /**
  * Module exports.
  * @public
@@ -56,13 +54,12 @@ function parse(str, options) {
   var pairs = str.split(pairSplitRegExp);
   var dec = opt.decode || decode;
 
-  for (var i = 0; i < pairs.length; i++) {
-    var pair = pairs[i];
-    var eq_idx = pair.indexOf('=');
+  pairs.forEach(function (pair) {
+    var eq_idx = pair.indexOf('=')
 
     // skip things that don't look like key=value
     if (eq_idx < 0) {
-      continue;
+      return;
     }
 
     var key = pair.substr(0, eq_idx).trim()
@@ -77,13 +74,53 @@ function parse(str, options) {
     if (undefined == obj[key]) {
       obj[key] = tryDecode(val, dec);
     }
-  }
+  });
 
   return obj;
 }
 
 /**
  * Serialize data into a cookie header.
+ *
+ * If the first parameter is an object, serialize the key-value pairs
+ * in the object into an array of cookie strings suitable for http headers.
+ * An optional options object can be used to specify the encoding and cookie
+ * parameters.
+ *
+ * If the first parameter is a string, serialize the name value pair
+ * into a cookie string suitable for http headers. An optional options
+ * object specifies cookie parameters and encoding.
+ *
+ * serialize('foo', 'bar', { httpOnly: true })
+ *   => "foo=bar; httpOnly"
+ *
+ * serialize({ foo: 'bar', cat: 'meow' }, { httpOnly: true })
+ *  => ["foo=bar; httpOnly", "cat=meow; httpOnly"]
+ *
+ * @param {string} name
+ * @param {string} val
+ * @param {object} [options]
+ * @return {string}
+ * @public
+ */
+
+function serialize(name, val, options) {
+  if (typeof name === 'object') {
+    var cookies = name;
+    var serializeOptions = val;
+    return Object.keys(cookies).reduce(function (acc, key, i, arr) {
+      console.log(`key${key} value: ${cookies[key]} serializeOptions: ${serializeOptions}`);
+      console.log(`serailized`, serializeNameValue(key, cookies[key], serializeOptions))
+      console.log('serialized', acc + serializeNameValue(key, cookies[key], serializeOptions));
+      return acc + serializeNameValue(key, cookies[key], serializeOptions);
+    }, '');
+  } else {
+    return serializeNameValue(name, val, options);
+  }
+}
+
+/**
+ * Serialize name value pair into a cookie header.
  *
  * Serialize the a name value pair into a cookie string suitable for
  * http headers. An optional options object specified cookie parameters.
@@ -95,16 +132,12 @@ function parse(str, options) {
  * @param {string} val
  * @param {object} [options]
  * @return {string}
- * @public
+ * @private
  */
 
-function serialize(name, val, options) {
+function serializeNameValue(name, val, options) {
   var opt = options || {};
   var enc = opt.encode || encode;
-
-  if (typeof enc !== 'function') {
-    throw new TypeError('option encode is invalid');
-  }
 
   if (!fieldContentRegExp.test(name)) {
     throw new TypeError('argument name is invalid');
@@ -116,16 +149,12 @@ function serialize(name, val, options) {
     throw new TypeError('argument val is invalid');
   }
 
-  var str = name + '=' + value;
+  var pairs = [name + '=' + value];
 
   if (null != opt.maxAge) {
     var maxAge = opt.maxAge - 0;
-
-    if (isNaN(maxAge) || !isFinite(maxAge)) {
-      throw new TypeError('option maxAge is invalid')
-    }
-
-    str += '; Max-Age=' + Math.floor(maxAge);
+    if (isNaN(maxAge)) throw new Error('maxAge should be a Number');
+    pairs.push('Max-Age=' + Math.floor(maxAge));
   }
 
   if (opt.domain) {
@@ -133,7 +162,7 @@ function serialize(name, val, options) {
       throw new TypeError('option domain is invalid');
     }
 
-    str += '; Domain=' + opt.domain;
+    pairs.push('Domain=' + opt.domain);
   }
 
   if (opt.path) {
@@ -141,48 +170,15 @@ function serialize(name, val, options) {
       throw new TypeError('option path is invalid');
     }
 
-    str += '; Path=' + opt.path;
+    pairs.push('Path=' + opt.path);
   }
 
-  if (opt.expires) {
-    if (typeof opt.expires.toUTCString !== 'function') {
-      throw new TypeError('option expires is invalid');
-    }
+  if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
+  if (opt.httpOnly) pairs.push('HttpOnly');
+  if (opt.secure) pairs.push('Secure');
+  if (opt.firstPartyOnly) pairs.push('First-Party-Only');
 
-    str += '; Expires=' + opt.expires.toUTCString();
-  }
-
-  if (opt.httpOnly) {
-    str += '; HttpOnly';
-  }
-
-  if (opt.secure) {
-    str += '; Secure';
-  }
-
-  if (opt.sameSite) {
-    var sameSite = typeof opt.sameSite === 'string'
-      ? opt.sameSite.toLowerCase() : opt.sameSite;
-
-    switch (sameSite) {
-      case true:
-        str += '; SameSite=Strict';
-        break;
-      case 'lax':
-        str += '; SameSite=Lax';
-        break;
-      case 'strict':
-        str += '; SameSite=Strict';
-        break;
-      case 'none':
-        str += '; SameSite=None';
-        break;
-      default:
-        throw new TypeError('option sameSite is invalid');
-    }
-  }
-
-  return str;
+  return pairs.join('; ');
 }
 
 /**

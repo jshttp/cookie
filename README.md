@@ -62,6 +62,16 @@ var setCookie = cookie.serialize('foo', 'bar');
 // foo=bar
 ```
 
+### cookie.serialize(cookieObject, options)
+
+Serialize a cookie object map into a `Set-Cookie` header string. the `object` argument is an object of key value pairs for each cookie, the options
+argument is an optional object containing additional serialization options.
+
+```js
+var setCookie = cookie.serialize({foo: 'bar'});
+// foo=bar
+```
+
 #### Options
 
 `cookie.serialize` accepts these properties in the options object.
