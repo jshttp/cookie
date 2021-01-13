@@ -14,9 +14,11 @@ test('basic', function() {
   assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {encode: 42}), /option encode is invalid/);
 });
 
-test('serialise object', function () {
-  console.log('obj to cookie string', cookie.serialize({ foo: 'bar' }))
+test('serialize object', function () {
   assert.equal('foo=bar; HttpOnly', cookie.serialize({foo: 'bar'}, {
+    httpOnly: true
+  }));
+  assert.equal('foo=bar; HttpOnly baz=boo; HttpOnly', cookie.serialize({ foo: 'bar', baz: 'boo' }, {
     httpOnly: true
   }));
 });
