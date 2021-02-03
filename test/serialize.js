@@ -141,20 +141,20 @@ test('sameSite', function() {
 });
 
 test('escaping', function() {
-  assert.deepEqual('cat=%2B%20', cookie.serialize('cat', '+ '));
+  assert.deepStrictEqual('cat=%2B%20', cookie.serialize('cat', '+ '));
 });
 
 test('parse->serialize', function() {
 
-  assert.deepEqual({ cat: 'foo=123&name=baz five' }, cookie.parse(
+  assert.deepStrictEqual({ cat: 'foo=123&name=baz five' }, cookie.parse(
     cookie.serialize('cat', 'foo=123&name=baz five')));
 
-  assert.deepEqual({ cat: ' ";/' }, cookie.parse(
+  assert.deepStrictEqual({ cat: ' ";/' }, cookie.parse(
     cookie.serialize('cat', ' ";/')));
 });
 
 test('unencoded', function() {
-  assert.deepEqual('cat=+ ', cookie.serialize('cat', '+ ', {
+  assert.deepStrictEqual('cat=+ ', cookie.serialize('cat', '+ ', {
     encode: function(value) { return value; }
   }));
 
