@@ -6,16 +6,16 @@ var cookie = require('..');
 suite('serialize');
 
 test('basic', function() {
-  assert.equal('foo=bar', cookie.serialize('foo', 'bar'));
-  assert.equal('foo=bar%20baz', cookie.serialize('foo', 'bar baz'));
-  assert.equal('foo=', cookie.serialize('foo', ''));
+  assert.deepStrictEqual('foo=bar', cookie.serialize('foo', 'bar'));
+  assert.deepStrictEqual('foo=bar%20baz', cookie.serialize('foo', 'bar baz'));
+  assert.deepStrictEqual('foo=', cookie.serialize('foo', ''));
   assert.throws(cookie.serialize.bind(cookie, 'foo\n', 'bar'), /argument name is invalid/);
   assert.throws(cookie.serialize.bind(cookie, 'foo\u280a', 'bar'), /argument name is invalid/);
   assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {encode: 42}), /option encode is invalid/);
 });
 
 test('path', function() {
-  assert.equal('foo=bar; Path=/', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; Path=/', cookie.serialize('foo', 'bar', {
     path: '/'
   }));
 
@@ -25,17 +25,17 @@ test('path', function() {
 });
 
 test('secure', function() {
-  assert.equal('foo=bar; Secure', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; Secure', cookie.serialize('foo', 'bar', {
     secure: true
   }));
 
-  assert.equal('foo=bar', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar', cookie.serialize('foo', 'bar', {
     secure: false
   }));
 });
 
 test('domain', function() {
-  assert.equal('foo=bar; Domain=example.com', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; Domain=example.com', cookie.serialize('foo', 'bar', {
     domain: 'example.com'
   }));
 
@@ -45,7 +45,7 @@ test('domain', function() {
 });
 
 test('httpOnly', function() {
-  assert.equal('foo=bar; HttpOnly', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; HttpOnly', cookie.serialize('foo', 'bar', {
     httpOnly: true
   }));
 });
@@ -63,37 +63,37 @@ test('maxAge', function() {
     })
   }, /option maxAge is invalid/)
 
-  assert.equal('foo=bar; Max-Age=1000', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; Max-Age=1000', cookie.serialize('foo', 'bar', {
     maxAge: 1000
   }));
 
-  assert.equal('foo=bar; Max-Age=1000', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; Max-Age=1000', cookie.serialize('foo', 'bar', {
     maxAge: '1000'
   }));
 
-  assert.equal('foo=bar; Max-Age=0', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; Max-Age=0', cookie.serialize('foo', 'bar', {
     maxAge: 0
   }));
 
-  assert.equal('foo=bar; Max-Age=0', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; Max-Age=0', cookie.serialize('foo', 'bar', {
     maxAge: '0'
   }));
 
-  assert.equal('foo=bar', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar', cookie.serialize('foo', 'bar', {
     maxAge: null
   }));
 
-  assert.equal('foo=bar', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar', cookie.serialize('foo', 'bar', {
     maxAge: undefined
   }));
 
-  assert.equal('foo=bar; Max-Age=3', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; Max-Age=3', cookie.serialize('foo', 'bar', {
     maxAge: 3.14
   }));
 });
 
 test('expires', function() {
-  assert.equal('foo=bar; Expires=Sun, 24 Dec 2000 10:30:59 GMT', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; Expires=Sun, 24 Dec 2000 10:30:59 GMT', cookie.serialize('foo', 'bar', {
     expires: new Date(Date.UTC(2000, 11, 24, 10, 30, 59, 900))
   }));
 
@@ -103,35 +103,35 @@ test('expires', function() {
 });
 
 test('sameSite', function() {
-  assert.equal('foo=bar; SameSite=Strict', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; SameSite=Strict', cookie.serialize('foo', 'bar', {
     sameSite: true
   }));
 
-  assert.equal('foo=bar; SameSite=Strict', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; SameSite=Strict', cookie.serialize('foo', 'bar', {
     sameSite: 'Strict'
   }));
 
-  assert.equal('foo=bar; SameSite=Strict', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; SameSite=Strict', cookie.serialize('foo', 'bar', {
     sameSite: 'strict'
   }));
 
-  assert.equal('foo=bar; SameSite=Lax', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; SameSite=Lax', cookie.serialize('foo', 'bar', {
     sameSite: 'Lax'
   }));
 
-  assert.equal('foo=bar; SameSite=Lax', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; SameSite=Lax', cookie.serialize('foo', 'bar', {
     sameSite: 'lax'
   }));
 
-  assert.equal('foo=bar; SameSite=None', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; SameSite=None', cookie.serialize('foo', 'bar', {
     sameSite: 'None'
   }));
 
-  assert.equal('foo=bar; SameSite=None', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar; SameSite=None', cookie.serialize('foo', 'bar', {
     sameSite: 'none'
   }));
 
-  assert.equal('foo=bar', cookie.serialize('foo', 'bar', {
+  assert.deepStrictEqual('foo=bar', cookie.serialize('foo', 'bar', {
     sameSite: false
   }));
 
