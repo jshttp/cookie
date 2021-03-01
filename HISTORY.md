@@ -1,4 +1,4 @@
-0.5.0 / 2020-06-04
+unreleased
 ==================
 
   * Add support for reading multiple cookies with same name

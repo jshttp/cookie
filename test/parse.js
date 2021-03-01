@@ -90,4 +90,10 @@ test('multiValuedCookies flag', function () {
       multiValuedCookies: true,
     })
   );
+  assert.deepEqual(
+    { foo: "%1", bar: "bar" },
+    cookie.parse("foo=%1;bar=bar", {
+      multiValuedCookies: true,
+    })
+  );
 });
