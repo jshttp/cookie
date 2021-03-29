@@ -15,7 +15,7 @@
   "devDependencies": {
     "beautify-benchmark": "0.2.4",
     "benchmark": "2.1.4",
-    "eslint": "7.17.0",
+    "eslint": "7.23.0",
     "eslint-plugin-markdown": "1.0.2",
     "mocha": "8.3.0",
     "nyc": "15.1.0"
