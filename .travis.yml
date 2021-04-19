@@ -103,7 +103,7 @@ script:
   - |
     # Run test script, depending on nyc install
     if npm_module_installed 'nyc'; then npm run-script test-ci
-    else npm test
+    else ./.test.sh
     fi
   - |
     # Run linting, if eslint exists

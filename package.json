@@ -17,6 +17,7 @@
     "benchmark": "2.1.4",
     "eslint": "7.23.0",
     "eslint-plugin-markdown": "2.0.1",
+    "esm": "3.2.25",
     "mocha": "8.3.2",
     "nyc": "15.1.0"
   },
@@ -24,7 +25,8 @@
     "HISTORY.md",
     "LICENSE",
     "README.md",
-    "index.js"
+    "index.cjs",
+    "wrapper.mjs"
   ],
   "engines": {
     "node": ">= 0.6"
@@ -32,9 +34,15 @@
   "scripts": {
     "bench": "node benchmark/index.js",
     "lint": "eslint .",
-    "test": "mocha --reporter spec --bail --check-leaks --ui qunit test/",
-    "test-ci": "nyc --reporter=text npm test",
+    "test": "mocha --require esm --reporter spec --bail --check-leaks --ui qunit test/",
+    "test-ci": "nyc --reporter=text ./.test.sh",
     "test-cov": "nyc --reporter=html --reporter=text npm test",
     "version": "node scripts/version-history.js && git add HISTORY.md"
+  },
+  "main": "./index.cjs",
+  "module": "./wrapper.mjs",
+  "exports": {
+    "import": "./wrapper.mjs",
+    "require": "./index.cjs"
   }
 }
