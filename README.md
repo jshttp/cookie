@@ -51,6 +51,11 @@ sequences into their byte representations.
 **note** if an error is thrown from this function, the original, non-decoded cookie value will
 be returned as the cookie's value.
 
+##### multiValuedCookies
+
+Specifies a boolean flag which if set to `true` would allow reading multiple cookies with same name (key). All values will be put into an array.
+By default (when `multiValuedCookies` isn't present or set to `false`), only first cookie's value is read which is not in accordance with [RFC 6265](https://tools.ietf.org/html/rfc6265#section-4.2.2) (this behaviour is kept around for backward compatibility reason).
+
 ### cookie.serialize(name, value, options)
 
 Serialize a cookie name-value pair into a `Set-Cookie` header string. The `name` argument is the
