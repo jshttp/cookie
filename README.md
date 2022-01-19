@@ -198,19 +198,26 @@ $ npm test
 ```
 $ npm run bench
 
-> cookie@0.3.1 bench cookie
+> cookie@0.4.1 bench
 > node benchmark/index.js
 
-  http_parser@2.8.0
-  node@6.14.2
-  v8@5.1.281.111
-  uv@1.16.1
+  node@16.13.1
+  v8@9.4.146.24-node.14
+  uv@1.42.0
   zlib@1.2.11
-  ares@1.10.1-DEV
-  icu@58.2
-  modules@48
-  napi@3
-  openssl@1.0.2o
+  brotli@1.0.9
+  ares@1.18.1
+  modules@93
+  nghttp2@1.45.1
+  napi@8
+  llhttp@6.0.4
+  openssl@1.1.1l+quic
+  cldr@39.0
+  icu@69.1
+  tz@2021a
+  unicode@13.0
+  ngtcp2@0.1.0-DEV
+  nghttp3@0.1.0-DEV
 
 > node benchmark/parse.js
 
@@ -218,12 +225,12 @@ $ npm run bench
 
   6 tests completed.
 
-  simple      x 1,200,691 ops/sec ±1.12% (189 runs sampled)
-  decode      x 1,012,994 ops/sec ±0.97% (186 runs sampled)
-  unquote     x 1,074,174 ops/sec ±2.43% (186 runs sampled)
-  duplicates  x   438,424 ops/sec ±2.17% (184 runs sampled)
-  10 cookies  x   147,154 ops/sec ±1.01% (186 runs sampled)
-  100 cookies x    14,274 ops/sec ±1.07% (187 runs sampled)
+  simple      x 1,583,012 ops/sec ±0.70% (191 runs sampled)
+  decode      x   958,910 ops/sec ±0.44% (193 runs sampled)
+  unquote     x   974,390 ops/sec ±4.49% (188 runs sampled)
+  duplicates  x   572,274 ops/sec ±0.55% (190 runs sampled)
+  10 cookies  x   164,955 ops/sec ±0.69% (186 runs sampled)
+  100 cookies x    15,415 ops/sec ±0.57% (193 runs sampled)
 ```
 
 ## References
