@@ -22,7 +22,6 @@ exports.serialize = serialize;
 
 var decode = decodeURIComponent;
 var encode = encodeURIComponent;
-var pairSplitRegExp = /; */;
 
 /**
  * RegExp to match field-content in RFC 7230 sec 3.2
@@ -53,7 +52,7 @@ function parse(str, options) {
 
   var obj = {}
   var opt = options || {};
-  var pairs = str.split(pairSplitRegExp);
+  var pairs = str.split(';')
   var dec = opt.decode || decode;
 
   for (var i = 0; i < pairs.length; i++) {

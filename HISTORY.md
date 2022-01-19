@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * pref: remove unnecessary regexp in parse
+
 0.4.1 / 2020-04-21
 ==================
 
