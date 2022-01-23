@@ -60,7 +60,10 @@ function getCookies (site, callback) {
 }
 
 function obfuscate (str) {
-  return str.replace(/[a-z]/g, function () { return 'l' })
+  return str
+    .replace(/%[0-9a-f]{2}/gi, function () { return '%__' })
+    .replace(/[a-z]/g, function () { return 'l' })
     .replace(/[A-Z]/g, function () { return 'U' })
     .replace(/[0-9]/g, function () { return '0' })
+    .replace(/%__/g, function () { return '%22' })
 }
