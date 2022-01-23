@@ -57,15 +57,15 @@ function parse(str, options) {
 
   for (var i = 0; i < pairs.length; i++) {
     var pair = pairs[i];
-    var eq_idx = pair.indexOf('=');
+    var index = pair.indexOf('=')
 
     // skip things that don't look like key=value
-    if (eq_idx < 0) {
+    if (index < 0) {
       continue;
     }
 
-    var key = pair.substr(0, eq_idx).trim()
-    var val = pair.substr(++eq_idx, pair.length).trim();
+    var key = pair.substring(0, index).trim()
+    var val = pair.substring(index + 1, pair.length).trim()
 
     // quoted values
     if ('"' == val[0]) {
