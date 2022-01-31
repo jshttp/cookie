@@ -65,15 +65,16 @@ function parse(str, options) {
     }
 
     var key = pair.substring(0, index).trim()
-    var val = pair.substring(index + 1, pair.length).trim()
-
-    // quoted values
-    if ('"' == val[0]) {
-      val = val.slice(1, -1);
-    }
 
     // only assign once
     if (undefined == obj[key]) {
+      var val = pair.substring(index + 1, pair.length).trim()
+
+      // quoted values
+      if (val[0] === '"') {
+        val = val.slice(1, -1)
+      }
+
       obj[key] = tryDecode(val, dec);
     }
   }
