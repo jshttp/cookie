@@ -1,5 +1,5 @@
-unreleased
-==========
+0.4.2 / 2022-02-02
+==================
 
   * pref: read value only when assigning in parse
   * pref: remove unnecessary regexp in parse
