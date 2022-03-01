@@ -19,7 +19,7 @@
     "eslint-plugin-markdown": "2.2.1",
     "mocha": "9.2.1",
     "nyc": "15.1.0",
-    "top-sites": "1.1.87"
+    "top-sites": "1.1.89"
   },
   "files": [
     "HISTORY.md",
