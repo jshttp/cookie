@@ -43,5 +43,5 @@ function gencookies (num) {
     str += '; foo' + i + '=bar'
   }
 
-  return str.substr(2)
+  return str.slice(2)
 }
