@@ -160,6 +160,26 @@ function serialize(name, val, options) {
     str += '; Secure';
   }
 
+  if (opt.priority) {
+    var priority = typeof opt.priority === 'string'
+      ? opt.priority.toLowerCase()
+      : opt.priority
+
+    switch (priority) {
+      case 'low':
+        str += '; Priority=Low'
+        break
+      case 'medium':
+        str += '; Priority=Medium'
+        break
+      case 'high':
+        str += '; Priority=High'
+        break
+      default:
+        throw new TypeError('option priority is invalid')
+    }
+  }
+
   if (opt.sameSite) {
     var sameSite = typeof opt.sameSite === 'string'
       ? opt.sameSite.toLowerCase() : opt.sameSite;

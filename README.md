@@ -112,6 +112,20 @@ so if both are set, they should point to the same date and time.
 Specifies the value for the [`Path` `Set-Cookie` attribute][rfc-6265-5.2.4]. By default, the path
 is considered the ["default path"][rfc-6265-5.1.4].
 
+##### priority
+
+Specifies the `string` to be the value for the [`Priority` `Set-Cookie` attribute][rfc-west-cookie-priority-00-4.1].
+
+  - `'low'` will set the `Priority` attribute to `Low`.
+  - `'medium'` will set the `Priority` attribute to `Medium`, the default priority when not set.
+  - `'high'` will set the `Priority` attribute to `High`.
+
+More information about the different priority levels can be found in
+[the specification][rfc-west-cookie-priority-00-4.1].
+
+**note** This is an attribute that has not yet been fully standardized, and may change in the future.
+This also means many clients may ignore this attribute until they understand it.
+
 ##### sameSite
 
 Specifies the `boolean` or `string` to be the value for the [`SameSite` `Set-Cookie` attribute][rfc-6265bis-09-5.4.7].
@@ -260,6 +274,7 @@ $ npm run bench
 - [RFC 6265: HTTP State Management Mechanism][rfc-6265]
 - [Same-site Cookies][rfc-6265bis-09-5.4.7]
 
+[rfc-west-cookie-priority-00-4.1]: https://tools.ietf.org/html/draft-west-cookie-priority-00#section-4.1
 [rfc-6265bis-09-5.4.7]: https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-09#section-5.4.7
 [rfc-6265]: https://tools.ietf.org/html/rfc6265
 [rfc-6265-5.1.4]: https://tools.ietf.org/html/rfc6265#section-5.1.4

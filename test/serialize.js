@@ -69,6 +69,23 @@ test('expires', function() {
   }), /option expires is invalid/);
 });
 
+test('priority', function () {
+  assert.equal(cookie.serialize('foo', 'bar', { priority: 'Low' }), 'foo=bar; Priority=Low')
+  assert.equal(cookie.serialize('foo', 'bar', { priority: 'loW' }), 'foo=bar; Priority=Low')
+  assert.equal(cookie.serialize('foo', 'bar', { priority: 'Medium' }), 'foo=bar; Priority=Medium')
+  assert.equal(cookie.serialize('foo', 'bar', { priority: 'medium' }), 'foo=bar; Priority=Medium')
+  assert.equal(cookie.serialize('foo', 'bar', { priority: 'High' }), 'foo=bar; Priority=High')
+  assert.equal(cookie.serialize('foo', 'bar', { priority: 'HIGH' }), 'foo=bar; Priority=High')
+
+  assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {
+    priority: 'foo'
+  }), /option priority is invalid/)
+
+  assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {
+    priority: 42
+  }), /option priority is invalid/)
+})
+
 test('sameSite', function() {
   assert.equal(cookie.serialize('foo', 'bar', { sameSite: true }), 'foo=bar; SameSite=Strict')
   assert.equal(cookie.serialize('foo', 'bar', { sameSite: 'Strict' }), 'foo=bar; SameSite=Strict')
