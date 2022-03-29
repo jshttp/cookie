@@ -20,6 +20,7 @@ exports.serialize = serialize;
  * @private
  */
 
+var __toString = Object.prototype.toString
 var decode = decodeURIComponent;
 var encode = encodeURIComponent;
 
@@ -145,11 +146,13 @@ function serialize(name, val, options) {
   }
 
   if (opt.expires) {
-    if (typeof opt.expires.toUTCString !== 'function') {
+    var expires = opt.expires
+
+    if (!isDate(expires) || isNaN(expires.valueOf())) {
       throw new TypeError('option expires is invalid');
     }
 
-    str += '; Expires=' + opt.expires.toUTCString();
+    str += '; Expires=' + expires.toUTCString()
   }
 
   if (opt.httpOnly) {
@@ -203,6 +206,18 @@ function serialize(name, val, options) {
   }
 
   return str;
+}
+
+/**
+ * Determine if value is a Date.
+ *
+ * @param {*} val
+ * @private
+ */
+
+function isDate (val) {
+  return __toString.call(val) === '[object Date]' ||
+    val instanceof Date
 }
 
 /**

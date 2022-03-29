@@ -67,6 +67,10 @@ test('expires', function() {
   assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {
     expires: Date.now()
   }), /option expires is invalid/);
+
+  assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', {
+    expires: new Date(NaN)
+  }), /option expires is invalid/)
 });
 
 test('priority', function () {
