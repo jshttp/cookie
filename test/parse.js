@@ -40,6 +40,7 @@ describe('cookie.parse(str)', function () {
 
   it('should ignore cookies without value', function () {
     assert.deepEqual(cookie.parse('foo=bar;fizz  ;  buzz'), { foo: 'bar' })
+    assert.deepEqual(cookie.parse('  fizz; foo=  bar'), { foo: 'bar' })
   })
 
   it('should ignore duplicate cookies', function () {
