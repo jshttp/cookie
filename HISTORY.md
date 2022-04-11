@@ -1,5 +1,5 @@
-unreleased
-==========
+0.5.0 / 2022-04-11
+==================
 
   * Add `priority` option
   * Fix `expires` option to reject invalid dates
