@@ -26,6 +26,7 @@
     "HISTORY.md",
     "LICENSE",
     "README.md",
+    "SECURITY.md",
     "index.js"
   ],
   "engines": {
