@@ -239,21 +239,22 @@ $ npm run bench
 
   15 tests completed.
 
-  parse apple.com          x 3,459,374 ops/sec ±1.29% (185 runs sampled)
-  parse cloudflare.com     x 2,350,288 ops/sec ±0.82% (187 runs sampled)
-  parse docs.google.com    x 2,556,080 ops/sec ±0.98% (186 runs sampled)
-  parse drive.google.com   x 2,579,129 ops/sec ±0.75% (186 runs sampled)
-  parse en.wikipedia.org   x   852,883 ops/sec ±0.75% (187 runs sampled)
-  parse linkedin.com       x   543,323 ops/sec ±0.71% (188 runs sampled)
-  parse maps.google.com    x 1,319,198 ops/sec ±0.88% (187 runs sampled)
-  parse microsoft.com      x   152,365 ops/sec ±1.07% (186 runs sampled)
-  parse play.google.com    x 2,499,181 ops/sec ±0.68% (187 runs sampled)
-  parse plus.google.com    x 2,558,406 ops/sec ±0.77% (187 runs sampled)
-  parse sites.google.com   x 2,560,766 ops/sec ±0.71% (186 runs sampled)
-  parse support.google.com x 1,548,934 ops/sec ±0.85% (186 runs sampled)
-  parse www.google.com     x 1,350,825 ops/sec ±1.10% (187 runs sampled)
-  parse youtu.be           x 1,047,505 ops/sec ±0.71% (188 runs sampled)
-  parse youtube.com        x 1,046,127 ops/sec ±0.68% (188 runs sampled)
+  parse accounts.google.com x 2,421,245 ops/sec ±0.80% (188 runs sampled)
+  parse apple.com           x 2,684,710 ops/sec ±0.59% (189 runs sampled)
+  parse cloudflare.com      x 2,231,418 ops/sec ±0.76% (186 runs sampled)
+  parse docs.google.com     x 2,316,357 ops/sec ±1.28% (187 runs sampled)
+  parse drive.google.com    x 2,363,543 ops/sec ±0.49% (189 runs sampled)
+  parse en.wikipedia.org    x   839,414 ops/sec ±0.53% (189 runs sampled)
+  parse linkedin.com        x   553,797 ops/sec ±0.63% (190 runs sampled)
+  parse maps.google.com     x 1,314,779 ops/sec ±0.72% (189 runs sampled)
+  parse microsoft.com       x   153,783 ops/sec ±0.53% (190 runs sampled)
+  parse play.google.com     x 2,249,574 ops/sec ±0.59% (187 runs sampled)
+  parse plus.google.com     x 2,258,682 ops/sec ±0.60% (188 runs sampled)
+  parse sites.google.com    x 2,247,069 ops/sec ±0.68% (189 runs sampled)
+  parse support.google.com  x 1,456,840 ops/sec ±0.70% (187 runs sampled)
+  parse www.google.com      x 1,046,028 ops/sec ±0.58% (188 runs sampled)
+  parse youtu.be            x   937,428 ops/sec ±1.47% (190 runs sampled)
+  parse youtube.com         x   963,878 ops/sec ±0.59% (190 runs sampled)
 
 > node benchmark/parse.js
 
@@ -261,12 +262,12 @@ $ npm run bench
 
   6 tests completed.
 
-  simple      x 3,541,023 ops/sec ±0.81% (186 runs sampled)
-  decode      x   569,051 ops/sec ±0.63% (188 runs sampled)
-  unquote     x 3,031,533 ops/sec ±0.80% (184 runs sampled)
-  duplicates  x   937,600 ops/sec ±0.76% (186 runs sampled)
-  10 cookies  x   302,703 ops/sec ±1.25% (188 runs sampled)
-  100 cookies x    23,559 ops/sec ±0.71% (189 runs sampled)
+  simple      x 2,745,604 ops/sec ±0.77% (185 runs sampled)
+  decode      x   557,287 ops/sec ±0.60% (188 runs sampled)
+  unquote     x 2,498,475 ops/sec ±0.55% (189 runs sampled)
+  duplicates  x   868,591 ops/sec ±0.89% (187 runs sampled)
+  10 cookies  x   306,745 ops/sec ±0.49% (190 runs sampled)
+  100 cookies x    22,414 ops/sec ±2.38% (182 runs sampled)
 ```
 
 ## References
