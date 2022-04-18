@@ -3,14 +3,14 @@
 
   * Add `priority` option
   * Fix `expires` option to reject invalid dates
-  * pref: improve default decode speed
-  * pref: remove slow string split in parse
+  * perf: improve default decode speed
+  * perf: remove slow string split in parse
 
 0.4.2 / 2022-02-02
 ==================
 
-  * pref: read value only when assigning in parse
-  * pref: remove unnecessary regexp in parse
+  * perf: read value only when assigning in parse
+  * perf: remove unnecessary regexp in parse
 
 0.4.1 / 2020-04-21
 ==================
