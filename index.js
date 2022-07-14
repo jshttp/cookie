@@ -54,15 +54,17 @@ function parse(str, options) {
   var dec = opt.decode || decode;
 
   var index = 0
+  var eqIdx = 0
+  var endIdx = 0
   while (index < str.length) {
-    var eqIdx = str.indexOf('=', index)
+    eqIdx = str.indexOf('=', index)
 
     // no more cookie pairs
     if (eqIdx === -1) {
       break
     }
 
-    var endIdx = str.indexOf(';', index)
+    endIdx = str.indexOf(';', index)
 
     if (endIdx === -1) {
       endIdx = str.length
@@ -72,16 +74,13 @@ function parse(str, options) {
       continue
     }
 
-    var key = str.slice(index, eqIdx).trim()
+    var key = str.slice(index, eqIdx++).trim()
 
     // only assign once
     if (undefined === obj[key]) {
-      var val = str.slice(eqIdx + 1, endIdx).trim()
-
-      // quoted values
-      if (val.charCodeAt(0) === 0x22) {
-        val = val.slice(1, -1)
-      }
+      var val = (str.charCodeAt(eqIdx) === 0x22)
+        ? str.slice(eqIdx + 1, endIdx - 1).trim()
+        : str.slice(eqIdx, endIdx).trim()
 
       obj[key] = tryDecode(val, dec);
     }
