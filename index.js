@@ -49,7 +49,7 @@ function parse(str, options) {
     throw new TypeError('argument str must be a string');
   }
 
-  var obj = {}
+  var obj = Object.create(null);
   var opt = options || {};
   var dec = opt.decode || decode;
 

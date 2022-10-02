@@ -48,6 +48,11 @@ describe('cookie.parse(str)', function () {
     assert.deepEqual(cookie.parse('foo=false;bar=bar;foo=true'), { foo: 'false', bar: 'bar' })
     assert.deepEqual(cookie.parse('foo=;bar=bar;foo=boo'), { foo: '', bar: 'bar' })
   })
+
+  it('should handle special Object properties', function () {
+    assert.equal(cookie.parse('')['__proto__'], undefined);
+    assert.equal(cookie.parse('__proto__=foo')['__proto__'], 'foo');
+  })
 })
 
 describe('cookie.parse(str, options)', function () {
