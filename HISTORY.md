@@ -41,7 +41,7 @@
 
   * perf: enable strict mode
   * perf: use for loop in parse
-  * perf: use string concatination for serialization
+  * perf: use string concatenation for serialization
 
 0.2.3 / 2015-10-25
 ==================
