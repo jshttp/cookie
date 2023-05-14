@@ -193,4 +193,14 @@ describe('cookie.serialize(name, value, options)', function () {
       assert.equal(cookie.serialize('foo', 'bar', { secure: false }), 'foo=bar')
     })
   })
+  
+  describe('with "partitioned" option', function () {
+    it('should include partitioned flag when true', function () {
+      assert.equal(cookie.serialize('foo', 'bar', { partitioned: true }), 'foo=bar; Partitioned')
+    })
+
+    it('should not include partitioned flag when false', function () {
+      assert.equal(cookie.serialize('foo', 'bar', { partitioned: false }), 'foo=bar')
+    })
+  })
 })
