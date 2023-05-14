@@ -213,6 +213,10 @@ function serialize(name, val, options) {
         throw new TypeError('option sameSite is invalid');
     }
   }
+  
+  if (opt.partitioned) {
+    str += '; Partitioned';
+  }
 
   return str;
 }
