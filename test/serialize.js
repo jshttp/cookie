@@ -113,6 +113,20 @@ describe('cookie.serialize(name, value, options)', function () {
     })
   })
 
+  describe('with "partitioned" option', function () {
+    it('should include partitioned flag when true', function () {
+      assert.equal(cookie.serialize('foo', 'bar', { partitioned: true }), 'foo=bar; Partitioned')
+    })
+
+    it('should not include partitioned flag when false', function () {
+      assert.equal(cookie.serialize('foo', 'bar', { partitioned: false }), 'foo=bar')
+    })
+
+    it('should not include partitioned flag when not defined', function () {
+      assert.equal(cookie.serialize('foo', 'bar', {}), 'foo=bar')
+    })
+  })
+
   describe('with "path" option', function () {
     it('should serialize path', function () {
       assert.equal(cookie.serialize('foo', 'bar', { path: '/' }), 'foo=bar; Path=/')

@@ -107,6 +107,17 @@ The given number will be converted to an integer by rounding down. By default, n
 `maxAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
 so if both are set, they should point to the same date and time.
 
+##### partitioned
+
+Specifies the `boolean` value for the [`Partitioned` `Set-Cookie`](rfc-cutler-httpbis-partitioned-cookies)
+attribute. When truthy, the `Partitioned` attribute is set, otherwise it is not. By default, the
+`Partitioned` attribute is not set.
+
+**note** This is an attribute that has not yet been fully standardized, and may change in the future.
+This also means many clients may ignore this attribute until they understand it.
+
+More information about can be found in [the proposal](https://github.com/privacycg/CHIPS).
+
 ##### path
 
 Specifies the value for the [`Path` `Set-Cookie` attribute][rfc-6265-5.2.4]. By default, the path
@@ -275,6 +286,7 @@ $ npm run bench
 - [RFC 6265: HTTP State Management Mechanism][rfc-6265]
 - [Same-site Cookies][rfc-6265bis-09-5.4.7]
 
+[rfc-cutler-httpbis-partitioned-cookies]: https://tools.ietf.org/html/draft-cutler-httpbis-partitioned-cookies/
 [rfc-west-cookie-priority-00-4.1]: https://tools.ietf.org/html/draft-west-cookie-priority-00#section-4.1
 [rfc-6265bis-09-5.4.7]: https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-09#section-5.4.7
 [rfc-6265]: https://tools.ietf.org/html/rfc6265
