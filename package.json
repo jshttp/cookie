@@ -27,18 +27,25 @@
     "LICENSE",
     "README.md",
     "SECURITY.md",
-    "index.js"
+    "index.js",
+    "index.mjs"
   ],
   "engines": {
     "node": ">= 0.6"
   },
   "scripts": {
     "bench": "node benchmark/index.js",
+    "build-esm": "node scripts/build-esm.js",
     "lint": "eslint .",
+    "prepare": "npm run build-esm",
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-ci": "nyc --reporter=lcov --reporter=text npm test",
     "test-cov": "nyc --reporter=html --reporter=text npm test",
     "update-bench": "node scripts/update-benchmark.js",
     "version": "node scripts/version-history.js && git add HISTORY.md"
+  },
+  "exports": {
+    "import": "./index.mjs",
+    "require": "./index.js"
   }
 }
