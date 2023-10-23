@@ -16,13 +16,12 @@ var srcFile = path.join(__dirname, '../index.js')
 var destFile = path.join(__dirname, '../index.mjs')
 
 var cjsCode = fs.readFileSync(srcFile, 'utf-8')
-var esmCode =  `const exports = {}
-export {
-  parse,
-  serialize,
-  exports as default
-}
-
-${cjsCode}`
+var esmCode =  "const exports = {}\
+export {\
+  parse,\
+  serialize,\
+  exports as default\
+}\
+" + cjsCode;
 
 fs.writeFileSync(destFile, esmCode);
