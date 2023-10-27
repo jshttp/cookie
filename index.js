@@ -155,13 +155,20 @@ function serialize(name, val, options) {
   }
 
   if (opt.expires) {
-    var expires = opt.expires
+    var expires = opt.expires;
 
-    if (!isDate(expires) || isNaN(expires.valueOf())) {
-      throw new TypeError('option expires is invalid');
+    if (!isDate(expires)) {
+        // Attempt to parse the date in ISO 8601 or a custom format
+        expires = new Date(expires);
+
+        // Check if the parsed date is valid
+        if (isNaN(expires.valueOf())) {
+            throw new TypeError('option expires is invalid');
+        }
     }
 
-    str += '; Expires=' + expires.toUTCString()
+    // Use the expires date for setting the Expires header
+    str += '; Expires=' + expires.toUTCString();
   }
 
   if (opt.httpOnly) {
