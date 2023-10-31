@@ -33,6 +33,7 @@ jobs:
         - Node.js 17.x
         - Node.js 18.x
         - Node.js 19.x
+        - Node.js 20.x
 
         include:
         - name: Node.js 0.6
@@ -134,6 +135,9 @@ jobs:
         - name: Node.js 19.x
           node-version: "19.2"
 
+        - name: Node.js 20.x
+          node-version: "20.9"
+
     steps:
     - uses: actions/checkout@v3
 
@@ -163,7 +167,12 @@ jobs:
         dirname "$(nvm which ${{ matrix.node-version }})" >> "$GITHUB_PATH"
 
     - name: Configure npm
-      run: npm config set shrinkwrap false
+      run: |
+        if [[ "$(npm config get package-lock)" == "true" ]]; then
+          npm config set package-lock false
+        else
+          npm config set shrinkwrap false
+        fi
 
     - name: Remove npm module(s) ${{ matrix.npm-rm }}
       run: npm rm --silent --save-dev ${{ matrix.npm-rm }}
