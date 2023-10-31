@@ -134,7 +134,7 @@ jobs:
           node-version: "18.18"
 
         - name: Node.js 19.x
-          node-version: "19.2"
+          node-version: "19.9"
 
         - name: Node.js 20.x
           node-version: "20.9"
