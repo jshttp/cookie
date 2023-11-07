@@ -1,5 +1,5 @@
-unreleased
-==========
+0.6.0 / 2023-11-06
+==================
 
   * Add `partitioned` option
 
