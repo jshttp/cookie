@@ -20,7 +20,7 @@
     "mocha": "10.2.0",
     "nyc": "15.1.0",
     "safe-buffer": "5.2.1",
-    "top-sites": "1.1.97"
+    "top-sites": "1.1.194"
   },
   "files": [
     "HISTORY.md",
