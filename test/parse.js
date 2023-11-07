@@ -27,6 +27,10 @@ describe('cookie.parse(str)', function () {
     assert.deepEqual(cookie.parse('foo= ; bar='), { foo: '', bar: '' })
   })
 
+  it('should parse cookie with minimum length', function () {
+    assert.deepEqual(cookie.parse('f='), { f: '' })
+  })
+
   it('should URL-decode values', function () {
     assert.deepEqual(cookie.parse('foo="bar=123456789&name=Magic+Mouse"'),
       { foo: 'bar=123456789&name=Magic+Mouse' })
