@@ -2,9 +2,9 @@
 
 [![NPM Version][npm-version-image]][npm-url]
 [![NPM Downloads][npm-downloads-image]][npm-url]
-[![Node.js Version][node-version-image]][node-version-url]
-[![Build Status][github-actions-ci-image]][github-actions-ci-url]
-[![Test Coverage][coveralls-image]][coveralls-url]
+[![Node.js Version][node-image]][node-url]
+[![Build Status][ci-image]][ci-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
 
 Basic HTTP cookie parser and serializer for HTTP servers.
 
@@ -303,12 +303,12 @@ $ npm run bench
 
 [MIT](LICENSE)
 
+[ci-image]: https://badgen.net/github/checks/jshttp/cookie/master?label=ci
+[ci-url]: https://github.com/jshttp/cookie/actions/workflows/ci.yml
 [coveralls-image]: https://badgen.net/coveralls/c/github/jshttp/cookie/master
 [coveralls-url]: https://coveralls.io/r/jshttp/cookie?branch=master
-[github-actions-ci-image]: https://img.shields.io/github/workflow/status/jshttp/cookie/ci/master?label=ci
-[github-actions-ci-url]: https://github.com/jshttp/cookie/actions/workflows/ci.yml
-[node-version-image]: https://badgen.net/npm/node/cookie
-[node-version-url]: https://nodejs.org/en/download
+[node-image]: https://badgen.net/npm/node/cookie
+[node-url]: https://nodejs.org/en/download
 [npm-downloads-image]: https://badgen.net/npm/dm/cookie
 [npm-url]: https://npmjs.org/package/cookie
 [npm-version-image]: https://badgen.net/npm/v/cookie
