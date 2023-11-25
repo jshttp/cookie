@@ -1,5 +1,5 @@
 {
-  "name": "cookie",
+  "name": "@nichoth/cookie",
   "description": "HTTP server cookie parsing and serialization",
   "version": "0.6.0",
   "author": "Roman Shtylman <shtylman@gmail.com>",

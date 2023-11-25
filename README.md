@@ -8,6 +8,9 @@
 
 Basic HTTP cookie parser and serializer for HTTP servers.
 
+## fork
+This is a fork of [jshttp/cookie](https://github.com/jshttp/cookie)
+
 ## Installation
 
 This is a [Node.js](https://nodejs.org/en/) module available through the
@@ -15,13 +18,13 @@ This is a [Node.js](https://nodejs.org/en/) module available through the
 [`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
 ```sh
-$ npm install cookie
+$ npm install @nichoth/cookie
 ```
 
 ## API
 
 ```js
-var cookie = require('cookie');
+var cookie = require('@nichoth/cookie');
 ```
 
 ### cookie.parse(str, options)
@@ -167,7 +170,7 @@ The following example uses this module in conjunction with the Node.js core HTTP
 to prompt a user for their name and display it back on future visits.
 
 ```js
-var cookie = require('cookie');
+var cookie = require('@nichoth/cookie');
 var escapeHtml = require('escape-html');
 var http = require('http');
 var url = require('url');
