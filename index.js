@@ -113,7 +113,7 @@ function serialize(name, val, options) {
   var enc = opt.encode || encode;
 
   if (typeof enc !== 'function') {
-    throw new TypeError('option encode is invalid');
+    throw new TypeError('the encode option expected a function but received ' + enc);
   }
 
   if (!fieldContentRegExp.test(name)) {
@@ -132,7 +132,7 @@ function serialize(name, val, options) {
     var maxAge = opt.maxAge - 0;
 
     if (isNaN(maxAge) || !isFinite(maxAge)) {
-      throw new TypeError('option maxAge is invalid')
+      throw new TypeError(opt.maxAge + ' is not a valid value for the maxAge option')
     }
 
     str += '; Max-Age=' + Math.floor(maxAge);
@@ -140,7 +140,7 @@ function serialize(name, val, options) {
 
   if (opt.domain) {
     if (!fieldContentRegExp.test(opt.domain)) {
-      throw new TypeError('option domain is invalid');
+      throw new TypeError(opt.domain + ' is not a valid value for the domain option');
     }
 
     str += '; Domain=' + opt.domain;
@@ -148,7 +148,7 @@ function serialize(name, val, options) {
 
   if (opt.path) {
     if (!fieldContentRegExp.test(opt.path)) {
-      throw new TypeError('option path is invalid');
+      throw new TypeError(opt.path + ' is not a valid value for the path option');
     }
 
     str += '; Path=' + opt.path;
@@ -158,7 +158,7 @@ function serialize(name, val, options) {
     var expires = opt.expires
 
     if (!isDate(expires) || isNaN(expires.valueOf())) {
-      throw new TypeError('option expires is invalid');
+      throw new TypeError(expires + ' is not a valid value for the expires option');
     }
 
     str += '; Expires=' + expires.toUTCString()
@@ -192,7 +192,7 @@ function serialize(name, val, options) {
         str += '; Priority=High'
         break
       default:
-        throw new TypeError('option priority is invalid')
+        throw new TypeError(priority + ' is not a valid value for the priority option')
     }
   }
 
@@ -214,7 +214,7 @@ function serialize(name, val, options) {
         str += '; SameSite=None';
         break;
       default:
-        throw new TypeError('option sameSite is invalid');
+        throw new TypeError(sameSite + ' is not a valid value for the sameSite option');
     }
   }
 
