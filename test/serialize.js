@@ -134,7 +134,7 @@ describe('cookie.serialize(name, value, options)', function () {
 
     it('should throw for invalid value', function () {
       assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', { path: '/\n' }),
-        /\/\n is not a valid value for the path optio/)
+        /\/\n is not a valid value for the path option/)
     })
   })
 
@@ -142,7 +142,7 @@ describe('cookie.serialize(name, value, options)', function () {
     it('should throw on invalid priority', function () {
       assert.throws(function () {
         cookie.serialize('foo', 'bar', { priority: 'foo' })
-      }, /foo is not a valid value for the priority optio/)
+      }, /foo is not a valid value for the priority option/)
     })
 
     it('should throw on non-string', function () {
