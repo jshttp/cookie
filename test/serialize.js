@@ -18,8 +18,20 @@ describe('cookie.serialize(name, value)', function () {
   })
 
   it('should throw for invalid name', function () {
-    assert.throws(cookie.serialize.bind(cookie, 'foo\n', 'bar'), /argument name is invalid/)
-    assert.throws(cookie.serialize.bind(cookie, 'foo\u280a', 'bar'), /argument name is invalid/)
+    assert.throws(
+      cookie.serialize.bind(cookie, 'foo\n', 'bar'),
+      {
+        message: 'argument name is invalid',
+        code: 'ERR_INVALID_ARG_VALUE',
+      }
+    )
+    assert.throws(
+      cookie.serialize.bind(cookie, 'foo\u280a', 'bar'),
+      {
+        message: 'argument name is invalid',
+        code: 'ERR_INVALID_ARG_VALUE',
+      }
+    )
   })
 })
 
@@ -31,15 +43,25 @@ describe('cookie.serialize(name, value, options)', function () {
     })
 
     it('should throw for invalid value', function () {
-      assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', { domain: 'example.com\n' }),
-        /option domain is invalid/)
+      assert.throws(
+        cookie.serialize.bind(cookie, 'foo', 'bar', { domain: 'example.com\n' }),
+        {
+          message: 'option domain is invalid',
+          code: 'ERR_INVALID_ARG_VALUE',
+        }
+      )
     })
   })
 
   describe('with "encode" option', function () {
     it('should throw on non-function value', function () {
-      assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', { encode: 42 }),
-        /option encode is invalid/)
+      assert.throws(
+        cookie.serialize.bind(cookie, 'foo', 'bar', { encode: 42 }),
+        {
+          message: 'option encode is invalid',
+          code: 'ERR_INVALID_ARG_TYPE',
+        }
+      )
     })
 
     it('should specify alternative value encoder', function () {
@@ -49,21 +71,37 @@ describe('cookie.serialize(name, value, options)', function () {
     })
 
     it('should throw when returned value is invalid', function () {
-      assert.throws(cookie.serialize.bind(cookie, 'foo', '+ \n', {
-        encode: function (v) { return v }
-      }), /argument val is invalid/)
+      assert.throws(
+        cookie.serialize.bind(cookie, 'foo', '+ \n', {
+          encode: function (v) { return v }
+        }),
+        {
+          message: 'argument val is invalid',
+          code: 'ERR_INVALID_RETURN_VALUE',
+        }
+      )
     })
   })
 
   describe('with "expires" option', function () {
     it('should throw on non-Date value', function () {
-      assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', { expires: 42 }),
-        /option expires is invalid/)
+      assert.throws(
+        cookie.serialize.bind(cookie, 'foo', 'bar', { expires: 42 }),
+        {
+          message: 'option expires is invalid',
+          code: 'ERR_INVALID_ARG_TYPE',
+        }
+      )
     })
 
     it('should throw on invalid date', function () {
-      assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', { expires: new Date(NaN) }),
-        /option expires is invalid/)
+      assert.throws(
+        cookie.serialize.bind(cookie, 'foo', 'bar', { expires: new Date(NaN) }),
+        {
+          message: 'option expires is invalid',
+          code: 'ERR_INVALID_ARG_VALUE',
+        }
+      )
     })
 
     it('should set expires to given date', function () {
@@ -85,15 +123,27 @@ describe('cookie.serialize(name, value, options)', function () {
 
   describe('with "maxAge" option', function () {
     it('should throw when not a number', function () {
-      assert.throws(function () {
-        cookie.serialize('foo', 'bar', { maxAge: 'buzz' })
-      }, /option maxAge is invalid/)
+      assert.throws(
+        function () {
+          cookie.serialize('foo', 'bar', { maxAge: 'buzz' })
+        },
+        {
+          message: 'option maxAge is invalid',
+          code: 'ERR_INVALID_ARG_VALUE',
+        }
+      )
     })
 
     it('should throw when Infinity', function () {
-      assert.throws(function () {
-        cookie.serialize('foo', 'bar', { maxAge: Infinity })
-      }, /option maxAge is invalid/)
+      assert.throws(
+        function () {
+          cookie.serialize('foo', 'bar', { maxAge: Infinity })
+        },
+        {
+          message: 'option maxAge is invalid',
+          code: 'ERR_INVALID_ARG_VALUE',
+        }
+      )
     })
 
     it('should set max-age to value', function () {
@@ -133,22 +183,38 @@ describe('cookie.serialize(name, value, options)', function () {
     })
 
     it('should throw for invalid value', function () {
-      assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', { path: '/\n' }),
-        /option path is invalid/)
+      assert.throws(
+        cookie.serialize.bind(cookie, 'foo', 'bar', { path: '/\n' }),
+        {
+          message: 'option path is invalid',
+          code: 'ERR_INVALID_ARG_VALUE',
+        }      )
     })
   })
 
   describe('with "priority" option', function () {
     it('should throw on invalid priority', function () {
-      assert.throws(function () {
-        cookie.serialize('foo', 'bar', { priority: 'foo' })
-      }, /option priority is invalid/)
+      assert.throws(
+        function () {
+          cookie.serialize('foo', 'bar', { priority: 'foo' })
+        },
+        {
+          message: 'option priority is invalid',
+          code: 'ERR_INVALID_ARG_VALUE',
+        }
+      )
     })
 
     it('should throw on non-string', function () {
-      assert.throws(function () {
-        cookie.serialize('foo', 'bar', { priority: 42 })
-      }, /option priority is invalid/)
+      assert.throws(
+        function () {
+          cookie.serialize('foo', 'bar', { priority: 42 })
+        },
+        {
+          message: 'option priority is invalid',
+          code: 'ERR_INVALID_ARG_TYPE',
+        }
+      )
     })
 
     it('should set priority low', function () {
@@ -169,9 +235,15 @@ describe('cookie.serialize(name, value, options)', function () {
 
   describe('with "sameSite" option', function () {
     it('should throw on invalid sameSite', function () {
-      assert.throws(function () {
-        cookie.serialize('foo', 'bar', { sameSite: 'foo' })
-      }, /option sameSite is invalid/)
+      assert.throws(
+        function () {
+          cookie.serialize('foo', 'bar', { sameSite: 'foo' })
+        },
+        {
+          message: 'option sameSite is invalid',
+          code: 'ERR_INVALID_ARG_VALUE',
+        }
+      )
     })
 
     it('should set sameSite strict', function () {
