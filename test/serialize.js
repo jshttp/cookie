@@ -32,14 +32,14 @@ describe('cookie.serialize(name, value, options)', function () {
 
     it('should throw for invalid value', function () {
       assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', { domain: 'example.com\n' }),
-        /option domain is invalid/)
+        /example.com\n is not a valid value for the domain option/)
     })
   })
 
   describe('with "encode" option', function () {
     it('should throw on non-function value', function () {
       assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', { encode: 42 }),
-        /option encode is invalid/)
+        /the encode option expected a function but received 42/)
     })
 
     it('should specify alternative value encoder', function () {
@@ -58,12 +58,12 @@ describe('cookie.serialize(name, value, options)', function () {
   describe('with "expires" option', function () {
     it('should throw on non-Date value', function () {
       assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', { expires: 42 }),
-        /option expires is invalid/)
+        /42 is not a valid value for the expires option/)
     })
 
     it('should throw on invalid date', function () {
       assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', { expires: new Date(NaN) }),
-        /option expires is invalid/)
+        /Invalid Date is not a valid value for the expires option/)
     })
 
     it('should set expires to given date', function () {
@@ -87,13 +87,13 @@ describe('cookie.serialize(name, value, options)', function () {
     it('should throw when not a number', function () {
       assert.throws(function () {
         cookie.serialize('foo', 'bar', { maxAge: 'buzz' })
-      }, /option maxAge is invalid/)
+      }, /buzz is not a valid value for the maxAge option/)
     })
 
     it('should throw when Infinity', function () {
       assert.throws(function () {
         cookie.serialize('foo', 'bar', { maxAge: Infinity })
-      }, /option maxAge is invalid/)
+      }, /Infinity is not a valid value for the maxAge option/)
     })
 
     it('should set max-age to value', function () {
@@ -134,7 +134,7 @@ describe('cookie.serialize(name, value, options)', function () {
 
     it('should throw for invalid value', function () {
       assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', { path: '/\n' }),
-        /option path is invalid/)
+        /\/\n is not a valid value for the path optio/)
     })
   })
 
@@ -142,13 +142,13 @@ describe('cookie.serialize(name, value, options)', function () {
     it('should throw on invalid priority', function () {
       assert.throws(function () {
         cookie.serialize('foo', 'bar', { priority: 'foo' })
-      }, /option priority is invalid/)
+      }, /foo is not a valid value for the priority optio/)
     })
 
     it('should throw on non-string', function () {
       assert.throws(function () {
         cookie.serialize('foo', 'bar', { priority: 42 })
-      }, /option priority is invalid/)
+      }, /42 is not a valid value for the priority option/)
     })
 
     it('should set priority low', function () {
@@ -171,7 +171,7 @@ describe('cookie.serialize(name, value, options)', function () {
     it('should throw on invalid sameSite', function () {
       assert.throws(function () {
         cookie.serialize('foo', 'bar', { sameSite: 'foo' })
-      }, /option sameSite is invalid/)
+      }, /foo is not a valid value for the sameSite option/)
     })
 
     it('should set sameSite strict', function () {
