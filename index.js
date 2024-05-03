@@ -46,7 +46,9 @@ var fieldContentRegExp = /^[\u0009\u0020-\u007e\u0080-\u00ff]+$/;
 
 function parse(str, options) {
   if (typeof str !== 'string') {
-    throw new TypeError('argument str must be a string');
+    var parseError = new TypeError('argument str must be a string')
+    parseError.code = 'ERR_INVALID_ARG_TYPE'
+    throw parseError
   }
 
   var obj = {}
