@@ -246,6 +246,18 @@ describe('cookie.serialize(name, value, options)', function () {
       )
     })
 
+    it('should throw on non-string/non-true', function () {
+      assert.throws(
+        function () {
+          cookie.serialize('foo', 'bar', { sameSite: 42 })
+        },
+        {
+          message: 'option sameSite is invalid',
+          code: 'ERR_INVALID_ARG_TYPE',
+        }
+      )
+    })
+
     it('should set sameSite strict', function () {
       assert.equal(cookie.serialize('foo', 'bar', { sameSite: 'Strict' }), 'foo=bar; SameSite=Strict')
       assert.equal(cookie.serialize('foo', 'bar', { sameSite: 'strict' }), 'foo=bar; SameSite=Strict')
