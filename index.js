@@ -113,17 +113,23 @@ function serialize(name, val, options) {
   var enc = opt.encode || encode;
 
   if (typeof enc !== 'function') {
-    throw new TypeError('option encode is invalid');
+    var encodeError = new TypeError('option encode is invalid')
+    encodeError.code = 'ERR_INVALID_ARG_TYPE'
+    throw encodeError
   }
 
   if (!fieldContentRegExp.test(name)) {
-    throw new TypeError('argument name is invalid');
+    var nameError = new TypeError('argument name is invalid')
+    nameError.code = 'ERR_INVALID_ARG_VALUE'
+    throw nameError;
   }
 
   var value = enc(val);
 
   if (value && !fieldContentRegExp.test(value)) {
-    throw new TypeError('argument val is invalid');
+    var returnError = new TypeError('argument val is invalid')
+    returnError.code = 'ERR_INVALID_RETURN_VALUE'
+    throw returnError;
   }
 
   var str = name + '=' + value;
@@ -132,7 +138,9 @@ function serialize(name, val, options) {
     var maxAge = opt.maxAge - 0;
 
     if (isNaN(maxAge) || !isFinite(maxAge)) {
-      throw new TypeError('option maxAge is invalid')
+      var maxAgeError = new TypeError('option maxAge is invalid')
+      maxAgeError.code = 'ERR_INVALID_ARG_VALUE'
+      throw maxAgeError;
     }
 
     str += '; Max-Age=' + Math.floor(maxAge);
@@ -140,7 +148,9 @@ function serialize(name, val, options) {
 
   if (opt.domain) {
     if (!fieldContentRegExp.test(opt.domain)) {
-      throw new TypeError('option domain is invalid');
+      var domainError = new TypeError('option domain is invalid')
+      domainError.code = 'ERR_INVALID_ARG_VALUE'
+      throw domainError;
     }
 
     str += '; Domain=' + opt.domain;
@@ -148,7 +158,9 @@ function serialize(name, val, options) {
 
   if (opt.path) {
     if (!fieldContentRegExp.test(opt.path)) {
-      throw new TypeError('option path is invalid');
+      var pathError = new TypeError('option path is invalid')
+      pathError.code = 'ERR_INVALID_ARG_VALUE'
+      throw pathError;
     }
 
     str += '; Path=' + opt.path;
@@ -156,9 +168,14 @@ function serialize(name, val, options) {
 
   if (opt.expires) {
     var expires = opt.expires
+    var expiresError = new TypeError('option expires is invalid')
 
-    if (!isDate(expires) || isNaN(expires.valueOf())) {
-      throw new TypeError('option expires is invalid');
+    if (!isDate(expires)) {
+      expiresError.code = 'ERR_INVALID_ARG_TYPE'
+      throw expiresError;
+    } else if (isNaN(expires.valueOf())) {
+      expiresError.code = 'ERR_INVALID_ARG_VALUE'
+      throw expiresError;
     }
 
     str += '; Expires=' + expires.toUTCString()
@@ -177,9 +194,13 @@ function serialize(name, val, options) {
   }
 
   if (opt.priority) {
-    var priority = typeof opt.priority === 'string'
-      ? opt.priority.toLowerCase()
-      : opt.priority
+    var priorityError = new TypeError('option priority is invalid')
+    if (typeof opt.priority !== 'string') {
+      priorityError.code = 'ERR_INVALID_ARG_TYPE'
+      throw priorityError;
+    }
+
+    var priority = opt.priority.toLowerCase()
 
     switch (priority) {
       case 'low':
@@ -192,7 +213,8 @@ function serialize(name, val, options) {
         str += '; Priority=High'
         break
       default:
-        throw new TypeError('option priority is invalid')
+        priorityError.code = 'ERR_INVALID_ARG_VALUE'
+        throw priorityError;
     }
   }
 
@@ -214,7 +236,11 @@ function serialize(name, val, options) {
         str += '; SameSite=None';
         break;
       default:
-        throw new TypeError('option sameSite is invalid');
+        var sameSiteError = new TypeError('option sameSite is invalid')
+        sameSiteError.code = typeof opt.sameSite === 'string'
+          ? 'ERR_INVALID_ARG_VALUE'
+          : 'ERR_INVALID_ARG_TYPE'
+        throw sameSiteError;
     }
   }
 
