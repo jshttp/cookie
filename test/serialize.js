@@ -1,6 +1,7 @@
 
 var assert = require('assert');
 var Buffer = require('safe-buffer').Buffer
+var compareError = require('./compare-error');
 
 var cookie = require('..');
 
@@ -20,17 +21,17 @@ describe('cookie.serialize(name, value)', function () {
   it('should throw for invalid name', function () {
     assert.throws(
       cookie.serialize.bind(cookie, 'foo\n', 'bar'),
-      {
+      compareError({
         message: 'argument name is invalid',
         code: 'ERR_INVALID_ARG_VALUE',
-      }
+      })
     )
     assert.throws(
       cookie.serialize.bind(cookie, 'foo\u280a', 'bar'),
-      {
+      compareError({
         message: 'argument name is invalid',
         code: 'ERR_INVALID_ARG_VALUE',
-      }
+      })
     )
   })
 })
@@ -45,10 +46,10 @@ describe('cookie.serialize(name, value, options)', function () {
     it('should throw for invalid value', function () {
       assert.throws(
         cookie.serialize.bind(cookie, 'foo', 'bar', { domain: 'example.com\n' }),
-        {
+        compareError({
           message: 'option domain is invalid',
           code: 'ERR_INVALID_ARG_VALUE',
-        }
+        })
       )
     })
   })
@@ -57,10 +58,10 @@ describe('cookie.serialize(name, value, options)', function () {
     it('should throw on non-function value', function () {
       assert.throws(
         cookie.serialize.bind(cookie, 'foo', 'bar', { encode: 42 }),
-        {
+        compareError({
           message: 'option encode is invalid',
           code: 'ERR_INVALID_ARG_TYPE',
-        }
+        })
       )
     })
 
@@ -75,10 +76,10 @@ describe('cookie.serialize(name, value, options)', function () {
         cookie.serialize.bind(cookie, 'foo', '+ \n', {
           encode: function (v) { return v }
         }),
-        {
+        compareError({
           message: 'argument val is invalid',
           code: 'ERR_INVALID_RETURN_VALUE',
-        }
+        })
       )
     })
   })
@@ -87,20 +88,20 @@ describe('cookie.serialize(name, value, options)', function () {
     it('should throw on non-Date value', function () {
       assert.throws(
         cookie.serialize.bind(cookie, 'foo', 'bar', { expires: 42 }),
-        {
+        compareError({
           message: 'option expires is invalid',
           code: 'ERR_INVALID_ARG_TYPE',
-        }
+        })
       )
     })
 
     it('should throw on invalid date', function () {
       assert.throws(
         cookie.serialize.bind(cookie, 'foo', 'bar', { expires: new Date(NaN) }),
-        {
+        compareError({
           message: 'option expires is invalid',
           code: 'ERR_INVALID_ARG_VALUE',
-        }
+        })
       )
     })
 
@@ -127,10 +128,10 @@ describe('cookie.serialize(name, value, options)', function () {
         function () {
           cookie.serialize('foo', 'bar', { maxAge: 'buzz' })
         },
-        {
+        compareError({
           message: 'option maxAge is invalid',
           code: 'ERR_INVALID_ARG_VALUE',
-        }
+        })
       )
     })
 
@@ -139,10 +140,10 @@ describe('cookie.serialize(name, value, options)', function () {
         function () {
           cookie.serialize('foo', 'bar', { maxAge: Infinity })
         },
-        {
+        compareError({
           message: 'option maxAge is invalid',
           code: 'ERR_INVALID_ARG_VALUE',
-        }
+        })
       )
     })
 
@@ -185,10 +186,11 @@ describe('cookie.serialize(name, value, options)', function () {
     it('should throw for invalid value', function () {
       assert.throws(
         cookie.serialize.bind(cookie, 'foo', 'bar', { path: '/\n' }),
-        {
+        compareError({
           message: 'option path is invalid',
           code: 'ERR_INVALID_ARG_VALUE',
-        }      )
+        })
+      )
     })
   })
 
@@ -198,10 +200,10 @@ describe('cookie.serialize(name, value, options)', function () {
         function () {
           cookie.serialize('foo', 'bar', { priority: 'foo' })
         },
-        {
+        compareError({
           message: 'option priority is invalid',
           code: 'ERR_INVALID_ARG_VALUE',
-        }
+        })
       )
     })
 
@@ -210,10 +212,10 @@ describe('cookie.serialize(name, value, options)', function () {
         function () {
           cookie.serialize('foo', 'bar', { priority: 42 })
         },
-        {
+        compareError({
           message: 'option priority is invalid',
           code: 'ERR_INVALID_ARG_TYPE',
-        }
+        })
       )
     })
 
@@ -239,10 +241,10 @@ describe('cookie.serialize(name, value, options)', function () {
         function () {
           cookie.serialize('foo', 'bar', { sameSite: 'foo' })
         },
-        {
+        compareError({
           message: 'option sameSite is invalid',
           code: 'ERR_INVALID_ARG_VALUE',
-        }
+        })
       )
     })
 
@@ -251,10 +253,10 @@ describe('cookie.serialize(name, value, options)', function () {
         function () {
           cookie.serialize('foo', 'bar', { sameSite: 42 })
         },
-        {
+        compareError({
           message: 'option sameSite is invalid',
           code: 'ERR_INVALID_ARG_TYPE',
-        }
+        })
       )
     })
 

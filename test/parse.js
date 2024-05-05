@@ -1,6 +1,7 @@
 
 var assert = require('assert');
 var Buffer = require('safe-buffer').Buffer
+var compareError = require('./compare-error');
 
 var cookie = require('..');
 
@@ -8,20 +9,20 @@ describe('cookie.parse(str)', function () {
   it('should throw with no arguments', function () {
     assert.throws(
       cookie.parse.bind(),
-      {
+      compareError({
         message: 'argument str must be a string',
         code: 'ERR_INVALID_ARG_TYPE',
-      }
+      })
     )
   })
 
   it('should throw when not a string', function () {
     assert.throws(
       cookie.parse.bind(null, 42),
-      {
+      compareError({
         message: 'argument str must be a string',
         code: 'ERR_INVALID_ARG_TYPE',
-      }
+      })
     )
   })
 
