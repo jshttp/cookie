@@ -26,7 +26,7 @@ var __toString = Object.prototype.toString
  * RegExp to match cookie-name in RFC 6265 sec 4.1.1
  * This refers out to the obsoleted definition of token in RFC 2616 sec 2.2
  * which has been replaced by the token definition in RFC 7230 appendix B.
- * 
+ *
  * cookie-name       = token
  * token             = 1*tchar
  * tchar             = "!" / "#" / "$" / "%" / "&" / "'" /
@@ -36,7 +36,7 @@ var __toString = Object.prototype.toString
 
 var cookieNameRegExp = /^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/;
 
-/** 
+/**
  * RegExp to match cookie-value in RFC 6265 sec 4.1.1
  *
  * cookie-value      = *cookie-octet / ( DQUOTE *cookie-octet DQUOTE )
@@ -46,7 +46,7 @@ var cookieNameRegExp = /^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/;
  *                     ; and backslash
  */
 
-var  cookieValueRegExp = /^("?)[\u0021\u0023-\u002B\u002D-\u003A\u003C-\u005B\u005D-\u007E]*\1$/;
+var cookieValueRegExp = /^("?)[\u0021\u0023-\u002B\u002D-\u003A\u003C-\u005B\u005D-\u007E]*\1$/;
 
 /**
  * RegExp to match domain-value in RFC 6265 sec 4.1.1
@@ -65,7 +65,7 @@ var  cookieValueRegExp = /^("?)[\u0021\u0023-\u002B\u002D-\u003A\u003C-\u005B\u0
  *                     upper case and a through z in lower case
  * <digit>           = any one of the ten digits 0 through 9
  */
-var  domainValueRegExp = /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)([.][a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+var domainValueRegExp = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i;
 
 /**
  * RegExp to match path-value in RFC 6265 sec 4.1.1
@@ -73,7 +73,7 @@ var  domainValueRegExp = /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)([.][a-z
  * path-value        = <any CHAR except CTLs or ";">
  */
 
-var  pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
+var pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
 
 /**
  * Parse a cookie header.
