@@ -34,7 +34,7 @@ var __toString = Object.prototype.toString
  *                     "`" / "|" / "~" / DIGIT / ALPHA
  */
 
-var cookieNameRegExp = /^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/;
+var cookieNameRegExp = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
 
 /**
  * RegExp to match cookie-value in RFC 6265 sec 4.1.1
