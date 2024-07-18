@@ -65,6 +65,7 @@ var cookieValueRegExp = /^("?)[\u0021\u0023-\u002B\u002D-\u003A\u003C-\u005B\u00
  *                     upper case and a through z in lower case
  * <digit>           = any one of the ten digits 0 through 9
  */
+ 
 var domainValueRegExp = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i;
 
 /**
