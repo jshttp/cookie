@@ -71,6 +71,8 @@ var domainValueRegExp = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0
  * RegExp to match path-value in RFC 6265 sec 4.1.1
  *
  * path-value        = <any CHAR except CTLs or ";">
+ * CHAR              = %x01-7F
+ *                     ; defined in RFC 5234 appendix B.1
  */
 
 var pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
