@@ -21,6 +21,36 @@ var decode = decodeURIComponent;
 var encode = encodeURIComponent;
 
 /**
+ * RegExp to match cookie-name in RFC 6265 sec 4.1.1
+ *
+ * cookie-name = token (as defined in RFC 2616 sec 2.2)
+ *
+ * token = 1*<any CHAR except CTLs or separators>
+ *
+ * Character classes:
+ *  \x21: !
+ *  \x23-\x27: # to ' (excluding " which is \x22).
+ *  \x2A-\x2B: * and +.
+ *  \x2D-\x2E: - and ..
+ *  \x30-\x39: 0 to 9 (digits).
+ *  \x41-\x5A: A to Z (uppercase letters).
+ *  \x5E-\x7A: ^ to z (excluding backslash and a few separators).
+ *  \x7C: |
+ *  \x7E: ~.
+ *
+ * separators     = "(" | ")" | "<" | ">" | "@"
+ *                | "," | ";" | ":" | "\" | <">
+ *                | "/" | "[" | "]" | "?" | "="
+ *                | "{" | "}" | SP | HT
+ * CTLs defined as:
+ *  Octets 0-31 (ASCII values \x00 to \x1F)
+ *  DEL (ASCII value 127, \x7F)
+ */
+
+var cookieNameRegExp =
+  /^[\x21\x23-\x27\x2A-\x2B\x2D-\x2E\x30-\x39\x41-\x5A\x5E-\x7A\x7C\x7E]+$/;
+
+/**
  * Parse a cookie header.
  *
  * Parse the given cookie header string into an object
@@ -82,6 +112,12 @@ function parse(str, options) {
 function serialize(name, val, options) {
   var opt = options || {};
   var enc = opt.encode || encode;
+
+  // NES: Added check for valid cookie name to avoid vulnerabilities
+  if (!cookieNameRegExp.test(name)) {
+    throw new TypeError('cookie name contains invalid characters');
+  }
+
   var pairs = [name + '=' + enc(val)];
 
   if (null != opt.maxAge) {

@@ -66,3 +66,57 @@ test('unencoded', function() {
         encode: function(value) { return value; }
     }));
 })
+
+// Test for valid cookie names
+test('valid cookie names', function() {
+  var validCookieNames = [
+    'user_id-123',
+    'SESSION-TOKEN_v2',
+    'auth0.jwt.token',
+    '__Secure-ID',
+    'csrf_token!valid',
+    'tracking-cookie$main_version',
+    'analytics%5Bsource%5D',
+    'persistent_001#abc',
+    'first|last'
+  ];
+
+  validCookieNames.forEach(function(name) {
+    var expectedCookie = {};
+    expectedCookie[name] = 'test_value'; // Dynamically set the property name
+
+    assert.deepEqual(
+      expectedCookie, 
+      cookie.parse(cookie.serialize(name, 'test_value'))
+    );
+  });
+});
+
+// Test for invalid cookie names
+test('invalid cookie names throw error', function() {
+  var invalidCookieNames = [
+    'locale-set@en-US',
+    'cart[items][id]',
+    'mydir/username',
+    'query?id',
+    'category:cars',
+    'first,last',
+    '{id:123}',
+    'no spaces allowed',
+    'no\ttabs\tallowed',
+    'foo<scriptalertscript',
+    'userId=<script>alert(%27XSS7%27)</script>;+Max-Age=2592000;+a',
+    'token=<img src=x onerror=alert(%27XSS2%27)>;+Path=/;+Secure;',
+    'tracking=<body onload=alert(%27XSS5%27)>;+Expires=Tue, 19 Jan 2038 03:14:07 GMT;'
+  ];
+
+  invalidCookieNames.forEach(function(name) {
+    assert.throws(
+      function() {
+        cookie.serialize(name, 'test_value');
+      },
+      Error,
+      'Expected "' + name + '" to throw an error'
+    );
+  });
+});
