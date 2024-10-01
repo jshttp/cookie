@@ -34,6 +34,16 @@ describe('cookie.parse(str)', function () {
     assert.deepEqual(cookie.parse('email=%20%22%2c%3b%2f'), { email: ' ",;/' })
   })
 
+  it('should parse quoted values', function () {
+    assert.deepEqual(cookie.parse('foo="bar"'), { foo: 'bar' })
+  })
+
+  it('should trim whitespace around key and value', function () {
+    assert.deepEqual(cookie.parse('  foo  =  "bar"  '), { foo: 'bar' })
+    assert.deepEqual(cookie.parse('  foo  =  bar  ;  fizz  =  buzz  '), { foo: 'bar', fizz: 'buzz' })
+    assert.deepEqual(cookie.parse('foo=" a b c "'), { foo: ' a b c ' })
+  })
+
   it('should return original value on escape error', function () {
     assert.deepEqual(cookie.parse('foo=%1;bar=bar'), { foo: '%1', bar: 'bar' })
   })
