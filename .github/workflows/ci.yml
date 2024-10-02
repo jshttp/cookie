@@ -105,39 +105,50 @@ jobs:
         - name: Node.js 10.x
           node-version: "10.24"
           npm-i: mocha@8.4.0
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 11.x
           node-version: "11.15"
           npm-i: mocha@8.4.0
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 12.x
           node-version: "12.22"
           npm-i: mocha@9.2.2
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 13.x
           node-version: "13.14"
           npm-i: mocha@9.2.2
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 14.x
           node-version: "14.21"
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 15.x
           node-version: "15.14"
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 16.x
           node-version: "16.20"
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 17.x
           node-version: "17.9"
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 18.x
           node-version: "18.18"
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 19.x
           node-version: "19.9"
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 20.x
           node-version: "20.9"
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 21.x
           node-version: "21.1"

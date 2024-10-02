@@ -18,7 +18,7 @@ describe('cookie.serialize(name, value)', function () {
   })
 
   it('should serialize valid name', function () {
-    const validNames = [
+    var validNames = [
       'foo',
       'foo!bar',
       'foo#bar',
@@ -42,7 +42,7 @@ describe('cookie.serialize(name, value)', function () {
   });
 
   it('should throw for invalid name', function () {
-    const invalidNames = [
+    var invalidNames = [
       'foo\n',
       'foo\u280a',
       'foo/foo',
@@ -68,7 +68,7 @@ describe('cookie.serialize(name, value)', function () {
       );
     });
   });
-})
+});
 
 describe('cookie.serialize(name, value, options)', function () {
   describe('with "domain" option', function () {
@@ -125,6 +125,9 @@ describe('cookie.serialize(name, value, options)', function () {
 
     it('should throw when returned value is invalid', function () {
       assert.throws(cookie.serialize.bind(cookie, 'foo', '+ \n', {
+        encode: function (v) { return v }
+      }), /argument val is invalid/)
+      assert.throws(cookie.serialize.bind(cookie, 'foo', 'foo bar', {
         encode: function (v) { return v }
       }), /argument val is invalid/)
     })
