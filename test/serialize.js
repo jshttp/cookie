@@ -23,7 +23,7 @@ describe('cookie.serialize(name, value)', function () {
       'foo!bar',
       'foo#bar',
       'foo$bar',
-      `foo'bar`,
+      "foo'bar",
       'foo*bar',
       'foo+bar',
       'foo-bar',
