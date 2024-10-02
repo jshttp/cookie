@@ -102,14 +102,19 @@ function parse(str, options) {
   var index = 0;
 
   while (index < str.length) {
+    var eqIdx = str.indexOf('=', index);
+
+    // no more cookie pairs
+    if (eqIdx === -1) {
+      break;
+    }
+
     var endIdx = str.indexOf(';', index);
-    if (endIdx === -1) endIdx = str.length;
 
-    var eqIdx = index;
-    while (eqIdx < endIdx && str.charCodeAt(eqIdx) !== 0x3D /* = */) eqIdx++;
-
-    if (eqIdx === endIdx) {
-      index = endIdx + 1;
+    if (endIdx === -1) {
+      endIdx = str.length;
+    } else if (eqIdx > endIdx) {
+      index = str.lastIndexOf(';', eqIdx - 1) + 1;
       continue;
     }
 
