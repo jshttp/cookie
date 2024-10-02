@@ -39,7 +39,6 @@
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-ci": "nyc --reporter=lcov --reporter=text npm test",
     "test-cov": "nyc --reporter=html --reporter=text npm test",
-    "update-bench": "node scripts/update-benchmark.js",
-    "version": "node scripts/version-history.js && git add HISTORY.md"
+    "update-bench": "node scripts/update-benchmark.js"
   }
 }
