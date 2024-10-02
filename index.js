@@ -96,17 +96,17 @@ function parse(str, options) {
   }
 
   var obj = {};
+  var len = str.length;
+  // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
+  var max = len - 2;
+  if (max < 0) return obj;
+  
   var dec = (options && options.decode) || decode;
-
   var index = 0;
   var eqIdx = 0;
   var endIdx = 0;
-  var len = str.length;
 
-  // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
-  var max = len - 2;
-
-  while (index < max) {
+  do {
     eqIdx = str.indexOf('=', index);
 
     // no more cookie pairs
@@ -143,7 +143,7 @@ function parse(str, options) {
     }
 
     index = endIdx + 1
-  } while (index < length)
+  } while (index < max);
 
   return obj;
 }
