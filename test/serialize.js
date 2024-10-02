@@ -90,7 +90,7 @@ describe('cookie.serialize(name, value, options)', function () {
       });
     });
 
-    it('should throw for invalid value', function () {
+    it('should throw for invalid domain', function () {
       const invalidDomains = [
         'example.com\n',
         'sub.example.com\u0000',
@@ -206,7 +206,6 @@ describe('cookie.serialize(name, value, options)', function () {
   })
 
   describe('with "path" option', function () {
-
     it('should serialize path', function () {
       const validPaths = [
         '/',
@@ -248,8 +247,7 @@ describe('cookie.serialize(name, value, options)', function () {
         );
       });
     });
-
-  })
+  });
 
   describe('with "priority" option', function () {
     it('should throw on invalid priority', function () {
