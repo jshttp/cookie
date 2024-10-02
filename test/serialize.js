@@ -17,23 +17,98 @@ describe('cookie.serialize(name, value)', function () {
     assert.equal(cookie.serialize('foo', ''), 'foo=')
   })
 
+  it('should serialize valid name', function () {
+    var validNames = [
+      'foo',
+      'foo!bar',
+      'foo#bar',
+      'foo$bar',
+      "foo'bar",
+      'foo*bar',
+      'foo+bar',
+      'foo-bar',
+      'foo.bar',
+      'foo^bar',
+      'foo_bar',
+      'foo`bar',
+      'foo|bar',
+      'foo~bar',
+      'foo7bar',
+    ];
+
+    validNames.forEach((name) => {
+      assert.equal(cookie.serialize(name, 'baz'), `${name}=baz`, `Expected serialized value for name: "${name}"`);
+    });
+  });
+
   it('should throw for invalid name', function () {
-    assert.throws(cookie.serialize.bind(cookie, 'foo\n', 'bar'), /argument name is invalid/)
-    assert.throws(cookie.serialize.bind(cookie, 'foo\u280a', 'bar'), /argument name is invalid/)
-  })
-})
+    var invalidNames = [
+      'foo\n',
+      'foo\u280a',
+      'foo/foo',
+      'foo,foo',
+      'foo;foo',
+      'foo@foo',
+      'foo[foo]',
+      'foo?foo',
+      'foo:foo',
+      'foo!foo',
+      'foo{foo}',
+      'foo foo',
+      'foo\tfoo',
+      'foo"foo',
+      'foo<script>foo'
+    ];
+
+    invalidNames.forEach((name) => {
+      assert.throws(
+        cookie.serialize.bind(cookie, name, 'bar'),
+        /argument name is invalid/,
+        `Expected an error for invalid name: "${name}"`
+      );
+    });
+  });
+});
 
 describe('cookie.serialize(name, value, options)', function () {
   describe('with "domain" option', function () {
-    it('should serialize domain', function () {
-      assert.equal(cookie.serialize('foo', 'bar', { domain: 'example.com' }),
-        'foo=bar; Domain=example.com')
-    })
 
-    it('should throw for invalid value', function () {
-      assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', { domain: 'example.com\n' }),
-        /option domain is invalid/)
-    })
+    it('should serialize valid domain', function () {
+      const validDomains = [
+        'example.com',
+        'sub.example.com',
+        'my-site.org',
+        'localhost'
+      ];
+
+      validDomains.forEach((domain) => {
+        assert.equal(
+          cookie.serialize('foo', 'bar', { domain }),
+          `foo=bar; Domain=${domain}`,
+          `Expected serialized value for domain: "${domain}"`
+        );
+      });
+    });
+
+    it('should throw for invalid domain', function () {
+      const invalidDomains = [
+        'example.com\n',
+        'sub.example.com\u0000',
+        'my site.org',
+        'domain..com',
+        '.example.com',
+        'example.com; Path=/',
+        'example.com /* inject a comment */'
+      ];
+
+      invalidDomains.forEach((domain) => {
+        assert.throws(
+          cookie.serialize.bind(cookie, 'foo', 'bar', { domain }),
+          /option domain is invalid/,
+          `Expected an error for invalid domain: "${domain}"`
+        );
+      });
+    });
   })
 
   describe('with "encode" option', function () {
@@ -50,6 +125,9 @@ describe('cookie.serialize(name, value, options)', function () {
 
     it('should throw when returned value is invalid', function () {
       assert.throws(cookie.serialize.bind(cookie, 'foo', '+ \n', {
+        encode: function (v) { return v }
+      }), /argument val is invalid/)
+      assert.throws(cookie.serialize.bind(cookie, 'foo', 'foo bar', {
         encode: function (v) { return v }
       }), /argument val is invalid/)
     })
@@ -113,16 +191,63 @@ describe('cookie.serialize(name, value, options)', function () {
     })
   })
 
-  describe('with "path" option', function () {
-    it('should serialize path', function () {
-      assert.equal(cookie.serialize('foo', 'bar', { path: '/' }), 'foo=bar; Path=/')
+  describe('with "partitioned" option', function () {
+    it('should include partitioned flag when true', function () {
+      assert.equal(cookie.serialize('foo', 'bar', { partitioned: true }), 'foo=bar; Partitioned')
     })
 
-    it('should throw for invalid value', function () {
-      assert.throws(cookie.serialize.bind(cookie, 'foo', 'bar', { path: '/\n' }),
-        /option path is invalid/)
+    it('should not include partitioned flag when false', function () {
+      assert.equal(cookie.serialize('foo', 'bar', { partitioned: false }), 'foo=bar')
+    })
+
+    it('should not include partitioned flag when not defined', function () {
+      assert.equal(cookie.serialize('foo', 'bar', {}), 'foo=bar')
     })
   })
+
+  describe('with "path" option', function () {
+    it('should serialize path', function () {
+      const validPaths = [
+        '/',
+        '/login',
+        '/foo.bar/baz',
+        '/foo-bar',
+        '/foo=bar?baz',
+        '/foo"bar"',
+        '/../foo/bar',
+        '../foo/',
+        './'
+      ];
+
+      validPaths.forEach((path) => {
+        assert.equal(
+          cookie.serialize('foo', 'bar', { path }),
+          `foo=bar; Path=${path}`,
+          `Expected serialized value for path: "${path}"`
+        );
+      });
+    });
+
+    it('should throw for invalid value', function () {
+      const invalidPaths = [
+        '/\n',
+        '/foo\u0000',
+        '/foo bar',
+        '/path/with\rnewline',
+        '/path\\with\\backslash',
+        '/; Path=/sensitive-data',
+        '/login"><script>alert(1)</script>'
+      ];
+
+      invalidPaths.forEach((path) => {
+        assert.throws(
+          cookie.serialize.bind(cookie, 'foo', 'bar', { path }),
+          /option path is invalid/,
+          `Expected an error for invalid path: "${path}"`
+        );
+      });
+    });
+  });
 
   describe('with "priority" option', function () {
     it('should throw on invalid priority', function () {

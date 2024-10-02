@@ -23,14 +23,60 @@ exports.serialize = serialize;
 var __toString = Object.prototype.toString
 
 /**
- * RegExp to match field-content in RFC 7230 sec 3.2
+ * RegExp to match cookie-name in RFC 6265 sec 4.1.1
+ * This refers out to the obsoleted definition of token in RFC 2616 sec 2.2
+ * which has been replaced by the token definition in RFC 7230 appendix B.
  *
- * field-content = field-vchar [ 1*( SP / HTAB ) field-vchar ]
- * field-vchar   = VCHAR / obs-text
- * obs-text      = %x80-FF
+ * cookie-name       = token
+ * token             = 1*tchar
+ * tchar             = "!" / "#" / "$" / "%" / "&" / "'" /
+ *                     "*" / "+" / "-" / "." / "^" / "_" /
+ *                     "`" / "|" / "~" / DIGIT / ALPHA
  */
 
-var fieldContentRegExp = /^[\u0009\u0020-\u007e\u0080-\u00ff]+$/;
+var cookieNameRegExp = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
+
+/**
+ * RegExp to match cookie-value in RFC 6265 sec 4.1.1
+ *
+ * cookie-value      = *cookie-octet / ( DQUOTE *cookie-octet DQUOTE )
+ * cookie-octet      = %x21 / %x23-2B / %x2D-3A / %x3C-5B / %x5D-7E
+ *                     ; US-ASCII characters excluding CTLs,
+ *                     ; whitespace DQUOTE, comma, semicolon,
+ *                     ; and backslash
+ */
+
+var cookieValueRegExp = /^("?)[\u0021\u0023-\u002B\u002D-\u003A\u003C-\u005B\u005D-\u007E]*\1$/;
+
+/**
+ * RegExp to match domain-value in RFC 6265 sec 4.1.1
+ *
+ * domain-value      = <subdomain>
+ *                     ; defined in [RFC1034], Section 3.5, as
+ *                     ; enhanced by [RFC1123], Section 2.1
+ * <subdomain>       = <label> | <subdomain> "." <label>
+ * <label>           = <let-dig> [ [ <ldh-str> ] <let-dig> ]
+ *                     Labels must be 63 characters or less.
+ *                     'let-dig' not 'letter' in the first char, per RFC1123
+ * <ldh-str>         = <let-dig-hyp> | <let-dig-hyp> <ldh-str>
+ * <let-dig-hyp>     = <let-dig> | "-"
+ * <let-dig>         = <letter> | <digit>
+ * <letter>          = any one of the 52 alphabetic characters A through Z in
+ *                     upper case and a through z in lower case
+ * <digit>           = any one of the ten digits 0 through 9
+ */
+
+var domainValueRegExp = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i;
+
+/**
+ * RegExp to match path-value in RFC 6265 sec 4.1.1
+ *
+ * path-value        = <any CHAR except CTLs or ";">
+ * CHAR              = %x01-7F
+ *                     ; defined in RFC 5234 appendix B.1
+ */
+
+var pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
 
 /**
  * Parse a cookie header.
@@ -49,51 +95,50 @@ function parse(str, options) {
     throw new TypeError('argument str must be a string');
   }
 
-  var obj = {}
-  var length = str.length
-
-  if (length < 2) {
-    // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
-    return obj
-  }
-
+  var obj = {};
   var dec = (options && options.decode) || decode;
 
-  var index = 0
-  var eqIdx = 0
-  var endIdx = 0
-  var key;
-  var val;
+  var index = 0;
+  var eqIdx = 0;
+  var endIdx = 0;
+  var len = str.length;
 
-  do {
-    eqIdx = str.indexOf('=', index)
+  // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
+  var max = len - 2;
+
+  while (index < max) {
+    eqIdx = str.indexOf('=', index);
 
     // no more cookie pairs
     if (eqIdx === -1) {
-      break
+      break;
     }
 
-    endIdx = str.indexOf(';', index)
+    endIdx = str.indexOf(';', index);
 
     if (endIdx === -1) {
-      endIdx = length
-    } else if (endIdx < eqIdx) {
+      endIdx = len;
+    } else if (eqIdx > endIdx) {
       // backtrack on prior semicolon
-      index = str.lastIndexOf(';', eqIdx - 1) + 1
-      continue
+      index = str.lastIndexOf(';', eqIdx - 1) + 1;
+      continue;
     }
 
-    key = str.slice(index, eqIdx).trim()
+    var keyStartIdx = startIndex(str, index, eqIdx);
+    var keyEndIdx = endIndex(str, eqIdx, keyStartIdx);
+    var key = str.slice(keyStartIdx, keyEndIdx);
 
     // only assign once
     if (undefined === obj[key]) {
-      val = str.slice(eqIdx + 1, endIdx).trim()
+      var valStartIdx = startIndex(str, eqIdx + 1, endIdx);
+      var valEndIdx = endIndex(str, endIdx, valStartIdx);
 
-      // quoted values
-      if (val.charCodeAt(0) === 0x22) {
-        val = val.slice(1, -1)
+      if (str.charCodeAt(valStartIdx) === 0x22 /* " */ && str.charCodeAt(valEndIdx - 1) === 0x22 /* " */) {
+        valStartIdx++;
+        valEndIdx--;
       }
 
+      var val = str.slice(valStartIdx, valEndIdx);
       obj[key] = tryDecode(val, dec);
     }
 
@@ -103,11 +148,27 @@ function parse(str, options) {
   return obj;
 }
 
+function startIndex(str, index, max) {
+  do {
+    var code = str.charCodeAt(index);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index;
+  } while (++index < max);
+  return max;
+}
+
+function endIndex(str, index, min) {
+  while (index > min) {
+    var code = str.charCodeAt(--index);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index + 1;
+  }
+  return min;
+}
+
 /**
  * Serialize data into a cookie header.
  *
- * Serialize the a name value pair into a cookie string suitable for
- * http headers. An optional options object specified cookie parameters.
+ * Serialize a name value pair into a cookie string suitable for
+ * http headers. An optional options object specifies cookie parameters.
  *
  * serialize('foo', 'bar', { httpOnly: true })
  *   => "foo=bar; httpOnly"
@@ -127,13 +188,13 @@ function serialize(name, val, options) {
     throw new TypeError('option encode is invalid');
   }
 
-  if (!fieldContentRegExp.test(name)) {
+  if (!cookieNameRegExp.test(name)) {
     throw new TypeError('argument name is invalid');
   }
 
   var value = enc(val);
 
-  if (value && !fieldContentRegExp.test(value)) {
+  if (value && !cookieValueRegExp.test(value)) {
     throw new TypeError('argument val is invalid');
   }
 
@@ -150,7 +211,7 @@ function serialize(name, val, options) {
   }
 
   if (opt.domain) {
-    if (!fieldContentRegExp.test(opt.domain)) {
+    if (!domainValueRegExp.test(opt.domain)) {
       throw new TypeError('option domain is invalid');
     }
 
@@ -158,7 +219,7 @@ function serialize(name, val, options) {
   }
 
   if (opt.path) {
-    if (!fieldContentRegExp.test(opt.path)) {
+    if (!pathValueRegExp.test(opt.path)) {
       throw new TypeError('option path is invalid');
     }
 
@@ -181,6 +242,10 @@ function serialize(name, val, options) {
 
   if (opt.secure) {
     str += '; Secure';
+  }
+
+  if (opt.partitioned) {
+    str += '; Partitioned'
   }
 
   if (opt.priority) {
@@ -244,7 +309,7 @@ function decode (str) {
 /**
  * URL-encode value.
  *
- * @param {string} str
+ * @param {string} val
  * @returns {string}
  */
 

@@ -6,7 +6,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         name:
@@ -31,6 +31,10 @@ jobs:
         - Node.js 15.x
         - Node.js 16.x
         - Node.js 17.x
+        - Node.js 18.x
+        - Node.js 19.x
+        - Node.js 20.x
+        - Node.js 21.x
 
         include:
         - name: Node.js 0.6
@@ -90,48 +94,76 @@ jobs:
 
         - name: Node.js 8.x
           node-version: "8.17"
-          npm-i: mocha@7.1.2
+          npm-i: mocha@7.1.2 nyc@14.1.1
           npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 9.x
           node-version: "9.11"
-          npm-i: mocha@7.1.2
+          npm-i: mocha@7.1.2 nyc@14.1.1
           npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 10.x
           node-version: "10.24"
           npm-i: mocha@8.4.0
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 11.x
           node-version: "11.15"
           npm-i: mocha@8.4.0
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 12.x
           node-version: "12.22"
+          npm-i: mocha@9.2.2
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 13.x
           node-version: "13.14"
+          npm-i: mocha@9.2.2
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 14.x
-          node-version: "14.19"
+          node-version: "14.21"
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 15.x
           node-version: "15.14"
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 16.x
-          node-version: "16.14"
+          node-version: "16.20"
+          npm-rm: beautify-benchmark benchmark top-sites
 
         - name: Node.js 17.x
           node-version: "17.9"
+          npm-rm: beautify-benchmark benchmark top-sites
+
+        - name: Node.js 18.x
+          node-version: "18.18"
+          npm-rm: beautify-benchmark benchmark top-sites
+
+        - name: Node.js 19.x
+          node-version: "19.9"
+          npm-rm: beautify-benchmark benchmark top-sites
+
+        - name: Node.js 20.x
+          node-version: "20.9"
+          npm-rm: beautify-benchmark benchmark top-sites
+
+        - name: Node.js 21.x
+          node-version: "21.1"
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Install Node.js ${{ matrix.node-version }}
       shell: bash -eo pipefail -l {0}
       run: |
         if [[ "${{ matrix.node-version }}" == 0.6* ]]; then
-          sudo apt-get install g++-4.8 gcc-4.8 libssl1.0-dev
+          sudo sh -c 'echo "deb http://us.archive.ubuntu.com/ubuntu/ bionic universe" >> /etc/apt/sources.list'
+          sudo sh -c 'echo "deb http://security.ubuntu.com/ubuntu bionic-security main" >> /etc/apt/sources.list'
+          sudo apt-get update
+          sudo apt-get install g++-4.8 gcc-4.8 libssl1.0-dev python2 python-is-python2
           export CC=/usr/bin/gcc-4.8
           export CXX=/usr/bin/g++-4.8
         fi
@@ -150,7 +182,12 @@ jobs:
         dirname "$(nvm which ${{ matrix.node-version }})" >> "$GITHUB_PATH"
 
     - name: Configure npm
-      run: npm config set shrinkwrap false
+      run: |
+        if [[ "$(npm config get package-lock)" == "true" ]]; then
+          npm config set package-lock false
+        else
+          npm config set shrinkwrap false
+        fi
 
     - name: Remove npm module(s) ${{ matrix.npm-rm }}
       run: npm rm --silent --save-dev ${{ matrix.npm-rm }}
@@ -164,8 +201,8 @@ jobs:
       shell: bash
       run: |
         # eslint for linting
-        # - remove on Node.js < 10
-        if [[ "$(cut -d. -f1 <<< "${{ matrix.node-version }}")" -lt 10 ]]; then
+        # - remove on Node.js < 12
+        if [[ "$(cut -d. -f1 <<< "${{ matrix.node-version }}")" -lt 12 ]]; then
           node -pe 'Object.keys(require("./package").devDependencies).join("\n")' | \
             grep -E '^eslint(-|$)' | \
             sort -r | \
@@ -182,7 +219,7 @@ jobs:
         echo "node@$(node -v)"
         echo "npm@$(npm -v)"
         npm -s ls ||:
-        (npm -s ls --depth=0 ||:) | awk -F'[ @]' 'NR>1 && $2 { print "::set-output name=" $2 "::" $3 }'
+        (npm -s ls --depth=0 ||:) | awk -F'[ @]' 'NR>1 && $2 { print $2 "=" $3 }' >> "$GITHUB_OUTPUT"
 
     - name: Run tests
       shell: bash
