@@ -46,6 +46,7 @@ describe('cookie.parse(str)', function () {
     assert.deepEqual(cookie.parse(' = bar '), { '': 'bar' })
     assert.deepEqual(cookie.parse(' foo = '), { foo: '' })
     assert.deepEqual(cookie.parse('   =   '), { '': '' })
+    assert.deepEqual(cookie.parse('\tfoo\t=\tbar\t'), { foo: 'bar' })
   })
 
   it('should return original value on escape error', function () {

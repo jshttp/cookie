@@ -145,16 +145,18 @@ function parse(str, options) {
 
 function startIndex(str, index, max) {
   do {
-    if (str.charCodeAt(index) !== 0x20 /*   */) break;
+    var code = str.charCodeAt(index);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index;
   } while (++index < max);
-  return index;
+  return max;
 }
 
 function endIndex(str, index, min) {
   while (index > min) {
-    if (str.charCodeAt(--index) !== 0x20 /*   */) return index + 1;
+    var code = str.charCodeAt(--index);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index + 1;
   }
-  return index;
+  return min;
 }
 
 /**
