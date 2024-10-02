@@ -102,13 +102,13 @@ function parse(str, options) {
   var index = 0;
 
   while (index < str.length) {
-    var eqIdx = str.indexOf('=', index);
-    if (eqIdx === -1) break;
-
     var endIdx = str.indexOf(';', index);
     if (endIdx === -1) endIdx = str.length;
 
-    if (eqIdx > endIdx) {
+    var eqIdx = index;
+    while (eqIdx < endIdx && str.charCodeAt(eqIdx) !== 0x3D /* = */) eqIdx++;
+
+    if (eqIdx === endIdx) {
       index = endIdx + 1;
       continue;
     }
