@@ -100,19 +100,23 @@ function parse(str, options) {
   var dec = opt.decode || decode;
 
   var index = 0;
+  var eqIdx = 0;
+  var endIdx = 0;
+  var len = str.length;
+  var max = len - 2;
 
-  while (index < str.length) {
-    var eqIdx = str.indexOf('=', index);
+  while (index < max) {
+    eqIdx = str.indexOf('=', index);
 
     // no more cookie pairs
     if (eqIdx === -1) {
       break;
     }
 
-    var endIdx = str.indexOf(';', index);
+    endIdx = str.indexOf(';', index);
 
     if (endIdx === -1) {
-      endIdx = str.length;
+      endIdx = len;
     } else if (eqIdx > endIdx) {
       // backtrack on prior semicolon
       index = str.lastIndexOf(';', eqIdx - 1) + 1;
