@@ -114,6 +114,7 @@ function parse(str, options) {
     if (endIdx === -1) {
       endIdx = str.length;
     } else if (eqIdx > endIdx) {
+      // backtrack on prior semicolon
       index = str.lastIndexOf(';', eqIdx - 1) + 1;
       continue;
     }
@@ -150,9 +151,9 @@ function startIndex(str, index, max) {
 }
 
 function endIndex(str, index, min) {
-  do {
-    if (str.charCodeAt(index - 1) !== 0x20 /*   */) break;
-  } while (--index >= min);
+  while (index > min) {
+    if (str.charCodeAt(--index) !== 0x20 /*   */) return index + 1;
+  }
   return index;
 }
 
