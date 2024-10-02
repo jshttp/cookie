@@ -95,40 +95,39 @@ function parse(str, options) {
     throw new TypeError('argument str must be a string');
   }
 
-  var obj = {}
+  var obj = {};
   var opt = options || {};
   var dec = opt.decode || decode;
 
-  var index = 0
+  var index = 0;
+
   while (index < str.length) {
-    var eqIdx = str.indexOf('=', index)
+    var eqIdx = str.indexOf('=', index);
+    if (eqIdx === -1) break;
 
-    // no more cookie pairs
-    if (eqIdx === -1) {
-      break
+    var endIdx = str.indexOf(';', index);
+    if (endIdx === -1) endIdx = str.length;
+
+    if (eqIdx > endIdx) {
+      index = endIdx + 1;
+      continue;
     }
 
-    var endIdx = str.indexOf(';', index)
-
-    if (endIdx === -1) {
-      endIdx = str.length
-    } else if (endIdx < eqIdx) {
-      // backtrack on prior semicolon
-      index = str.lastIndexOf(';', eqIdx - 1) + 1
-      continue
-    }
-
-    var key = str.slice(index, eqIdx).trim()
+    var keyStartIdx = startIndex(str, index, eqIdx);
+    var keyEndIdx = endIndex(str, eqIdx, keyStartIdx);
+    var key = str.slice(keyStartIdx, keyEndIdx);
 
     // only assign once
     if (undefined === obj[key]) {
-      var val = str.slice(eqIdx + 1, endIdx).trim()
+      var valStartIdx = startIndex(str, eqIdx + 1, endIdx);
+      var valEndIdx = endIndex(str, endIdx, valStartIdx);
 
-      // quoted values
-      if (val.charCodeAt(0) === 0x22) {
-        val = val.slice(1, -1)
+      if (str.charCodeAt(valStartIdx) === 0x22 /* " */ && str.charCodeAt(valEndIdx - 1) === 0x22 /* " */) {
+        valStartIdx++;
+        valEndIdx--;
       }
 
+      var val = str.slice(valStartIdx, valEndIdx);
       obj[key] = tryDecode(val, dec);
     }
 
@@ -136,6 +135,20 @@ function parse(str, options) {
   }
 
   return obj;
+}
+
+function startIndex(str, index, max) {
+  do {
+    if (str.charCodeAt(index) !== 0x20 /*   */) break;
+  } while (++index < max);
+  return index;
+}
+
+function endIndex(str, index, min) {
+  do {
+    if (str.charCodeAt(index - 1) !== 0x20 /*   */) break;
+  } while (--index >= min);
+  return index;
 }
 
 /**
