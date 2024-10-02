@@ -100,7 +100,7 @@ function parse(str, options) {
   // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
   var max = len - 2;
   if (max < 0) return obj;
-  
+
   var dec = (options && options.decode) || decode;
   var index = 0;
   var eqIdx = 0;
@@ -203,7 +203,7 @@ function serialize(name, val, options) {
   if (null != opt.maxAge) {
     var maxAge = opt.maxAge - 0;
 
-    if (isNaN(maxAge) || !isFinite(maxAge)) {
+    if (!isFinite(maxAge)) {
       throw new TypeError('option maxAge is invalid')
     }
 
