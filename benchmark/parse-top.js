@@ -22,26 +22,16 @@ Object.keys(top).forEach(function (domain) {
   })
 })
 
-suite.on('start', function onCycle (event) {
+suite.on('start', function () {
   process.stdout.write('  cookie.parse - top sites\n\n')
 })
 
-suite.on('cycle', function onCycle (event) {
+suite.on('cycle', function (event) {
   benchmarks.add(event.target)
 })
 
-suite.on('complete', function onComplete () {
+suite.on('complete', function () {
   benchmarks.log()
 })
 
-suite.run({async: false})
-
-function gencookies (num) {
-  var str = ''
-
-  for (var i = 0; i < num; i++) {
-    str += '; foo' + i + '=bar'
-  }
-
-  return str.slice(2)
-}
+suite.run({ async: false })

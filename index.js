@@ -85,12 +85,12 @@ var pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
  * The object has the various cookies as keys(names) => values
  *
  * @param {string} str
- * @param {object} [options]
+ * @param {object} [opt]
  * @return {object}
  * @public
  */
 
-function parse(str, options) {
+function parse(str, opt) {
   if (typeof str !== 'string') {
     throw new TypeError('argument str must be a string');
   }
@@ -98,21 +98,16 @@ function parse(str, options) {
   var obj = {};
   var len = str.length;
   // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
-  var max = len - 2;
-  if (max < 0) return obj;
+  if (len < 2) return obj;
 
-  var dec = (options && options.decode) || decode;
+  var dec = (opt && opt.decode) || decode;
   var index = 0;
   var eqIdx = 0;
   var endIdx = 0;
 
   do {
     eqIdx = str.indexOf('=', index);
-
-    // no more cookie pairs
-    if (eqIdx === -1) {
-      break;
-    }
+    if (eqIdx === -1) break; // No more cookie pairs.
 
     endIdx = str.indexOf(';', index);
 
@@ -129,7 +124,7 @@ function parse(str, options) {
     var key = str.slice(keyStartIdx, keyEndIdx);
 
     // only assign once
-    if (undefined === obj[key]) {
+    if (!obj.hasOwnProperty(key)) {
       var valStartIdx = startIndex(str, eqIdx + 1, endIdx);
       var valEndIdx = endIndex(str, endIdx, valStartIdx);
 
@@ -143,7 +138,7 @@ function parse(str, options) {
     }
 
     index = endIdx + 1
-  } while (index < max);
+  } while (index < len);
 
   return obj;
 }
@@ -175,14 +170,13 @@ function endIndex(str, index, min) {
  *
  * @param {string} name
  * @param {string} val
- * @param {object} [options]
+ * @param {object} [opt]
  * @return {string}
  * @public
  */
 
-function serialize(name, val, options) {
-  var opt = options || {};
-  var enc = opt.encode || encode;
+function serialize(name, val, opt) {
+  var enc = (opt && opt.encode) || encodeURIComponent;
 
   if (typeof enc !== 'function') {
     throw new TypeError('option encode is invalid');
@@ -194,20 +188,21 @@ function serialize(name, val, options) {
 
   var value = enc(val);
 
-  if (value && !cookieValueRegExp.test(value)) {
+  if (!cookieValueRegExp.test(value)) {
     throw new TypeError('argument val is invalid');
   }
 
   var str = name + '=' + value;
+  if (!opt) return str;
 
   if (null != opt.maxAge) {
-    var maxAge = opt.maxAge - 0;
+    var maxAge = Math.floor(opt.maxAge);
 
     if (!isFinite(maxAge)) {
       throw new TypeError('option maxAge is invalid')
     }
 
-    str += '; Max-Age=' + Math.floor(maxAge);
+    str += '; Max-Age=' + maxAge;
   }
 
   if (opt.domain) {
@@ -250,8 +245,7 @@ function serialize(name, val, options) {
 
   if (opt.priority) {
     var priority = typeof opt.priority === 'string'
-      ? opt.priority.toLowerCase()
-      : opt.priority
+      ? opt.priority.toLowerCase() : opt.priority;
 
     switch (priority) {
       case 'low':
@@ -307,17 +301,6 @@ function decode (str) {
 }
 
 /**
- * URL-encode value.
- *
- * @param {string} val
- * @returns {string}
- */
-
-function encode (val) {
-  return encodeURIComponent(val)
-}
-
-/**
  * Determine if value is a Date.
  *
  * @param {*} val
@@ -325,8 +308,7 @@ function encode (val) {
  */
 
 function isDate (val) {
-  return __toString.call(val) === '[object Date]' ||
-    val instanceof Date
+  return __toString.call(val) === '[object Date]';
 }
 
 /**
