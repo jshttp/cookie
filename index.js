@@ -64,9 +64,15 @@ var cookieValueRegExp = /^("?)[\u0021\u0023-\u002B\u002D-\u003A\u003C-\u005B\u00
  * <letter>          = any one of the 52 alphabetic characters A through Z in
  *                     upper case and a through z in lower case
  * <digit>           = any one of the ten digits 0 through 9
+ *
+ * Keep support for leading dot: https://github.com/jshttp/cookie/issues/173
+ *
+ * > (Note that a leading %x2E ("."), if present, is ignored even though that
+ * character is not permitted, but a trailing %x2E ("."), if present, will
+ * cause the user agent to ignore the attribute.)
  */
 
-var domainValueRegExp = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i;
+var domainValueRegExp = /^([.]?[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i;
 
 /**
  * RegExp to match path-value in RFC 6265 sec 4.1.1
