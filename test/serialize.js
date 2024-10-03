@@ -76,6 +76,9 @@ describe('cookie.serialize(name, value, options)', function () {
       var validDomains = [
         'example.com',
         'sub.example.com',
+        '.example.com',
+        'localhost',
+        '.localhost',
         'my-site.org',
         'localhost'
       ];
@@ -94,7 +97,6 @@ describe('cookie.serialize(name, value, options)', function () {
         'sub.example.com\u0000',
         'my site.org',
         'domain..com',
-        '.example.com',
         'example.com; Path=/',
         'example.com /* inject a comment */'
       ];
