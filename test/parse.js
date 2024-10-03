@@ -68,6 +68,10 @@ describe('cookie.parse(str)', function () {
     assert.deepEqual(cookie.parse('foo=false;bar=bar;foo=true'), { foo: 'false', bar: 'bar' })
     assert.deepEqual(cookie.parse('foo=;bar=bar;foo=boo'), { foo: '', bar: 'bar' })
   })
+
+  it('should parse native properties', function () {
+    assert.deepEqual(cookie.parse('toString=foo;valueOf=bar'), { toString: 'foo', valueOf: 'bar' })
+  })
 })
 
 describe('cookie.parse(str, options)', function () {
