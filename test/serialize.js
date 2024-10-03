@@ -77,6 +77,8 @@ describe('cookie.serialize(name, value, options)', function () {
         'example.com',
         'sub.example.com',
         '.example.com',
+        'localhost',
+        '.localhost',
         'my-site.org',
         'localhost'
       ];
