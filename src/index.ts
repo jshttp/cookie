@@ -59,13 +59,6 @@ const domainValueRegExp =
 const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
 
 const __toString = Object.prototype.toString;
-const __hasOwnProperty = Object.prototype.hasOwnProperty;
-
-const NullObject = /* @__PURE__ */ (() => {
-  const C = function () {};
-  C.prototype = Object.create(null);
-  return C;
-})() as unknown as { new (): any };
 
 /**
  * Parse options.
@@ -91,11 +84,8 @@ export interface ParseOptions {
  * Parse the given cookie header string into an object
  * The object has the various cookies as keys(names) => values
  */
-export function parse(
-  str: string,
-  options?: ParseOptions,
-): Record<string, string> {
-  const obj: Record<string, string> = new NullObject();
+export function parse(str: string, options?: ParseOptions): URLSearchParams {
+  const obj = new URLSearchParams();
   const len = str.length;
   // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
   if (len < 2) return obj;
@@ -120,22 +110,19 @@ export function parse(
     const keyEndIdx = endIndex(str, eqIdx, keyStartIdx);
     const key = str.slice(keyStartIdx, keyEndIdx);
 
-    // only assign once
-    if (!__hasOwnProperty.call(obj, key)) {
-      let valStartIdx = startIndex(str, eqIdx + 1, endIdx);
-      let valEndIdx = endIndex(str, endIdx, valStartIdx);
+    let valStartIdx = startIndex(str, eqIdx + 1, endIdx);
+    let valEndIdx = endIndex(str, endIdx, valStartIdx);
 
-      if (
-        str.charCodeAt(valStartIdx) === 0x22 /* " */ &&
-        str.charCodeAt(valEndIdx - 1) === 0x22 /* " */
-      ) {
-        valStartIdx++;
-        valEndIdx--;
-      }
-
-      const val = str.slice(valStartIdx, valEndIdx);
-      obj[key] = tryDecode(val, dec);
+    if (
+      str.charCodeAt(valStartIdx) === 0x22 /* " */ &&
+      str.charCodeAt(valEndIdx - 1) === 0x22 /* " */
+    ) {
+      valStartIdx++;
+      valEndIdx--;
     }
+
+    const val = str.slice(valStartIdx, valEndIdx);
+    obj.append(key, tryDecode(val, dec));
 
     index = endIdx + 1;
   } while (index < len);
