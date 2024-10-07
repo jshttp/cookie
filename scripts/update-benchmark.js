@@ -1,31 +1,39 @@
 "use strict";
 
-var fs = require("fs");
-var http = require("http");
-var https = require("https");
-var path = require("path");
-var topSites = require("top-sites");
-var url = require("url");
+const fs = require("fs");
+const http = require("http");
+const https = require("https");
+const path = require("path");
+const topSites = require("top-sites");
+const url = require("url");
 
-var BENCH_COOKIES_FILE = path.join(__dirname, "parse-top.json");
+const BENCH_COOKIES_FILE = path.join(__dirname, "parse-top.json");
+const domains = topSites.slice(0, 30).map((x) => x.rootDomain);
 
-getAllCookies(topSites.slice(0, 20), function (err, cookies) {
+getAllCookies(domains, function (err, cookies) {
   if (err) throw err;
-  var str =
-    "{\n" +
-    Object.keys(cookies)
-      .sort()
-      .map(function (key) {
-        return "  " + JSON.stringify(key) + ": " + JSON.stringify(cookies[key]);
-      })
-      .join(",\n") +
-    "\n}\n";
-  fs.writeFileSync(BENCH_COOKIES_FILE, str);
+
+  const str = JSON.stringify(
+    Object.fromEntries(
+      Object.keys(cookies)
+        .sort()
+        .map((key) => [key, cookies[key]])
+        .concat([["example.com", ""]]),
+    ),
+    null,
+    2,
+  );
+
+  fs.writeFile(BENCH_COOKIES_FILE, `${str}\n`, function (err) {
+    if (err) throw err;
+    console.log("Cookies saved to", BENCH_COOKIES_FILE);
+    process.exit();
+  });
 });
 
 function get(href, callback) {
-  var protocol = url.parse(href, false, true).protocol;
-  var proto = protocol === "https:" ? https : http;
+  const protocol = url.parse(href, false, true).protocol;
+  const proto = protocol === "https:" ? https : http;
 
   proto
     .get(href)
@@ -43,14 +51,14 @@ function get(href, callback) {
     });
 }
 
-function getAllCookies(sites, callback) {
-  var all = Object.create(null);
-  var wait = sites.length;
+function getAllCookies(domains, callback) {
+  const all = Object.create(null);
+  let wait = domains.length;
 
-  sites.forEach(function (site) {
-    getCookies(site, function (err, cookies) {
+  domains.forEach(function (domain) {
+    getCookies(domain, function (err, cookies) {
       if (!err && cookies.length) {
-        all[site.rootDomain] = cookies.map(obfuscate).join("; ");
+        all[domain] = cookies.map(obfuscate).join("; ");
       }
       if (!--wait) {
         callback(null, all);
@@ -59,30 +67,30 @@ function getAllCookies(sites, callback) {
   });
 }
 
-function getCookies(site, callback) {
-  var href = url.format({ hostname: site.rootDomain, protocol: "http" });
+function getCookies(domain, callback) {
+  const href = url.format({ hostname: domain, protocol: "http" });
   get(href, function (err, res) {
     if (err) return callback(err);
-    var cookies = (res.headers["set-cookie"] || []).map(function (c) {
+    const cookies = (res.headers["set-cookie"] || []).map(function (c) {
       return c.split(";")[0];
     });
     callback(null, cookies);
   });
 }
 
-function obfuscate(str) {
+function obfuscate(str, index) {
   return str
     .replace(/%[0-9a-f]{2}/gi, function () {
       return "%__";
     })
     .replace(/[a-z]/g, function () {
-      return "l";
+      return String.fromCharCode(97 + ((index || 0) % 26));
     })
     .replace(/[A-Z]/g, function () {
-      return "U";
+      return String.fromCharCode(65 + ((index || 0) % 26));
     })
     .replace(/[0-9]/g, function () {
-      return "0";
+      return (index || 0) % 10;
     })
     .replace(/%__/g, function () {
       return "%22";
