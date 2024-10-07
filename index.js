@@ -186,17 +186,17 @@ function serialize(name, val, opt) {
   var enc = (opt && opt.encode) || encodeURIComponent;
 
   if (typeof enc !== 'function') {
-    throw new TypeError('option encode is invalid');
+    throw new TypeError('option encode is invalid: ' + enc);
   }
 
   if (!cookieNameRegExp.test(name)) {
-    throw new TypeError('argument name is invalid');
+    throw new TypeError('argument name is invalid: ' + name);
   }
 
   var value = enc(val);
 
   if (!cookieValueRegExp.test(value)) {
-    throw new TypeError('argument val is invalid');
+    throw new TypeError('argument val is invalid: ' + value);
   }
 
   var str = name + '=' + value;
@@ -206,7 +206,7 @@ function serialize(name, val, opt) {
     var maxAge = Math.floor(opt.maxAge);
 
     if (!isFinite(maxAge)) {
-      throw new TypeError('option maxAge is invalid')
+      throw new TypeError('option maxAge is invalid: ' + opt.maxAge)
     }
 
     str += '; Max-Age=' + maxAge;
@@ -214,7 +214,7 @@ function serialize(name, val, opt) {
 
   if (opt.domain) {
     if (!domainValueRegExp.test(opt.domain)) {
-      throw new TypeError('option domain is invalid');
+      throw new TypeError('option domain is invalid: ' + opt.domain);
     }
 
     str += '; Domain=' + opt.domain;
@@ -222,7 +222,7 @@ function serialize(name, val, opt) {
 
   if (opt.path) {
     if (!pathValueRegExp.test(opt.path)) {
-      throw new TypeError('option path is invalid');
+      throw new TypeError('option path is invalid: ' + opt.path);
     }
 
     str += '; Path=' + opt.path;
@@ -232,7 +232,7 @@ function serialize(name, val, opt) {
     var expires = opt.expires
 
     if (!isDate(expires) || isNaN(expires.valueOf())) {
-      throw new TypeError('option expires is invalid');
+      throw new TypeError('option expires is invalid: ' + expires);
     }
 
     str += '; Expires=' + expires.toUTCString()
@@ -265,7 +265,7 @@ function serialize(name, val, opt) {
         str += '; Priority=High'
         break
       default:
-        throw new TypeError('option priority is invalid')
+        throw new TypeError('option priority is invalid: ' + priority)
     }
   }
 
@@ -287,7 +287,7 @@ function serialize(name, val, opt) {
         str += '; SameSite=None';
         break;
       default:
-        throw new TypeError('option sameSite is invalid');
+        throw new TypeError('option sameSite is invalid: ' + sameSite);
     }
   }
 
