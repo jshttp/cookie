@@ -1,7 +1,7 @@
 {
   "name": "cookie",
   "description": "HTTP server cookie parsing and serialization",
-  "version": "0.6.0",
+  "version": "0.7.2",
   "author": "Roman Shtylman <shtylman@gmail.com>",
   "contributors": [
     "Douglas Christopher Wilson <doug@somethingdoug.com>"
@@ -29,6 +29,7 @@
     "SECURITY.md",
     "index.js"
   ],
+  "main": "index.js",
   "engines": {
     "node": ">= 0.6"
   },
@@ -38,7 +39,6 @@
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-ci": "nyc --reporter=lcov --reporter=text npm test",
     "test-cov": "nyc --reporter=html --reporter=text npm test",
-    "update-bench": "node scripts/update-benchmark.js",
-    "version": "node scripts/version-history.js && git add HISTORY.md"
+    "update-bench": "node scripts/update-benchmark.js"
   }
 }

@@ -24,7 +24,12 @@ describe('cookie.parse(str)', function () {
   })
 
   it('should parse cookie with empty value', function () {
-    assert.deepEqual(cookie.parse('foo= ; bar='), { foo: '', bar: '' })
+    assert.deepEqual(cookie.parse('foo=; bar='), { foo: '', bar: '' })
+  })
+
+  it('should parse cookie with minimum length', function () {
+    assert.deepEqual(cookie.parse('f='), { f: '' })
+    assert.deepEqual(cookie.parse('f=;b='), { f: '', b: '' })
   })
 
   it('should URL-decode values', function () {
@@ -32,6 +37,21 @@ describe('cookie.parse(str)', function () {
       { foo: 'bar=123456789&name=Magic+Mouse' })
 
     assert.deepEqual(cookie.parse('email=%20%22%2c%3b%2f'), { email: ' ",;/' })
+  })
+
+  it('should parse quoted values', function () {
+    assert.deepEqual(cookie.parse('foo="bar"'), { foo: 'bar' })
+    assert.deepEqual(cookie.parse('foo=" a b c "'), { foo: ' a b c ' })
+  })
+
+  it('should trim whitespace around key and value', function () {
+    assert.deepEqual(cookie.parse('  foo  =  "bar"  '), { foo: 'bar' })
+    assert.deepEqual(cookie.parse('  foo  =  bar  ;  fizz  =  buzz  '), { foo: 'bar', fizz: 'buzz' })
+    assert.deepEqual(cookie.parse(' foo = " a b c " '), { foo: ' a b c ' })
+    assert.deepEqual(cookie.parse(' = bar '), { '': 'bar' })
+    assert.deepEqual(cookie.parse(' foo = '), { foo: '' })
+    assert.deepEqual(cookie.parse('   =   '), { '': '' })
+    assert.deepEqual(cookie.parse('\tfoo\t=\tbar\t'), { foo: 'bar' })
   })
 
   it('should return original value on escape error', function () {
@@ -47,6 +67,10 @@ describe('cookie.parse(str)', function () {
     assert.deepEqual(cookie.parse('foo=%1;bar=bar;foo=boo'), { foo: '%1', bar: 'bar' })
     assert.deepEqual(cookie.parse('foo=false;bar=bar;foo=true'), { foo: 'false', bar: 'bar' })
     assert.deepEqual(cookie.parse('foo=;bar=bar;foo=boo'), { foo: '', bar: 'bar' })
+  })
+
+  it('should parse native properties', function () {
+    assert.deepEqual(cookie.parse('toString=foo;valueOf=bar'), { toString: 'foo', valueOf: 'bar' })
   })
 })
 
