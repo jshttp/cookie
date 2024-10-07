@@ -189,13 +189,11 @@ function serialize(name, val, opt) {
     throw new TypeError('option encode is invalid: ' + enc);
   }
 
-
   if (!cookieNameRegExp.test(name)) {
     throw new TypeError('argument name is invalid: ' + name);
   }
 
   var value = enc(val);
-
 
   if (!cookieValueRegExp.test(value)) {
     throw new TypeError('argument val is invalid: ' + value);
