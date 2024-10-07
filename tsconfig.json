@@ -1,0 +1,9 @@
+{
+  "extends": "@borderless/ts-scripts/configs/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*"]
+}

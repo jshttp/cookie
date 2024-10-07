@@ -10,10 +10,6 @@ Basic HTTP cookie parser and serializer for HTTP servers.
 
 ## Installation
 
-This is a [Node.js](https://nodejs.org/en/) module available through the
-[npm registry](https://www.npmjs.com/). Installation is done using the
-[`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
-
 ```sh
 $ npm install cookie
 ```
@@ -21,7 +17,7 @@ $ npm install cookie
 ## API
 
 ```js
-var cookie = require('cookie');
+const cookie = require("cookie");
 ```
 
 ### cookie.parse(str, options)
@@ -31,7 +27,7 @@ The `str` argument is the string representing a `Cookie` header value and `optio
 optional object containing additional parsing options.
 
 ```js
-var cookies = cookie.parse('foo=bar; equation=E%3Dmc%5E2');
+const cookies = cookie.parse("foo=bar; equation=E%3Dmc%5E2");
 // { foo: 'bar', equation: 'E=mc^2' }
 ```
 
@@ -43,12 +39,12 @@ var cookies = cookie.parse('foo=bar; equation=E%3Dmc%5E2');
 
 Specifies a function that will be used to decode a cookie's value. Since the value of a cookie
 has a limited character set (and must be a simple string), this function can be used to decode
-a previously-encoded cookie value into a JavaScript string or other object.
+a previously-encoded cookie value into a JavaScript string.
 
 The default function is the global `decodeURIComponent`, which will decode any URL-encoded
 sequences into their byte representations.
 
-**note** if an error is thrown from this function, the original, non-decoded cookie value will
+If an error is thrown from this function, the original, non-decoded cookie value will
 be returned as the cookie's value.
 
 ### cookie.serialize(name, value, options)
@@ -58,18 +54,13 @@ name for the cookie, the `value` argument is the value to set the cookie to, and
 argument is an optional object containing additional serialization options.
 
 ```js
-var setCookie = cookie.serialize('foo', 'bar');
+const setCookie = cookie.serialize("foo", "bar");
 // foo=bar
 ```
 
 #### Options
 
 `cookie.serialize` accepts these properties in the options object.
-
-##### domain
-
-Specifies the value for the [`Domain` `Set-Cookie` attribute][rfc-6265-5.2.3]. By default, no
-domain is set, and most clients will consider the cookie to apply to only the current domain.
 
 ##### encode
 
@@ -80,86 +71,83 @@ a value into a string suited for a cookie's value.
 The default function is the global `encodeURIComponent`, which will encode a JavaScript string
 into UTF-8 byte sequences and then URL-encode any that fall outside of the cookie range.
 
+##### maxAge
+
+Specifies the `number` (in seconds) to be the value for the [`Max-Age` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.2).
+The given number will be converted to an integer by rounding down. By default, no maximum age is set.
+
+The [cookie storage model specification](https://tools.ietf.org/html/rfc6265#section-5.3) states that if both `expires` and
+`maxAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
+so if both are set, they should point to the same date and time.
+
 ##### expires
 
-Specifies the `Date` object to be the value for the [`Expires` `Set-Cookie` attribute][rfc-6265-5.2.1].
+Specifies the `Date` object to be the value for the [`Expires` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.1).
 By default, no expiration is set, and most clients will consider this a "non-persistent cookie" and
 will delete it on a condition like exiting a web browser application.
 
-**note** the [cookie storage model specification][rfc-6265-5.3] states that if both `expires` and
+The [cookie storage model specification](https://tools.ietf.org/html/rfc6265#section-5.3) states that if both `expires` and
 `maxAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
 so if both are set, they should point to the same date and time.
 
-##### httpOnly
+##### domain
 
-Specifies the `boolean` value for the [`HttpOnly` `Set-Cookie` attribute][rfc-6265-5.2.6]. When truthy,
-the `HttpOnly` attribute is set, otherwise it is not. By default, the `HttpOnly` attribute is not set.
-
-**note** be careful when setting this to `true`, as compliant clients will not allow client-side
-JavaScript to see the cookie in `document.cookie`.
-
-##### maxAge
-
-Specifies the `number` (in seconds) to be the value for the [`Max-Age` `Set-Cookie` attribute][rfc-6265-5.2.2].
-The given number will be converted to an integer by rounding down. By default, no maximum age is set.
-
-**note** the [cookie storage model specification][rfc-6265-5.3] states that if both `expires` and
-`maxAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
-so if both are set, they should point to the same date and time.
-
-##### partitioned
-
-Specifies the `boolean` value for the [`Partitioned` `Set-Cookie`](rfc-cutler-httpbis-partitioned-cookies)
-attribute. When truthy, the `Partitioned` attribute is set, otherwise it is not. By default, the
-`Partitioned` attribute is not set.
-
-**note** This is an attribute that has not yet been fully standardized, and may change in the future.
-This also means many clients may ignore this attribute until they understand it.
-
-More information about can be found in [the proposal](https://github.com/privacycg/CHIPS).
+Specifies the value for the [`Domain` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.3).
+By default, no domain is set, and most clients will consider the cookie to apply to only the current domain.
 
 ##### path
 
-Specifies the value for the [`Path` `Set-Cookie` attribute][rfc-6265-5.2.4]. By default, the path
-is considered the ["default path"][rfc-6265-5.1.4].
+Specifies the value for the [`Path` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.4). By default, the path
+is considered the ["default path"](https://tools.ietf.org/html/rfc6265#section-5.1.4).
 
-##### priority
+##### httpOnly
 
-Specifies the `string` to be the value for the [`Priority` `Set-Cookie` attribute][rfc-west-cookie-priority-00-4.1].
+Specifies the `boolean` value for the [`HttpOnly` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.6). When truthy,
+the `HttpOnly` attribute is set, otherwise it is not. By default, the `HttpOnly` attribute is not set.
 
-  - `'low'` will set the `Priority` attribute to `Low`.
-  - `'medium'` will set the `Priority` attribute to `Medium`, the default priority when not set.
-  - `'high'` will set the `Priority` attribute to `High`.
-
-More information about the different priority levels can be found in
-[the specification][rfc-west-cookie-priority-00-4.1].
-
-**note** This is an attribute that has not yet been fully standardized, and may change in the future.
-This also means many clients may ignore this attribute until they understand it.
-
-##### sameSite
-
-Specifies the `boolean` or `string` to be the value for the [`SameSite` `Set-Cookie` attribute][rfc-6265bis-09-5.4.7].
-
-  - `true` will set the `SameSite` attribute to `Strict` for strict same site enforcement.
-  - `false` will not set the `SameSite` attribute.
-  - `'lax'` will set the `SameSite` attribute to `Lax` for lax same site enforcement.
-  - `'none'` will set the `SameSite` attribute to `None` for an explicit cross-site cookie.
-  - `'strict'` will set the `SameSite` attribute to `Strict` for strict same site enforcement.
-
-More information about the different enforcement levels can be found in
-[the specification][rfc-6265bis-09-5.4.7].
-
-**note** This is an attribute that has not yet been fully standardized, and may change in the future.
-This also means many clients may ignore this attribute until they understand it.
+Be careful when setting this to `true`, as compliant clients will not allow client-side
+JavaScript to see the cookie in `document.cookie`.
 
 ##### secure
 
-Specifies the `boolean` value for the [`Secure` `Set-Cookie` attribute][rfc-6265-5.2.5]. When truthy,
+Specifies the `boolean` value for the [`Secure` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.5). When truthy,
 the `Secure` attribute is set, otherwise it is not. By default, the `Secure` attribute is not set.
 
-**note** be careful when setting this to `true`, as compliant clients will not send the cookie back to
+Be careful when setting this to `true`, as compliant clients will not send the cookie back to
 the server in the future if the browser does not have an HTTPS connection.
+
+##### partitioned
+
+Specifies the `boolean` value for the [`Partitioned` `Set-Cookie`](https://tools.ietf.org/html/draft-cutler-httpbis-partitioned-cookies/)
+attribute. When truthy, the `Partitioned` attribute is set, otherwise it is not. By default, the
+`Partitioned` attribute is not set.
+
+This is an attribute that has not yet been fully standardized, and may change in the future.
+This also means many clients may ignore this attribute until they understand it. More information
+about can be found in [the proposal](https://github.com/privacycg/CHIPS).
+
+##### priority
+
+Specifies the `string` to be the value for the [`Priority` `Set-Cookie` attribute](https://tools.ietf.org/html/draft-west-cookie-priority-00#section-4.1).
+
+- `'low'` will set the `Priority` attribute to `Low`.
+- `'medium'` will set the `Priority` attribute to `Medium`, the default priority when not set.
+- `'high'` will set the `Priority` attribute to `High`.
+
+More information about the different priority levels can be found in
+[the specification](https://tools.ietf.org/html/draft-west-cookie-priority-00#section-4.1).
+
+##### sameSite
+
+Specifies the value for the [`SameSite` `Set-Cookie` attribute](https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-09#section-5.4.7).
+
+- `true` will set the `SameSite` attribute to `Strict` for strict same site enforcement.
+- `'lax'` will set the `SameSite` attribute to `Lax` for lax same site enforcement.
+- `'none'` will set the `SameSite` attribute to `None` for an explicit cross-site cookie.
+- `'strict'` will set the `SameSite` attribute to `Strict` for strict same site enforcement.
+
+More information about the different enforcement levels can be found in
+[the specification](https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-09#section-5.4.7).
 
 ## Example
 
@@ -167,10 +155,10 @@ The following example uses this module in conjunction with the Node.js core HTTP
 to prompt a user for their name and display it back on future visits.
 
 ```js
-var cookie = require('cookie');
-var escapeHtml = require('escape-html');
-var http = require('http');
-var url = require('url');
+var cookie = require("cookie");
+var escapeHtml = require("escape-html");
+var http = require("http");
+var url = require("url");
 
 function onRequest(req, res) {
   // Parse the query string
@@ -178,35 +166,40 @@ function onRequest(req, res) {
 
   if (query && query.name) {
     // Set a new cookie with the name
-    res.setHeader('Set-Cookie', cookie.serialize('name', String(query.name), {
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7 // 1 week
-    }));
+    res.setHeader(
+      "Set-Cookie",
+      cookie.serialize("name", String(query.name), {
+        httpOnly: true,
+        maxAge: 60 * 60 * 24 * 7, // 1 week
+      }),
+    );
 
     // Redirect back after setting cookie
     res.statusCode = 302;
-    res.setHeader('Location', req.headers.referer || '/');
+    res.setHeader("Location", req.headers.referer || "/");
     res.end();
     return;
   }
 
   // Parse the cookies on the request
-  var cookies = cookie.parse(req.headers.cookie || '');
+  var cookies = cookie.parse(req.headers.cookie || "");
 
   // Get the visitor name set in the cookie
   var name = cookies.name;
 
-  res.setHeader('Content-Type', 'text/html; charset=UTF-8');
+  res.setHeader("Content-Type", "text/html; charset=UTF-8");
 
   if (name) {
-    res.write('<p>Welcome back, <b>' + escapeHtml(name) + '</b>!</p>');
+    res.write("<p>Welcome back, <b>" + escapeHtml(name) + "</b>!</p>");
   } else {
-    res.write('<p>Hello, new visitor!</p>');
+    res.write("<p>Hello, new visitor!</p>");
   }
 
   res.write('<form method="GET">');
-  res.write('<input placeholder="enter your name" name="name"> <input type="submit" value="Set Name">');
-  res.end('</form>');
+  res.write(
+    '<input placeholder="enter your name" name="name"> <input type="submit" value="Set Name">',
+  );
+  res.end("</form>");
 }
 
 http.createServer(onRequest).listen(3000);
@@ -215,92 +208,46 @@ http.createServer(onRequest).listen(3000);
 ## Testing
 
 ```sh
-$ npm test
+npm test
 ```
 
 ## Benchmark
 
+```sh
+npm run bench
 ```
-$ npm run bench
 
-> cookie@0.5.0 bench
-> node benchmark/index.js
-
-  node@18.18.2
-  acorn@8.10.0
-  ada@2.6.0
-  ares@1.19.1
-  brotli@1.0.9
-  cldr@43.1
-  icu@73.2
-  llhttp@6.0.11
-  modules@108
-  napi@9
-  nghttp2@1.57.0
-  nghttp3@0.7.0
-  ngtcp2@0.8.1
-  openssl@3.0.10+quic
-  simdutf@3.2.14
-  tz@2023c
-  undici@5.26.3
-  unicode@15.0
-  uv@1.44.2
-  uvwasi@0.0.18
-  v8@10.2.154.26-node.26
-  zlib@1.2.13.1-motley
-
-> node benchmark/parse-top.js
-
-  cookie.parse - top sites
-
-  14 tests completed.
-
-  parse accounts.google.com x 2,588,913 ops/sec ±0.74% (186 runs sampled)
-  parse apple.com           x 2,370,002 ops/sec ±0.69% (186 runs sampled)
-  parse cloudflare.com      x 2,213,102 ops/sec ±0.88% (188 runs sampled)
-  parse docs.google.com     x 2,194,157 ops/sec ±1.03% (184 runs sampled)
-  parse drive.google.com    x 2,265,084 ops/sec ±0.79% (187 runs sampled)
-  parse en.wikipedia.org    x   457,099 ops/sec ±0.81% (186 runs sampled)
-  parse linkedin.com        x   504,407 ops/sec ±0.89% (186 runs sampled)
-  parse maps.google.com     x 1,230,959 ops/sec ±0.98% (186 runs sampled)
-  parse microsoft.com       x   926,294 ops/sec ±0.88% (184 runs sampled)
-  parse play.google.com     x 2,311,338 ops/sec ±0.83% (185 runs sampled)
-  parse support.google.com  x 1,508,850 ops/sec ±0.86% (186 runs sampled)
-  parse www.google.com      x 1,022,582 ops/sec ±1.32% (182 runs sampled)
-  parse youtu.be            x   332,136 ops/sec ±1.02% (185 runs sampled)
-  parse youtube.com         x   323,833 ops/sec ±0.77% (183 runs sampled)
-
-> node benchmark/parse.js
-
-  cookie.parse - generic
-
-  6 tests completed.
-
-  simple      x 3,214,032 ops/sec ±1.61% (183 runs sampled)
-  decode      x   587,237 ops/sec ±1.16% (187 runs sampled)
-  unquote     x 2,954,618 ops/sec ±1.35% (183 runs sampled)
-  duplicates  x   857,008 ops/sec ±0.89% (187 runs sampled)
-  10 cookies  x   292,133 ops/sec ±0.89% (187 runs sampled)
-  100 cookies x    22,610 ops/sec ±0.68% (187 runs sampled)
+```
+     name                   hz     min     max    mean     p75     p99    p995    p999     rme  samples
+   · simple       8,566,313.09  0.0000  0.3694  0.0001  0.0001  0.0002  0.0002  0.0003  ±0.64%  4283157   fastest
+   · decode       3,834,348.85  0.0001  0.2465  0.0003  0.0003  0.0003  0.0004  0.0006  ±0.38%  1917175
+   · unquote      8,315,355.96  0.0000  0.3824  0.0001  0.0001  0.0002  0.0002  0.0003  ±0.72%  4157880
+   · duplicates   1,944,765.97  0.0004  0.2959  0.0005  0.0005  0.0006  0.0006  0.0008  ±0.24%   972384
+   · 10 cookies     675,345.67  0.0012  0.4328  0.0015  0.0015  0.0019  0.0020  0.0058  ±0.75%   337673
+   · 100 cookies     61,040.71  0.0152  0.4092  0.0164  0.0160  0.0196  0.0228  0.2260  ±0.71%    30521   slowest
+   ✓ parse top-sites (15) 22945ms
+     name                                  hz     min     max    mean     p75     p99    p995    p999     rme   samples
+   · parse accounts.google.com   7,164,349.17  0.0000  0.0929  0.0001  0.0002  0.0002  0.0002  0.0003  ±0.09%   3582184
+   · parse apple.com             7,817,686.84  0.0000  0.6048  0.0001  0.0001  0.0002  0.0002  0.0003  ±1.05%   3908844
+   · parse cloudflare.com        7,189,841.70  0.0000  0.0390  0.0001  0.0002  0.0002  0.0002  0.0003  ±0.06%   3594921
+   · parse docs.google.com       7,051,765.61  0.0000  0.0296  0.0001  0.0002  0.0002  0.0002  0.0003  ±0.06%   3525883
+   · parse drive.google.com      7,349,104.77  0.0000  0.0368  0.0001  0.0001  0.0002  0.0002  0.0003  ±0.05%   3674553
+   · parse en.wikipedia.org      1,929,909.49  0.0004  0.3598  0.0005  0.0005  0.0007  0.0007  0.0012  ±0.16%    964955
+   · parse linkedin.com          2,225,658.01  0.0003  0.0595  0.0004  0.0005  0.0005  0.0005  0.0006  ±0.06%   1112830
+   · parse maps.google.com       4,423,511.68  0.0001  0.0942  0.0002  0.0003  0.0003  0.0003  0.0005  ±0.08%   2211756
+   · parse microsoft.com         3,387,601.88  0.0002  0.0725  0.0003  0.0003  0.0004  0.0004  0.0005  ±0.09%   1693801
+   · parse play.google.com       7,375,980.86  0.0000  0.1994  0.0001  0.0001  0.0002  0.0002  0.0003  ±0.12%   3687991
+   · parse support.google.com    4,912,267.94  0.0001  2.8958  0.0002  0.0002  0.0003  0.0003  0.0005  ±1.28%   2456134
+   · parse www.google.com        3,443,035.87  0.0002  0.2783  0.0003  0.0003  0.0004  0.0004  0.0007  ±0.51%   1721518
+   · parse youtu.be              1,910,492.87  0.0004  0.3490  0.0005  0.0005  0.0007  0.0007  0.0011  ±0.46%    955247
+   · parse youtube.com           1,895,082.62  0.0004  0.7454  0.0005  0.0005  0.0006  0.0007  0.0013  ±0.64%    947542   slowest
+   · parse example.com          21,582,835.27  0.0000  0.1095  0.0000  0.0000  0.0001  0.0001  0.0001  ±0.13%  10791418
 ```
 
 ## References
 
-- [RFC 6265: HTTP State Management Mechanism][rfc-6265]
-- [Same-site Cookies][rfc-6265bis-09-5.4.7]
-
-[rfc-cutler-httpbis-partitioned-cookies]: https://tools.ietf.org/html/draft-cutler-httpbis-partitioned-cookies/
-[rfc-west-cookie-priority-00-4.1]: https://tools.ietf.org/html/draft-west-cookie-priority-00#section-4.1
-[rfc-6265bis-09-5.4.7]: https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-09#section-5.4.7
-[rfc-6265]: https://tools.ietf.org/html/rfc6265
-[rfc-6265-5.1.4]: https://tools.ietf.org/html/rfc6265#section-5.1.4
-[rfc-6265-5.2.1]: https://tools.ietf.org/html/rfc6265#section-5.2.1
-[rfc-6265-5.2.2]: https://tools.ietf.org/html/rfc6265#section-5.2.2
-[rfc-6265-5.2.3]: https://tools.ietf.org/html/rfc6265#section-5.2.3
-[rfc-6265-5.2.4]: https://tools.ietf.org/html/rfc6265#section-5.2.4
-[rfc-6265-5.2.5]: https://tools.ietf.org/html/rfc6265#section-5.2.5
-[rfc-6265-5.2.6]: https://tools.ietf.org/html/rfc6265#section-5.2.6
-[rfc-6265-5.3]: https://tools.ietf.org/html/rfc6265#section-5.3
+- [RFC 6265: HTTP State Management Mechanism](https://tools.ietf.org/html/rfc6265)
+- [Same-site Cookies](https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-09#section-5.4.7)
 
 ## License
 
