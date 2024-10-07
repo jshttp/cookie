@@ -172,12 +172,12 @@ export interface SerializeOptions {
    */
   encode?: (str: string) => string;
   /**
-   * Specifies the `number` (in seconds) to be the value for the [`Max-Age` `Set-Cookie` attribute][rfc-6265-5.2.2].
-The given number will be converted to an integer by rounding down. By default, no maximum age is set.
-
-The [cookie storage model specification](https://tools.ietf.org/html/rfc6265#section-5.3) states that if both `expires` and
-`maxAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
-so if both are set, they should point to the same date and time.
+   * Specifies the `number` (in seconds) to be the value for the [`Max-Age` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.2).
+   * The given number will be converted to an integer by rounding down. By default, no maximum age is set.
+   *
+   * The [cookie storage model specification](https://tools.ietf.org/html/rfc6265#section-5.3) states that if both `expires` and
+   * `maxAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
+   * so if both are set, they should point to the same date and time.
    */
   maxAge?: number;
   /**
