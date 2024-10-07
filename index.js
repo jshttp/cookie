@@ -21,6 +21,7 @@ exports.serialize = serialize;
  */
 
 var __toString = Object.prototype.toString
+var __hasOwnProperty = Object.prototype.hasOwnProperty
 
 /**
  * RegExp to match cookie-name in RFC 6265 sec 4.1.1
@@ -130,7 +131,7 @@ function parse(str, opt) {
     var key = str.slice(keyStartIdx, keyEndIdx);
 
     // only assign once
-    if (!obj.hasOwnProperty(key)) {
+    if (!__hasOwnProperty.call(obj, key)) {
       var valStartIdx = startIndex(str, eqIdx + 1, endIdx);
       var valEndIdx = endIndex(str, endIdx, valStartIdx);
 
