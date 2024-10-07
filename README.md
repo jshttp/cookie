@@ -4,7 +4,7 @@
 [![NPM Downloads][npm-downloads-image]][npm-url]
 [![Node.js Version][node-image]][node-url]
 [![Build Status][ci-image]][ci-url]
-[![Coverage Status][coveralls-image]][coveralls-url]
+[![Coverage Status][coverage-image]][coverage-url]
 
 Basic HTTP cookie parser and serializer for HTTP servers.
 
@@ -255,8 +255,8 @@ npm run bench
 
 [ci-image]: https://badgen.net/github/checks/jshttp/cookie/master?label=ci
 [ci-url]: https://github.com/jshttp/cookie/actions/workflows/ci.yml
-[coveralls-image]: https://badgen.net/coveralls/c/github/jshttp/cookie/master
-[coveralls-url]: https://coveralls.io/r/jshttp/cookie?branch=master
+[coverage-image]: https://badgen.net/codecov/c/github/jshttp/cookie/master
+[coverage-url]: https://app.codecov.io/gh/jshttp/cookie
 [node-image]: https://badgen.net/npm/node/cookie
 [node-url]: https://nodejs.org/en/download
 [npm-downloads-image]: https://badgen.net/npm/dm/cookie
