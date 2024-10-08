@@ -238,8 +238,8 @@ npm run bench
 
 [MIT](LICENSE)
 
-[ci-image]: https://img.shields.io/github/checks-status/jshttp/cookie/master
-[ci-url]: https://github.com/jshttp/cookie/actions/workflows/ci.yml
+[ci-image]: https://img.shields.io/github/actions/workflow/status/jshttp/cookie/ci.yml
+[ci-url]: https://github.com/jshttp/cookie/actions/workflows/ci.yml?query=branch%3Amaster
 [coverage-image]: https://img.shields.io/codecov/c/github/jshttp/cookie/master
 [coverage-url]: https://app.codecov.io/gh/jshttp/cookie
 [npm-downloads-image]: https://img.shields.io/npm/dm/cookie
