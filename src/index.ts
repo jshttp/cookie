@@ -81,7 +81,7 @@ export interface ParseOptions {
    *
    * @default decodeURIComponent
    */
-  decode?: (str: string) => string | undefined;
+  decode?: (str: string) => string;
 }
 
 /**
@@ -133,7 +133,8 @@ export function parse(
       }
 
       const value = dec(str.slice(valStartIdx, valEndIdx));
-      if (value !== undefined) obj[key] = value;
+
+      obj[key] = value;
     }
 
     index = endIdx + 1;
@@ -365,7 +366,7 @@ export function serialize(
 /**
  * URL-decode string value. Optimized to skip native call when no %.
  */
-function decode(str: string): string | undefined {
+function decode(str: string): string {
   if (str.indexOf("%") === -1) return str;
 
   try {
