@@ -71,15 +71,15 @@ const NullObject = /* @__PURE__ */ (() => {
  */
 export interface ParseOptions {
   /**
-   * Specifies a function that will be used to decode a cookie's value. Since
-   * the value of a cookie has a limited character set (and must be a simple
-   * string), this function can be used to decode a previously-encoded cookie
-   * value into a JavaScript string.
+   * Specifies a function that will be used to decode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
+   * Since the value of a cookie has a limited character set (and must be a simple string), this function can be used to decode
+   * a previously-encoded cookie value into a JavaScript string.
    *
-   * Note: if an error is thrown from this function, the original, non-decoded
-   * cookie value will be returned as the cookie's value.
+   * The default function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
+   * is thrown it will return the cookie's original value. If you provide your own encode/decode
+   * scheme you must ensure errors are appropriately handled.
    *
-   * @default decodeURIComponent
+   * @default decode
    */
   decode?: (str: string) => string | undefined;
 }
@@ -155,16 +155,15 @@ function endIndex(str: string, index: number, min: number) {
  */
 export interface SerializeOptions {
   /**
-   * Specifies a function that will be used to encode a cookie's value. Since
-   * value of a cookie has a limited character set (and must be a simple string),
-   * this function can be used to encode a value into a string suited for a cookie's value.
+   * Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
+   * Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
+   * a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
    *
    * @default encodeURIComponent
    */
   encode?: (str: string) => string;
   /**
    * Specifies the `number` (in seconds) to be the value for the [`Max-Age` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.2).
-   * The given number will be converted to an integer by rounding down. By default, no maximum age is set.
    *
    * The [cookie storage model specification](https://tools.ietf.org/html/rfc6265#section-5.3) states that if both `expires` and
    * `maxAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
@@ -173,8 +172,7 @@ export interface SerializeOptions {
   maxAge?: number;
   /**
    * Specifies the `Date` object to be the value for the [`Expires` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.1).
-   * By default, no expiration is set, and most clients will consider this a "non-persistent cookie" and
-   * will delete it on a condition like exiting a web browser application.
+   * When no expiration is set clients consider this a "non-persistent cookie" and delete it the current session is over.
    *
    * The [cookie storage model specification](https://tools.ietf.org/html/rfc6265#section-5.3) states that if both `expires` and
    * `maxAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
@@ -183,37 +181,30 @@ export interface SerializeOptions {
   expires?: Date;
   /**
    * Specifies the value for the [`Domain` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.3).
-   * By default, no domain is set, and most clients will consider the cookie to apply to only the current domain.
+   * When no domain is set clients consider the cookie to apply to the current domain only.
    */
   domain?: string;
   /**
-   * Specifies the value for the [`Path` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.4). By default, the path
-   * is considered the ["default path"](https://tools.ietf.org/html/rfc6265#section-5.1.4).
+   * Specifies the value for the [`Path` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.4).
+   * When no path is set, the path is considered the ["default path"](https://tools.ietf.org/html/rfc6265#section-5.1.4).
    */
   path?: string;
   /**
-   * Specifies the `boolean` value for the [`HttpOnly` `Set-Cookie` attribute][rfc-6265-5.2.6]. When truthy,
-   * the `HttpOnly` attribute is set, otherwise it is not. By default, the `HttpOnly` attribute is not set.
-   *
-   * Be careful when setting this to `true`, as compliant clients will not allow client-side
-   * JavaScript to see the cookie in `document.cookie`.
+   * Enables the [`HttpOnly` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.6).
+   * When enabled, clients will not allow client-side JavaScript to see the cookie in `document.cookie`.
    */
   httpOnly?: boolean;
   /**
-   * Specifies the `boolean` value for the [`Secure` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.5). When truthy,
-   * the `Secure` attribute is set, otherwise it is not. By default, the `Secure` attribute is not set.
-   *
-   * Be careful when setting this to `true`, as compliant clients will not send the cookie back to
-   * the server in the future if the browser does not have an HTTPS connection.
+   * Enables the [`Secure` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.5).
+   * When enabled, clients will only send the cookie back if the browser has a HTTPS connection.
    */
   secure?: boolean;
   /**
-   * Specifies the `boolean` value for the [`Partitioned` `Set-Cookie`](https://tools.ietf.org/html/draft-cutler-httpbis-partitioned-cookies/)
-   * attribute. When truthy, the `Partitioned` attribute is set, otherwise it is not. By default, the
-   * `Partitioned` attribute is not set.
+   * Enables the [`Partitioned` `Set-Cookie` attribute](https://tools.ietf.org/html/draft-cutler-httpbis-partitioned-cookies/).
+   * When enabled, clients will only send the cookie back when the current domain _and_ top-level domain matches.
    *
    * This is an attribute that has not yet been fully standardized, and may change in the future.
-   * This also means many clients may ignore this attribute until they understand it. More information
+   * This also means clients may ignore this attribute until they understand it. More information
    * about can be found in [the proposal](https://github.com/privacycg/CHIPS).
    */
   partitioned?: boolean;
@@ -224,8 +215,7 @@ export interface SerializeOptions {
    * - `'medium'` will set the `Priority` attribute to `Medium`, the default priority when not set.
    * - `'high'` will set the `Priority` attribute to `High`.
    *
-   * More information about the different priority levels can be found in
-   * [the specification](https://tools.ietf.org/html/draft-west-cookie-priority-00#section-4.1).
+   * More information about priority levels can be found in [the specification](https://tools.ietf.org/html/draft-west-cookie-priority-00#section-4.1).
    */
   priority?: "low" | "medium" | "high";
   /**
@@ -236,8 +226,7 @@ export interface SerializeOptions {
    * - `'none'` will set the `SameSite` attribute to `None` for an explicit cross-site cookie.
    * - `'strict'` will set the `SameSite` attribute to `Strict` for strict same site enforcement.
    *
-   * More information about the different enforcement levels can be found in
-   * [the specification](https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-09#section-5.4.7).
+   * More information about enforcement levels can be found in [the specification](https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-09#section-5.4.7).
    */
   sameSite?: boolean | "lax" | "strict" | "none";
 }
