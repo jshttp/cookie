@@ -82,7 +82,7 @@ export interface ParseOptions {
    *
    * @default decodeURIComponent
    */
-  decode?: (str: string) => string;
+  decode?: (str: string) => string | undefined;
 }
 
 /**
@@ -133,8 +133,8 @@ export function parse(
         valEndIdx--;
       }
 
-      const val = str.slice(valStartIdx, valEndIdx);
-      obj[key] = tryDecode(val, dec);
+      const value = dec(str.slice(valStartIdx, valEndIdx));
+      if (value !== undefined) obj[key] = value;
     }
 
     index = endIdx + 1;
@@ -366,8 +366,14 @@ export function serialize(
 /**
  * URL-decode string value. Optimized to skip native call when no %.
  */
-function decode(str: string): string {
-  return str.indexOf("%") !== -1 ? decodeURIComponent(str) : str;
+function decode(str: string): string | undefined {
+  if (str.indexOf("%") === -1) return str;
+
+  try {
+    return decodeURIComponent(str);
+  } catch (e) {
+    return str;
+  }
 }
 
 /**
@@ -375,15 +381,4 @@ function decode(str: string): string {
  */
 function isDate(val: any): val is Date {
   return __toString.call(val) === "[object Date]";
-}
-
-/**
- * Try decoding a string using a decoding function.
- */
-function tryDecode(str: string, decode: (str: string) => string): string {
-  try {
-    return decode(str);
-  } catch (e) {
-    return str;
-  }
 }
