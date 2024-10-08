@@ -25,24 +25,19 @@ describe("cookie.parse(str)", function () {
 
   it("should URL-decode values", function () {
     expect(cookie.parse('foo="bar=123456789&name=Magic+Mouse"')).toEqual({
-      foo: "bar=123456789&name=Magic+Mouse",
+      foo: '"bar=123456789&name=Magic+Mouse"',
     });
 
     expect(cookie.parse("email=%20%22%2c%3b%2f")).toEqual({ email: ' ",;/' });
   });
 
-  it("should parse quoted values", function () {
-    expect(cookie.parse('foo="bar"')).toEqual({ foo: "bar" });
-    expect(cookie.parse('foo=" a b c "')).toEqual({ foo: " a b c " });
-  });
-
   it("should trim whitespace around key and value", function () {
-    expect(cookie.parse('  foo  =  "bar"  ')).toEqual({ foo: "bar" });
+    expect(cookie.parse('  foo  =  "bar"  ')).toEqual({ foo: '"bar"' });
     expect(cookie.parse("  foo  =  bar  ;  fizz  =  buzz  ")).toEqual({
       foo: "bar",
       fizz: "buzz",
     });
-    expect(cookie.parse(' foo = " a b c " ')).toEqual({ foo: " a b c " });
+    expect(cookie.parse(' foo = " a b c " ')).toEqual({ foo: '" a b c "' });
     expect(cookie.parse(" = bar ")).toEqual({ "": "bar" });
     expect(cookie.parse(" foo = ")).toEqual({ foo: "" });
     expect(cookie.parse("   =   ")).toEqual({ "": "" });
