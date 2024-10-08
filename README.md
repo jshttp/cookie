@@ -36,8 +36,8 @@ const cookies = cookie.parse("foo=bar; equation=E%3Dmc%5E2");
 
 ##### decode
 
-Specifies a function that will be used to decode a cookie's value. Since the value of a cookie
-has a limited character set (and must be a simple string), this function can be used to decode
+Specifies a function that will be used to decode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
+Since the value of a cookie has a limited character set (and must be a simple string), this function can be used to decode
 a previously-encoded cookie value into a JavaScript string.
 
 The default function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
@@ -61,9 +61,9 @@ const setCookie = cookie.serialize("foo", "bar");
 
 ##### encode
 
-Specifies a function that will be used to encode a cookie's value. Since value of a cookie
-has a limited character set (and must be a simple string), this function can be used to encode
-a value into a string suited for a cookie's value.
+Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
+Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
+a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
 
 The default function is the global `encodeURIComponent`.
 

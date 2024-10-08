@@ -71,15 +71,15 @@ const NullObject = /* @__PURE__ */ (() => {
  */
 export interface ParseOptions {
   /**
-   * Specifies a function that will be used to decode a cookie's value. Since
-   * the value of a cookie has a limited character set (and must be a simple
-   * string), this function can be used to decode a previously-encoded cookie
-   * value into a JavaScript string.
+   * Specifies a function that will be used to decode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
+   * Since the value of a cookie has a limited character set (and must be a simple string), this function can be used to decode
+   * a previously-encoded cookie value into a JavaScript string.
    *
-   * Note: if an error is thrown from this function, the original, non-decoded
-   * cookie value will be returned as the cookie's value.
+   * The default function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
+   * is thrown it will return the cookie's original value. If you provide your own encode/decode
+   * scheme you must ensure errors are appropriately handled.
    *
-   * @default decodeURIComponent
+   * @default decode
    */
   decode?: (str: string) => string | undefined;
 }
@@ -155,9 +155,9 @@ function endIndex(str: string, index: number, min: number) {
  */
 export interface SerializeOptions {
   /**
-   * Specifies a function that will be used to encode a cookie's value. Since
-   * value of a cookie has a limited character set (and must be a simple string),
-   * this function can be used to encode a value into a string suited for a cookie's value.
+   * Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
+   * Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
+   * a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
    *
    * @default encodeURIComponent
    */
