@@ -2,7 +2,6 @@
 
 [![NPM Version][npm-version-image]][npm-url]
 [![NPM Downloads][npm-downloads-image]][npm-url]
-[![Node.js Version][node-image]][node-url]
 [![Build Status][ci-image]][ci-url]
 [![Coverage Status][coverage-image]][coverage-url]
 
@@ -253,12 +252,10 @@ npm run bench
 
 [MIT](LICENSE)
 
-[ci-image]: https://badgen.net/github/checks/jshttp/cookie/master?label=ci
+[ci-image]: https://img.shields.io/github/checks-status/jshttp/cookie/master
 [ci-url]: https://github.com/jshttp/cookie/actions/workflows/ci.yml
-[coverage-image]: https://badgen.net/codecov/c/github/jshttp/cookie/master
+[coverage-image]: https://img.shields.io/codecov/c/github/jshttp/cookie/master
 [coverage-url]: https://app.codecov.io/gh/jshttp/cookie
-[node-image]: https://badgen.net/npm/node/cookie
-[node-url]: https://nodejs.org/en/download
-[npm-downloads-image]: https://badgen.net/npm/dm/cookie
+[npm-downloads-image]: https://img.shields.io/npm/dm/cookie
 [npm-url]: https://npmjs.org/package/cookie
-[npm-version-image]: https://badgen.net/npm/v/cookie
+[npm-version-image]: https://img.shields.io/npm/v/cookie
