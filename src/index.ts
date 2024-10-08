@@ -59,7 +59,6 @@ const domainValueRegExp =
 const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
 
 const __toString = Object.prototype.toString;
-const __hasOwnProperty = Object.prototype.hasOwnProperty;
 
 const NullObject = /* @__PURE__ */ (() => {
   const C = function () {};
@@ -121,7 +120,7 @@ export function parse(
     const key = str.slice(keyStartIdx, keyEndIdx);
 
     // only assign once
-    if (!__hasOwnProperty.call(obj, key)) {
+    if (obj[key] === undefined) {
       let valStartIdx = startIndex(str, eqIdx + 1, endIdx);
       let valEndIdx = endIndex(str, endIdx, valStartIdx);
 
