@@ -372,7 +372,7 @@ function decode(str: string): string | undefined {
   try {
     return decodeURIComponent(str);
   } catch (e) {
-    return undefined;
+    return str;
   }
 }
 
