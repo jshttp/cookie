@@ -81,7 +81,7 @@ export interface ParseOptions {
    *
    * @default decodeURIComponent
    */
-  decode?: (str: string) => string;
+  decode?: (str: string) => string | undefined;
 }
 
 /**
@@ -133,7 +133,6 @@ export function parse(
       }
 
       const value = dec(str.slice(valStartIdx, valEndIdx));
-
       obj[key] = value;
     }
 
