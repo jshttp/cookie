@@ -93,8 +93,8 @@ export interface ParseOptions {
 export function parse(
   str: string,
   options?: ParseOptions,
-): Record<string, string> {
-  const obj: Record<string, string> = new NullObject();
+): Record<string, string | undefined> {
+  const obj: Record<string, string | undefined> = new NullObject();
   const len = str.length;
   // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
   if (len < 2) return obj;
