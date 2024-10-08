@@ -124,14 +124,6 @@ export function parse(
       let valStartIdx = startIndex(str, eqIdx + 1, endIdx);
       let valEndIdx = endIndex(str, endIdx, valStartIdx);
 
-      if (
-        str.charCodeAt(valStartIdx) === 0x22 /* " */ &&
-        str.charCodeAt(valEndIdx - 1) === 0x22 /* " */
-      ) {
-        valStartIdx++;
-        valEndIdx--;
-      }
-
       const value = dec(str.slice(valStartIdx, valEndIdx));
       obj[key] = value;
     }
