@@ -15,16 +15,19 @@ describe("parse", () => {
     cookie.parse('foo="foo bar"');
   });
 
+  const duplicates = genCookies(2) + "; " + genCookies(2);
   bench("duplicates", () => {
-    cookie.parse(genCookies(2) + "; " + genCookies(2));
+    cookie.parse(duplicates);
   });
 
+  const cookies10 = genCookies(10);
   bench("10 cookies", () => {
-    cookie.parse(genCookies(10));
+    cookie.parse(cookies10);
   });
 
+  const cookies100 = genCookies(100);
   bench("100 cookies", () => {
-    cookie.parse(genCookies(100));
+    cookie.parse(cookies100);
   });
 });
 
