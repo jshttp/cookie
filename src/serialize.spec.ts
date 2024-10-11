@@ -282,6 +282,13 @@ describe("cookie.serialize(name, value, options)", function () {
         "foo=bar; Priority=High",
       );
     });
+
+    it("should set priority case insensitive", function () {
+      /** @ts-expect-error */
+      expect(cookie.serialize("foo", "bar", { priority: "High" })).toEqual(
+        "foo=bar; Priority=High",
+      );
+    });
   });
 
   describe('with "sameSite" option', function () {
@@ -318,6 +325,13 @@ describe("cookie.serialize(name, value, options)", function () {
     it("should not set sameSite when false", function () {
       expect(cookie.serialize("foo", "bar", { sameSite: false })).toEqual(
         "foo=bar",
+      );
+    });
+
+    it("should set sameSite case insensitive", function () {
+      /** @ts-expect-error */
+      expect(cookie.serialize("foo", "bar", { sameSite: "Lax" })).toEqual(
+        "foo=bar; SameSite=Lax",
       );
     });
   });
