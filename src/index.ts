@@ -308,7 +308,11 @@ export function serialize(
   }
 
   if (options.priority) {
-    switch (options.priority) {
+    const priority =
+      typeof options.priority === "string"
+        ? options.priority.toLowerCase()
+        : options.sameSite;
+    switch (priority) {
       case "low":
         str += "; Priority=Low";
         break;
@@ -324,7 +328,11 @@ export function serialize(
   }
 
   if (options.sameSite) {
-    switch (options.sameSite) {
+    const sameSite =
+      typeof options.sameSite === "string"
+        ? options.sameSite.toLowerCase()
+        : options.sameSite;
+    switch (sameSite) {
       case true:
       case "strict":
         str += "; SameSite=Strict";
