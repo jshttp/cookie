@@ -17,6 +17,7 @@ $ npm install cookie
 
 ```js
 const cookie = require("cookie");
+// import * as cookie from 'cookie';
 ```
 
 ### cookie.parse(str, options)
