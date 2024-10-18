@@ -16,9 +16,8 @@ $ npm install cookie
 ## API
 
 ```js
-const cookie = require("cookie"); // commonjs
-// OR
-import * as cookie from 'cookie' // es modules
+const cookie = require("cookie");
+// import * as cookie from 'cookie';
 ```
 
 ### cookie.parse(str, options)
