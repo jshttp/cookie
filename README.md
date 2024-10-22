@@ -70,7 +70,7 @@ The default function is the global `encodeURIComponent`.
 
 ##### maxAge
 
-Specifies the `number` (in seconds) to be the value for the [`Max-Age` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.2).
+Specifies the `number` (in milliseconds) to be the value for the [`Max-Age` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.2).
 
 The [cookie storage model specification](https://tools.ietf.org/html/rfc6265#section-5.3) states that if both `expires` and
 `maxAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
