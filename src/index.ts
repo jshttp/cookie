@@ -84,6 +84,31 @@ export interface ParseOptions {
   decode?: (str: string) => string | undefined;
 }
 
+export const CookieErrorCode = {
+  INVALID_NAME: "INVALID_NAME",
+  INVALID_VALUE: "INVALID_VALUE",
+  INVALID_MAXAGE: "INVALID_MAXAGE",
+  INVALID_DOMAIN: "INVALID_DOMAIN",
+  INVALID_PATH: "INVALID_PATH",
+  INVALID_EXPIRES: "INVALID_EXPIRES",
+  INVALID_PRIORITY: "INVALID_PRIORITY",
+  INVALID_SAMESITE: "INVALID_SAMESITE",
+} as const;
+
+export type CookieErrorCode =
+  (typeof CookieErrorCode)[keyof typeof CookieErrorCode];
+
+class CookieError extends Error {
+  code: CookieErrorCode;
+
+  constructor(message: string, code: CookieErrorCode) {
+    super(message);
+    this.code = code;
+    this.name = "CookieError";
+    Object.setPrototypeOf(this, CookieError.prototype); // Ensures correct prototype chain for TypeScript
+  }
+}
+
 /**
  * Parse a cookie header.
  *
@@ -256,13 +281,19 @@ export function serialize(
   const enc = options?.encode || encodeURIComponent;
 
   if (!cookieNameRegExp.test(name)) {
-    throw new TypeError(`argument name is invalid: ${name}`);
+    throw new CookieError(
+      `argument name is invalid: ${name}`,
+      CookieErrorCode.INVALID_NAME,
+    );
   }
 
   const value = enc(val);
 
   if (!cookieValueRegExp.test(value)) {
-    throw new TypeError(`argument val is invalid: ${val}`);
+    throw new CookieError(
+      `argument val is invalid: ${val}`,
+      CookieErrorCode.INVALID_VALUE,
+    );
   }
 
   let str = name + "=" + value;
@@ -270,7 +301,10 @@ export function serialize(
 
   if (options.maxAge !== undefined) {
     if (!Number.isInteger(options.maxAge)) {
-      throw new TypeError(`option maxAge is invalid: ${options.maxAge}`);
+      throw new CookieError(
+        `option maxAge is invalid: ${options.maxAge}. Must be an integer`,
+        CookieErrorCode.INVALID_MAXAGE,
+      );
     }
 
     str += "; Max-Age=" + options.maxAge;
@@ -278,7 +312,10 @@ export function serialize(
 
   if (options.domain) {
     if (!domainValueRegExp.test(options.domain)) {
-      throw new TypeError(`option domain is invalid: ${options.domain}`);
+      throw new CookieError(
+        `option domain is invalid: ${options.domain}`,
+        CookieErrorCode.INVALID_DOMAIN,
+      );
     }
 
     str += "; Domain=" + options.domain;
@@ -286,7 +323,10 @@ export function serialize(
 
   if (options.path) {
     if (!pathValueRegExp.test(options.path)) {
-      throw new TypeError(`option path is invalid: ${options.path}`);
+      throw new CookieError(
+        `option path is invalid: ${options.path}`,
+        CookieErrorCode.INVALID_PATH,
+      );
     }
 
     str += "; Path=" + options.path;
@@ -297,7 +337,10 @@ export function serialize(
       !isDate(options.expires) ||
       !Number.isFinite(options.expires.valueOf())
     ) {
-      throw new TypeError(`option expires is invalid: ${options.expires}`);
+      throw new CookieError(
+        `option expires is invalid: ${options.expires}. Must be a Date object`,
+        CookieErrorCode.INVALID_EXPIRES,
+      );
     }
 
     str += "; Expires=" + options.expires.toUTCString();
@@ -331,8 +374,9 @@ export function serialize(
         str += "; Priority=High";
         break;
       default:
-        throw new TypeError(
+        throw new CookieError(
           `option priority is invalid: ${options.priority}. Must be one of ${VALID_PRIORITIES_VALUES_STRING}`,
+          CookieErrorCode.INVALID_PRIORITY,
         );
     }
   }
@@ -354,8 +398,9 @@ export function serialize(
         str += "; SameSite=None";
         break;
       default:
-        throw new TypeError(
+        throw new CookieError(
           `option sameSite is invalid: ${options.sameSite}. Must be boolean or one of ${VALID_SAMESITE_VALUE_STRING}`,
+          CookieErrorCode.INVALID_SAMESITE,
         );
     }
   }
