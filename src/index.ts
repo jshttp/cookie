@@ -150,6 +150,14 @@ function endIndex(str: string, index: number, min: number) {
   return min;
 }
 
+const VALID_PRIORITIES = ["low", "medium", "high"] as const;
+const VALID_PRIORITIES_VALUES_STRING = VALID_PRIORITIES.join(", ");
+type PriorityValues = (typeof VALID_PRIORITIES)[number];
+
+const VALID_SAMESITE = ["lax", "strict", "none"] as const;
+const VALID_SAMESITE_VALUE_STRING = VALID_SAMESITE.join(", ");
+type SameSiteValues = (typeof VALID_SAMESITE)[number];
+
 /**
  * Serialize options.
  */
@@ -217,7 +225,7 @@ export interface SerializeOptions {
    *
    * More information about priority levels can be found in [the specification](https://tools.ietf.org/html/draft-west-cookie-priority-00#section-4.1).
    */
-  priority?: "low" | "medium" | "high";
+  priority?: PriorityValues;
   /**
    * Specifies the value for the [`SameSite` `Set-Cookie` attribute](https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-09#section-5.4.7).
    *
@@ -228,7 +236,7 @@ export interface SerializeOptions {
    *
    * More information about enforcement levels can be found in [the specification](https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-09#section-5.4.7).
    */
-  sameSite?: boolean | "lax" | "strict" | "none";
+  sameSite?: boolean | SameSiteValues;
 }
 
 /**
@@ -323,7 +331,9 @@ export function serialize(
         str += "; Priority=High";
         break;
       default:
-        throw new TypeError(`option priority is invalid: ${options.priority}`);
+        throw new TypeError(
+          `option priority is invalid: ${options.priority}. Must be one of ${VALID_PRIORITIES_VALUES_STRING}`,
+        );
     }
   }
 
@@ -344,7 +354,9 @@ export function serialize(
         str += "; SameSite=None";
         break;
       default:
-        throw new TypeError(`option sameSite is invalid: ${options.sameSite}`);
+        throw new TypeError(
+          `option sameSite is invalid: ${options.sameSite}. Must be boolean or one of ${VALID_SAMESITE_VALUE_STRING}`,
+        );
     }
   }
 
