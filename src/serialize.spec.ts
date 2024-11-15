@@ -111,7 +111,7 @@ describe("cookie.serialize(name, value, options)", function () {
       },
     );
 
-    it.each([["+\n"], ["foo bar"], ["foo\tbar"], ["foo;bar"]])(
+    it.each([["+\n"], ["foo bar"], ["foo\tbar"], ["foo;bar"], ["foo\u280a"]])(
       "should throw for invalid value: %s",
       (value) => {
         expect(() =>
