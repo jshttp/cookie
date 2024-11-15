@@ -9,7 +9,6 @@ jobs:
     name: Node.js ${{ matrix.node-version }}
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
       contents: read
     strategy:
       matrix:
@@ -27,4 +26,4 @@ jobs:
       - uses: codecov/codecov-action@v4
         with:
           name: Node.js ${{ matrix.node-version }}
-          use_oidc: true
+          token: ${{ secrets.CODECOV_TOKEN }}
