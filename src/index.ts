@@ -311,7 +311,7 @@ export function serialize(
     const priority =
       typeof options.priority === "string"
         ? options.priority.toLowerCase()
-        : options.sameSite;
+        : undefined;
     switch (priority) {
       case "low":
         str += "; Priority=Low";
