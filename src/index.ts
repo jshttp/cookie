@@ -8,8 +8,11 @@
  * tchar             = "!" / "#" / "$" / "%" / "&" / "'" /
  *                     "*" / "+" / "-" / "." / "^" / "_" /
  *                     "`" / "|" / "~" / DIGIT / ALPHA
+ *
+ * Note: Allowing more characters - https://github.com/jshttp/cookie/issues/191
+ * Allow same range as cookie value, except `=`, which delimits end of name.
  */
-const cookieNameRegExp = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
+const cookieNameRegExp = /^[\u0021-\u003A\u003C\u003E-\u007E]+$/;
 
 /**
  * RegExp to match cookie-value in RFC 6265 sec 4.1.1
@@ -19,9 +22,11 @@ const cookieNameRegExp = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
  *                     ; US-ASCII characters excluding CTLs,
  *                     ; whitespace DQUOTE, comma, semicolon,
  *                     ; and backslash
+ *
+ * Allowing more characters: https://github.com/jshttp/cookie/issues/191
+ * Comma, backslash, and DQUOTE are not part of the parsing algorithm.
  */
-const cookieValueRegExp =
-  /^("?)[\u0021\u0023-\u002B\u002D-\u003A\u003C-\u005B\u005D-\u007E]*\1$/;
+const cookieValueRegExp = /^[\u0021-\u003A\u003C-\u007E]*$/;
 
 /**
  * RegExp to match domain-value in RFC 6265 sec 4.1.1

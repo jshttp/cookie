@@ -14,91 +14,80 @@ describe("cookie.serialize(name, value)", function () {
     expect(cookie.serialize("foo", "")).toEqual("foo=");
   });
 
-  it("should serialize valid name", function () {
-    var validNames = [
-      "foo",
-      "foo!bar",
-      "foo#bar",
-      "foo$bar",
-      "foo'bar",
-      "foo*bar",
-      "foo+bar",
-      "foo-bar",
-      "foo.bar",
-      "foo^bar",
-      "foo_bar",
-      "foo`bar",
-      "foo|bar",
-      "foo~bar",
-      "foo7bar",
-    ];
-
-    validNames.forEach(function (name) {
-      expect(cookie.serialize(name, "baz")).toEqual(name + "=baz");
-    });
+  it.each([
+    ["foo"],
+    ["foo,bar"],
+    ["foo!bar"],
+    ["foo#bar"],
+    ["foo$bar"],
+    ["foo'bar"],
+    ["foo*bar"],
+    ["foo+bar"],
+    ["foo-bar"],
+    ["foo.bar"],
+    ["foo^bar"],
+    ["foo_bar"],
+    ["foo`bar"],
+    ["foo|bar"],
+    ["foo~bar"],
+    ["foo7bar"],
+    ["foo/bar"],
+    ["foo@bar"],
+    ["foo[bar"],
+    ["foo]bar"],
+    ["foo:bar"],
+    ["foo{bar"],
+    ["foo}bar"],
+    ['foo"bar'],
+    ["foo<bar"],
+    ["foo>bar"],
+    ["foo?bar"],
+    ["foo\\bar"],
+  ])("should serialize name: %s", (name) => {
+    expect(cookie.serialize(name, "baz")).toEqual(`${name}=baz`);
   });
 
-  it("should throw for invalid name", function () {
-    var invalidNames = [
-      "foo\n",
-      "foo\u280a",
-      "foo/foo",
-      "foo,foo",
-      "foo;foo",
-      "foo@foo",
-      "foo[foo]",
-      "foo?foo",
-      "foo:foo",
-      "foo{foo}",
-      "foo foo",
-      "foo\tfoo",
-      'foo"foo',
-      "foo<script>foo",
-    ];
-
-    invalidNames.forEach(function (name) {
-      expect(cookie.serialize.bind(cookie, name, "bar")).toThrow(
-        /argument name is invalid/,
-      );
-    });
+  it.each([
+    ["foo\n"],
+    ["foo\u280a"],
+    ["foo=bar"],
+    ["foo;bar"],
+    ["foo bar"],
+    ["foo\tbar"],
+  ])("should throw for invalid name: %s", (name) => {
+    expect(() => cookie.serialize(name, "bar")).toThrow(
+      /argument name is invalid/,
+    );
   });
 });
 
 describe("cookie.serialize(name, value, options)", function () {
   describe('with "domain" option', function () {
-    it("should serialize valid domain", function () {
-      var validDomains = [
-        "example.com",
-        "sub.example.com",
-        ".example.com",
-        "localhost",
-        ".localhost",
-        "my-site.org",
-        "localhost",
-      ];
-
-      validDomains.forEach(function (domain) {
-        expect(cookie.serialize("foo", "bar", { domain: domain })).toEqual(
-          "foo=bar; Domain=" + domain,
-        );
-      });
+    it.each([
+      ["example.com"],
+      ["sub.example.com"],
+      [".example.com"],
+      ["localhost"],
+      [".localhost"],
+      ["my-site.org"],
+      ["localhost"],
+    ])("should serialize domain: %s", (domain) => {
+      expect(cookie.serialize("foo", "bar", { domain })).toEqual(
+        `foo=bar; Domain=${domain}`,
+      );
     });
 
-    it("should throw for invalid domain", function () {
-      var invalidDomains = [
-        "example.com\n",
-        "sub.example.com\u0000",
-        "my site.org",
-        "domain..com",
-        "example.com; Path=/",
-        "example.com /* inject a comment */",
-      ];
-
-      invalidDomains.forEach(function (domain) {
-        expect(
-          cookie.serialize.bind(cookie, "foo", "bar", { domain: domain }),
-        ).toThrow(/option domain is invalid/);
-      });
+    it.each([
+      ["example.com\n"],
+      ["sub.example.com\u0000"],
+      ["my site.org"],
+      ["domain..com"],
+      ["example.com; Path=/"],
+      ["example.com /* inject a comment */"],
+    ])("should throw for invalid domain: %s", (domain) => {
+      expect(() => cookie.serialize("foo", "bar", { domain })).toThrow(
+        /option domain is invalid/,
+      );
     });
   });
 
@@ -113,22 +102,23 @@ describe("cookie.serialize(name, value, options)", function () {
       ).toEqual("foo=YmFy");
     });
 
-    it("should throw when returned value is invalid", function () {
-      expect(
-        cookie.serialize.bind(cookie, "foo", "+ \n", {
-          encode: function (v) {
-            return v;
-          },
-        }),
-      ).toThrow(/argument val is invalid/);
-      expect(
-        cookie.serialize.bind(cookie, "foo", "foo bar", {
-          encode: function (v) {
-            return v;
-          },
-        }),
-      ).toThrow(/argument val is invalid/);
-    });
+    it.each(["foo=bar", 'foo"bar', "foo,bar", "foo\\bar", "foo$bar"])(
+      "should serialize value: %s",
+      (value) => {
+        expect(cookie.serialize("foo", value, { encode: (x) => x })).toEqual(
+          `foo=${value}`,
+        );
+      },
+    );
+
+    it.each([["+\n"], ["foo bar"], ["foo\tbar"], ["foo;bar"]])(
+      "should throw for invalid value: %s",
+      (value) => {
+        expect(() =>
+          cookie.serialize("foo", value, { encode: (x) => x }),
+        ).toThrow(/argument val is invalid/);
+      },
+    );
   });
 
   describe('with "expires" option', function () {
