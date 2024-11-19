@@ -26,6 +26,8 @@ Parse a HTTP `Cookie` header string and returning an object of all cookie name-v
 The `str` argument is the string representing a `Cookie` header value and `options` is an
 optional object containing additional parsing options.
 
+**NOTE:** This method does not parse the `set-cookie` header. It parses the `cookie` header. This means you cannot do `cookie.parse(cookie.serialize('name', 'value'))`.
+
 ```js
 const cookies = cookie.parse("foo=bar; equation=E%3Dmc%5E2");
 // { foo: 'bar', equation: 'E=mc^2' }
