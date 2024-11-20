@@ -169,7 +169,7 @@ export interface StringifyOptions {
 }
 
 /**
- * Stringify a set of cookies into a `Cookie` header string.
+ * Stringifies an object into a HTTP `Cookie` header.
  */
 export function stringify(
   cookies: Cookies,
