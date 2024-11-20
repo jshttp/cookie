@@ -90,16 +90,18 @@ export interface ParseOptions {
 }
 
 /**
+ * Cookies object.
+ */
+export type Cookies = Record<string, string | undefined>;
+
+/**
  * Parse a cookie header.
  *
  * Parse the given cookie header string into an object
  * The object has the various cookies as keys(names) => values
  */
-export function parse(
-  str: string,
-  options?: ParseOptions,
-): Record<string, string | undefined> {
-  const obj: Record<string, string | undefined> = new NullObject();
+export function parse(str: string, options?: ParseOptions): Cookies {
+  const obj: Cookies = new NullObject();
   const len = str.length;
   // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
   if (len < 2) return obj;
@@ -153,6 +155,46 @@ function endIndex(str: string, index: number, min: number) {
     if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index + 1;
   }
   return min;
+}
+
+export interface StringifyOptions {
+  /**
+   * Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
+   * Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
+   * a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
+   *
+   * @default encodeURIComponent
+   */
+  encode?: (str: string) => string;
+}
+
+/**
+ * Stringify a set of cookies into a `Cookie` header string.
+ */
+export function stringify(
+  cookies: Cookies,
+  options?: StringifyOptions,
+): string {
+  const enc = options?.encode || encodeURIComponent;
+  const cookieStrings: string[] = [];
+
+  for (const [name, val] of Object.entries(cookies)) {
+    if (val === undefined) continue;
+
+    if (!cookieNameRegExp.test(name)) {
+      throw new TypeError(`cookie name is invalid: ${name}`);
+    }
+
+    const value = enc(val);
+
+    if (!cookieValueRegExp.test(value)) {
+      throw new TypeError(`cookie val is invalid: ${val}`);
+    }
+
+    cookieStrings.push(`${name}=${value}`);
+  }
+
+  return cookieStrings.join("; ");
 }
 
 /**
