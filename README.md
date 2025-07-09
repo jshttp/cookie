@@ -79,7 +79,7 @@ so if both are set, they should point to the same date and time.
 ##### expires
 
 Specifies the `Date` object to be the value for the [`Expires` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.1).
-When no expiration is set clients consider this a "non-persistent cookie" and delete it the current session is over.
+When no expiration is set, clients consider this a "non-persistent cookie" and delete it when the current session is over.
 
 The [cookie storage model specification](https://tools.ietf.org/html/rfc6265#section-5.3) states that if both `expires` and
 `maxAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
@@ -88,7 +88,7 @@ so if both are set, they should point to the same date and time.
 ##### domain
 
 Specifies the value for the [`Domain` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.3).
-When no domain is set clients consider the cookie to apply to the current domain only.
+When no domain is set, clients consider the cookie to apply to the current domain only.
 
 ##### path
 
