@@ -253,13 +253,13 @@ export function serialize(
   const enc = options?.encode || encodeURIComponent;
 
   if (!cookieNameRegExp.test(name)) {
-    throw new TypeError(`argument name is invalid: ${name}`);
+    throw new TypeError(`Argument "name" is invalid: ${name}. It does not match the cookie name regular expression ${cookieNameRegExp}.`);
   }
 
   const value = enc(val);
 
   if (!cookieValueRegExp.test(value)) {
-    throw new TypeError(`argument val is invalid: ${val}`);
+    throw new TypeError(`Argument "val" is invalid: ${val}. It does not match the cookie value regular expression ${cookieValueRegExp}.`);
   }
 
   let str = name + "=" + value;
@@ -267,7 +267,7 @@ export function serialize(
 
   if (options.maxAge !== undefined) {
     if (!Number.isInteger(options.maxAge)) {
-      throw new TypeError(`option maxAge is invalid: ${options.maxAge}`);
+      throw new TypeError(`Option "maxAge" is invalid: ${options.maxAge}. Provided value is not an integer.`);
     }
 
     str += "; Max-Age=" + options.maxAge;
@@ -275,7 +275,7 @@ export function serialize(
 
   if (options.domain) {
     if (!domainValueRegExp.test(options.domain)) {
-      throw new TypeError(`option domain is invalid: ${options.domain}`);
+      throw new TypeError(`Option "domain" is invalid: ${options.domain}. It does not match the domain value regular expression ${domainValueRegExp}.`);
     }
 
     str += "; Domain=" + options.domain;
@@ -283,7 +283,7 @@ export function serialize(
 
   if (options.path) {
     if (!pathValueRegExp.test(options.path)) {
-      throw new TypeError(`option path is invalid: ${options.path}`);
+      throw new TypeError(`Option "path" is invalid: ${options.path}. It does not match the path value regular expression ${pathValueRegExp}.`);
     }
 
     str += "; Path=" + options.path;
@@ -294,7 +294,7 @@ export function serialize(
       !isDate(options.expires) ||
       !Number.isFinite(options.expires.valueOf())
     ) {
-      throw new TypeError(`option expires is invalid: ${options.expires}`);
+      throw new TypeError(`Option "expires" is invalid: ${options.expires}`);
     }
 
     str += "; Expires=" + options.expires.toUTCString();
@@ -328,7 +328,7 @@ export function serialize(
         str += "; Priority=High";
         break;
       default:
-        throw new TypeError(`option priority is invalid: ${options.priority}`);
+        throw new TypeError(`Option "priority" is invalid: ${options.priority}. Allowed string values: low, medium, high.`);
     }
   }
 
@@ -349,7 +349,7 @@ export function serialize(
         str += "; SameSite=None";
         break;
       default:
-        throw new TypeError(`option sameSite is invalid: ${options.sameSite}`);
+        throw new TypeError(`Option "sameSite" is invalid: ${options.sameSite}. Allowed string values: strict, lax, none.`);
     }
   }
 
