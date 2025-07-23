@@ -7,6 +7,10 @@
     "cookies"
   ],
   "repository": "jshttp/cookie",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/express"
+  },
   "license": "MIT",
   "author": "Roman Shtylman <shtylman@gmail.com>",
   "contributors": [
