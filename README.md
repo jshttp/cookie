@@ -45,6 +45,27 @@ The default function is the global `decodeURIComponent`, wrapped in a `try..catc
 is thrown it will return the cookie's original value. If you provide your own encode/decode
 scheme you must ensure errors are appropriately handled.
 
+### cookie.stringify(obj, options)
+
+Stringifies an object into a HTTP `Cookie` header.
+
+```js
+const cookieHeader = cookie.stringify({ a: "foo", b: "bar" });
+// a=foo; b=bar
+```
+
+#### Options
+
+`cookie.stringify` accepts these properties in the options object.
+
+##### encode
+
+Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
+Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
+a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
+
+The default function is the global `encodeURIComponent`.
+
 ### cookie.serialize(name, value, options)
 
 Serialize a cookie name-value pair into a `Set-Cookie` header string. The `name` argument is the
