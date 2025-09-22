@@ -22,7 +22,7 @@ const cookie = require("cookie");
 
 ### cookie.parse(str, options)
 
-Parse a HTTP `Cookie` header string and returning an object of all cookie name-value pairs.
+Parse an HTTP `Cookie` header string and returning an object of all cookie name-value pairs.
 The `str` argument is the string representing a `Cookie` header value and `options` is an
 optional object containing additional parsing options.
 
@@ -44,6 +44,27 @@ a previously-encoded cookie value into a JavaScript string.
 The default function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
 is thrown it will return the cookie's original value. If you provide your own encode/decode
 scheme you must ensure errors are appropriately handled.
+
+### cookie.stringify(obj, options)
+
+Stringifies an object into an HTTP `Cookie` header.
+
+```js
+const cookieHeader = cookie.stringify({ a: "foo", b: "bar" });
+// a=foo; b=bar
+```
+
+#### Options
+
+`cookie.stringify` accepts these properties in the options object.
+
+##### encode
+
+Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
+Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
+a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
+
+The default function is the global `encodeURIComponent`.
 
 ### cookie.serialize(name, value, options)
 
@@ -103,7 +124,7 @@ When enabled, clients will not allow client-side JavaScript to see the cookie in
 ##### secure
 
 Enables the [`Secure` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.5).
-When enabled, clients will only send the cookie back if the browser has a HTTPS connection.
+When enabled, clients will only send the cookie back if the browser has an HTTPS connection.
 
 ##### partitioned
 
