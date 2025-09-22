@@ -169,7 +169,7 @@ export interface StringifyOptions {
 }
 
 /**
- * Stringifies an object into a HTTP `Cookie` header.
+ * Stringifies an object into an HTTP `Cookie` header.
  */
 export function stringify(
   cookies: Cookies,
@@ -178,7 +178,8 @@ export function stringify(
   const enc = options?.encode || encodeURIComponent;
   const cookieStrings: string[] = [];
 
-  for (const [name, val] of Object.entries(cookies)) {
+  for (const name of Object.keys(cookies)) {
+    const val = cookies[name];
     if (val === undefined) continue;
 
     if (!cookieNameRegExp.test(name)) {
@@ -243,7 +244,7 @@ export interface SerializeOptions {
   httpOnly?: boolean;
   /**
    * Enables the [`Secure` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.5).
-   * When enabled, clients will only send the cookie back if the browser has a HTTPS connection.
+   * When enabled, clients will only send the cookie back if the browser has an HTTPS connection.
    */
   secure?: boolean;
   /**

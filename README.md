@@ -22,7 +22,7 @@ const cookie = require("cookie");
 
 ### cookie.parse(str, options)
 
-Parse a HTTP `Cookie` header string and returning an object of all cookie name-value pairs.
+Parse an HTTP `Cookie` header string and returning an object of all cookie name-value pairs.
 The `str` argument is the string representing a `Cookie` header value and `options` is an
 optional object containing additional parsing options.
 
@@ -47,7 +47,7 @@ scheme you must ensure errors are appropriately handled.
 
 ### cookie.stringify(obj, options)
 
-Stringifies an object into a HTTP `Cookie` header.
+Stringifies an object into an HTTP `Cookie` header.
 
 ```js
 const cookieHeader = cookie.stringify({ a: "foo", b: "bar" });
@@ -124,7 +124,7 @@ When enabled, clients will not allow client-side JavaScript to see the cookie in
 ##### secure
 
 Enables the [`Secure` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.5).
-When enabled, clients will only send the cookie back if the browser has a HTTPS connection.
+When enabled, clients will only send the cookie back if the browser has an HTTPS connection.
 
 ##### partitioned
 
