@@ -122,17 +122,11 @@ export function parse(str: string, options?: ParseOptions): Cookies {
       continue;
     }
 
-    const keyStartIdx = startIndex(str, index, eqIdx);
-    const keyEndIdx = endIndex(str, eqIdx, keyStartIdx);
-    const key = str.slice(keyStartIdx, keyEndIdx);
+    const key = valueSlice(str, index, eqIdx);
 
     // only assign once
     if (obj[key] === undefined) {
-      let valStartIdx = startIndex(str, eqIdx + 1, endIdx);
-      let valEndIdx = endIndex(str, endIdx, valStartIdx);
-
-      const value = dec(str.slice(valStartIdx, valEndIdx));
-      obj[key] = value;
+      obj[key] = dec(valueSlice(str, eqIdx + 1, endIdx));
     }
 
     index = endIdx + 1;
@@ -198,18 +192,15 @@ export function stringify(
   return cookieStrings.join("; ");
 }
 
-/**
- * Serialize options.
- */
-export interface SerializeOptions {
+export interface SetCookie {
   /**
-   * Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
-   * Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
-   * a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
-   *
-   * @default encodeURIComponent
+   * Specifies the name of the cookie.
    */
-  encode?: (str: string) => string;
+  name: string;
+  /**
+   * Specifies the string to be the value for the cookie.
+   */
+  value: string | undefined;
   /**
    * Specifies the `number` (in seconds) to be the value for the [`Max-Age` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.2).
    *
@@ -280,6 +271,20 @@ export interface SerializeOptions {
 }
 
 /**
+ * Serialize options.
+ */
+export interface SerializeOptions {
+  /**
+   * Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
+   * Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
+   * a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
+   *
+   * @default encodeURIComponent
+   */
+  encode?: (str: string) => string;
+}
+
+/**
  * Serialize data into a cookie header.
  *
  * Serialize a name value pair into a cookie string suitable for
@@ -289,76 +294,86 @@ export interface SerializeOptions {
  *   => "foo=bar; httpOnly"
  */
 export function serialize(
+  cookie: SetCookie,
+  options?: SerializeOptions,
+): string;
+export function serialize(
   name: string,
   val: string,
-  options?: SerializeOptions,
+  options?: SerializeOptions & Omit<SetCookie, "name" | "value">,
+): string;
+export function serialize(
+  _name: string | SetCookie,
+  _val?: string | SerializeOptions,
+  _opts?: SerializeOptions & Omit<SetCookie, "name" | "value">,
 ): string {
+  const cookie =
+    typeof _name === "object"
+      ? _name
+      : { name: _name, value: String(_val), ..._opts };
+  const options = typeof _val === "object" ? _val : _opts;
   const enc = options?.encode || encodeURIComponent;
 
-  if (!cookieNameRegExp.test(name)) {
-    throw new TypeError(`argument name is invalid: ${name}`);
+  if (!cookieNameRegExp.test(cookie.name)) {
+    throw new TypeError(`argument name is invalid: ${cookie.name}`);
   }
 
-  const value = enc(val);
+  const value = enc(cookie.value || "");
 
   if (!cookieValueRegExp.test(value)) {
-    throw new TypeError(`argument val is invalid: ${val}`);
+    throw new TypeError(`argument val is invalid: ${cookie.value}`);
   }
 
-  let str = name + "=" + value;
-  if (!options) return str;
+  let str = cookie.name + "=" + value;
 
-  if (options.maxAge !== undefined) {
-    if (!Number.isInteger(options.maxAge)) {
-      throw new TypeError(`option maxAge is invalid: ${options.maxAge}`);
+  if (cookie.maxAge !== undefined) {
+    if (!Number.isInteger(cookie.maxAge)) {
+      throw new TypeError(`option maxAge is invalid: ${cookie.maxAge}`);
     }
 
-    str += "; Max-Age=" + options.maxAge;
+    str += "; Max-Age=" + cookie.maxAge;
   }
 
-  if (options.domain) {
-    if (!domainValueRegExp.test(options.domain)) {
-      throw new TypeError(`option domain is invalid: ${options.domain}`);
+  if (cookie.domain) {
+    if (!domainValueRegExp.test(cookie.domain)) {
+      throw new TypeError(`option domain is invalid: ${cookie.domain}`);
     }
 
-    str += "; Domain=" + options.domain;
+    str += "; Domain=" + cookie.domain;
   }
 
-  if (options.path) {
-    if (!pathValueRegExp.test(options.path)) {
-      throw new TypeError(`option path is invalid: ${options.path}`);
+  if (cookie.path) {
+    if (!pathValueRegExp.test(cookie.path)) {
+      throw new TypeError(`option path is invalid: ${cookie.path}`);
     }
 
-    str += "; Path=" + options.path;
+    str += "; Path=" + cookie.path;
   }
 
-  if (options.expires) {
-    if (
-      !isDate(options.expires) ||
-      !Number.isFinite(options.expires.valueOf())
-    ) {
-      throw new TypeError(`option expires is invalid: ${options.expires}`);
+  if (cookie.expires) {
+    if (!isDate(cookie.expires) || !Number.isFinite(cookie.expires.valueOf())) {
+      throw new TypeError(`option expires is invalid: ${cookie.expires}`);
     }
 
-    str += "; Expires=" + options.expires.toUTCString();
+    str += "; Expires=" + cookie.expires.toUTCString();
   }
 
-  if (options.httpOnly) {
+  if (cookie.httpOnly) {
     str += "; HttpOnly";
   }
 
-  if (options.secure) {
+  if (cookie.secure) {
     str += "; Secure";
   }
 
-  if (options.partitioned) {
+  if (cookie.partitioned) {
     str += "; Partitioned";
   }
 
-  if (options.priority) {
+  if (cookie.priority) {
     const priority =
-      typeof options.priority === "string"
-        ? options.priority.toLowerCase()
+      typeof cookie.priority === "string"
+        ? cookie.priority.toLowerCase()
         : undefined;
     switch (priority) {
       case "low":
@@ -371,15 +386,15 @@ export function serialize(
         str += "; Priority=High";
         break;
       default:
-        throw new TypeError(`option priority is invalid: ${options.priority}`);
+        throw new TypeError(`option priority is invalid: ${cookie.priority}`);
     }
   }
 
-  if (options.sameSite) {
+  if (cookie.sameSite) {
     const sameSite =
-      typeof options.sameSite === "string"
-        ? options.sameSite.toLowerCase()
-        : options.sameSite;
+      typeof cookie.sameSite === "string"
+        ? cookie.sameSite.toLowerCase()
+        : cookie.sameSite;
     switch (sameSite) {
       case true:
       case "strict":
@@ -392,11 +407,89 @@ export function serialize(
         str += "; SameSite=None";
         break;
       default:
-        throw new TypeError(`option sameSite is invalid: ${options.sameSite}`);
+        throw new TypeError(`option sameSite is invalid: ${cookie.sameSite}`);
     }
   }
 
   return str;
+}
+
+export function deserialize(str: string, options?: ParseOptions): SetCookie {
+  const colonIdx = str.indexOf(";");
+  const dec = options?.decode || decode;
+  const len = str.length;
+  const endIdx = colonIdx === -1 ? len : colonIdx;
+  const [name, value] = keyPairSlice(str, 0, endIdx);
+  const setCookie: SetCookie = { name, value: dec(value) };
+
+  let index = endIdx + 1;
+  while (index < len) {
+    const colonIdx = str.indexOf(";", index);
+    const endIdx = colonIdx === -1 ? len : colonIdx;
+    const [attr, val] = keyPairSlice(str, index, endIdx);
+    const name = attr.toLowerCase();
+
+    if (name === "max-age") {
+      const num = Number(val);
+      if (Number.isInteger(num)) {
+        setCookie.maxAge = num;
+      }
+    } else if (name === "domain") {
+      if (domainValueRegExp.test(val)) {
+        setCookie.domain = val;
+      }
+    } else if (name === "path") {
+      if (pathValueRegExp.test(val)) {
+        setCookie.path = val;
+      }
+    } else if (name === "expires") {
+      const date = new Date(val);
+      if (Number.isFinite(date.valueOf())) {
+        setCookie.expires = date;
+      }
+    } else if (name === "httponly") {
+      setCookie.httpOnly = true;
+    } else if (name === "secure") {
+      setCookie.secure = true;
+    } else if (name === "partitioned") {
+      setCookie.partitioned = true;
+    } else if (name === "priority") {
+      const priority = val.toLowerCase();
+      if (priority === "low" || priority === "medium" || priority === "high") {
+        setCookie.priority = priority;
+      }
+    } else if (name === "samesite") {
+      const sameSite = val.toLowerCase();
+      if (sameSite === "lax" || sameSite === "strict" || sameSite === "none") {
+        setCookie.sameSite = sameSite;
+      }
+    }
+
+    index = endIdx + 1;
+  }
+
+  return setCookie;
+}
+
+function keyPairSlice(
+  str: string,
+  index: number,
+  endIdx: number,
+): [string, string] {
+  const eqIdx = str.indexOf("=", index);
+  if (eqIdx === -1 || eqIdx > endIdx) {
+    return [valueSlice(str, index, endIdx), ""];
+  }
+
+  const key = valueSlice(str, index, eqIdx);
+  const val = valueSlice(str, eqIdx + 1, endIdx);
+  return [key, val];
+}
+
+function valueSlice(str: string, index: number, endIdx: number) {
+  const start = startIndex(str, index, endIdx);
+  const end = endIndex(str, endIdx, start);
+  return str.slice(start, end);
 }
 
 /**
