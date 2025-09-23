@@ -135,22 +135,6 @@ export function parse(str: string, options?: ParseOptions): Cookies {
   return obj;
 }
 
-function startIndex(str: string, index: number, max: number) {
-  do {
-    const code = str.charCodeAt(index);
-    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index;
-  } while (++index < max);
-  return max;
-}
-
-function endIndex(str: string, index: number, min: number) {
-  while (index > min) {
-    const code = str.charCodeAt(--index);
-    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index + 1;
-  }
-  return min;
-}
-
 export interface StringifyOptions {
   /**
    * Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
@@ -192,6 +176,9 @@ export function stringify(
   return cookieStrings.join("; ");
 }
 
+/**
+ * Set-Cookie object.
+ */
 export interface SetCookie {
   /**
    * Specifies the name of the cookie.
@@ -414,7 +401,31 @@ export function serialize(
   return str;
 }
 
-export function deserialize(str: string, options?: ParseOptions): SetCookie {
+export interface DeserializeOptions {
+  /**
+   * Specifies a function that will be used to decode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
+   * Since the value of a cookie has a limited character set (and must be a simple string), this function can be used to decode
+   * a previously-encoded cookie value into a JavaScript string.
+   *
+   * The default function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
+   * is thrown it will return the cookie's original value. If you provide your own encode/decode
+   * scheme you must ensure errors are appropriately handled.
+   *
+   * @default decode
+   */
+  decode?: (str: string) => string | undefined;
+}
+
+/**
+ * Deserialize a `Set-Cookie` header into an object.
+ *
+ * deserialize('foo=bar; httpOnly')
+ *   => { name: 'foo', value: 'bar', httpOnly: true }
+ */
+export function deserialize(
+  str: string,
+  options?: DeserializeOptions,
+): SetCookie {
   const colonIdx = str.indexOf(";");
   const dec = options?.decode || decode;
   const len = str.length;
@@ -471,24 +482,48 @@ export function deserialize(str: string, options?: ParseOptions): SetCookie {
   return setCookie;
 }
 
-function keyPairSlice(
-  str: string,
-  index: number,
-  endIdx: number,
-): [string, string] {
-  const eqIdx = str.indexOf("=", index);
-  if (eqIdx === -1 || eqIdx > endIdx) {
-    return [valueSlice(str, index, endIdx), ""];
+/**
+ * Find starting index of non-whitespace.
+ */
+function startIndex(str: string, index: number, max: number) {
+  do {
+    const code = str.charCodeAt(index);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index;
+  } while (++index < max);
+  return max;
+}
+
+/**
+ * Find ending index of non-whitespace.
+ */
+function endIndex(str: string, index: number, min: number) {
+  while (index > min) {
+    const code = str.charCodeAt(--index);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index + 1;
+  }
+  return min;
+}
+
+/**
+ * Slice out a key=value pair between min to max.
+ */
+function keyPairSlice(str: string, min: number, max: number): [string, string] {
+  const eqIdx = str.indexOf("=", min);
+  if (eqIdx === -1 || eqIdx > max) {
+    return [valueSlice(str, min, max), ""];
   }
 
-  const key = valueSlice(str, index, eqIdx);
-  const val = valueSlice(str, eqIdx + 1, endIdx);
+  const key = valueSlice(str, min, eqIdx);
+  const val = valueSlice(str, eqIdx + 1, max);
   return [key, val];
 }
 
-function valueSlice(str: string, index: number, endIdx: number) {
-  const start = startIndex(str, index, endIdx);
-  const end = endIndex(str, endIdx, start);
+/**
+ * Slice out a value between startPod to max.
+ */
+function valueSlice(str: string, min: number, max: number) {
+  const start = startIndex(str, min, max);
+  const end = endIndex(str, max, start);
   return str.slice(start, end);
 }
 

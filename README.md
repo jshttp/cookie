@@ -22,7 +22,7 @@ const cookie = require("cookie");
 
 ### cookie.parse(str, options)
 
-Parse an HTTP `Cookie` header string and returning an object of all cookie name-value pairs.
+Parse an HTTP `Cookie` header string and return an [object](#cookies-object) of all cookie name-value pairs.
 The `str` argument is the string representing a `Cookie` header value and `options` is an
 optional object containing additional parsing options.
 
@@ -33,21 +33,11 @@ const cookies = cookie.parse("foo=bar; equation=E%3Dmc%5E2");
 
 #### Options
 
-`cookie.parse` accepts these properties in the options object.
+- `decode` Specifies the function to decode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to [`decodeURIComponent`](#encode-and-decode).
 
-##### decode
+### cookie.stringify(cookieObj, options)
 
-Specifies a function that will be used to decode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
-Since the value of a cookie has a limited character set (and must be a simple string), this function can be used to decode
-a previously-encoded cookie value into a JavaScript string.
-
-The default function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
-is thrown it will return the cookie's original value. If you provide your own encode/decode
-scheme you must ensure errors are appropriately handled.
-
-### cookie.stringify(obj, options)
-
-Stringifies an object into an HTTP `Cookie` header.
+Stringifies a [cookies object](#cookies-object) into an HTTP `Cookie` header.
 
 ```js
 const cookieHeader = cookie.stringify({ a: "foo", b: "bar" });
@@ -56,40 +46,51 @@ const cookieHeader = cookie.stringify({ a: "foo", b: "bar" });
 
 #### Options
 
-`cookie.stringify` accepts these properties in the options object.
+- `encode` Specifies the function to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to [`encodeURIComponent`](#encode-and-decode).
 
-##### encode
+### cookie.serialize(setCookieObj, options)
 
-Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
-Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
-a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
-
-The default function is the global `encodeURIComponent`.
-
-### cookie.serialize(name, value, options)
-
-Serialize a cookie name-value pair into a `Set-Cookie` header string. The `name` argument is the
-name for the cookie, the `value` argument is the value to set the cookie to, and the `options`
-argument is an optional object containing additional serialization options.
+Serialize a [`Set-Cookie` object](#set-cookie-object) into a `Set-Cookie` header string.
 
 ```js
-const setCookie = cookie.serialize("foo", "bar");
+const setCookie = cookie.serialize({ name: "foo", value: "bar" });
 // foo=bar
 ```
 
 #### Options
 
-`cookie.serialize` accepts these properties in the options object.
+- `encode` Specifies the function to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to [`encodeURIComponent`](#encode-and-decode).
 
-##### encode
+### cookie.deserialize(str, options)
 
-Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
-Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
-a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
+Parse an HTTP `Set-Cookie` header string and return an [object](#set-cookie-object) of all the options.
 
-The default function is the global `encodeURIComponent`.
+```js
+const setCookieObj = cookie.deserialize("foo=bar; httpOnly");
+// { name: "foo", value: "bar", httpOnly: true }
+```
 
-##### maxAge
+#### Options
+
+- `decode` Specifies the function to decode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to [`decodeURIComponent`](#encode-and-decode).
+
+## Cookies object
+
+The cookies object represents all cookie name-value pairs in a `Cookie` header, where `{ name: "value" }` is used for `name=value`.
+
+## `Set-Cookie` object
+
+The `Set-Cookie` object represents all the options in a `Set-Cookie` header.
+
+### name
+
+The name of the cookie.
+
+### value
+
+The value of a cookie after it has been [decoded](#encode-and-decode).
+
+### maxAge
 
 Specifies the `number` (in seconds) to be the value for the [`Max-Age` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.2).
 
@@ -97,7 +98,7 @@ The [cookie storage model specification](https://tools.ietf.org/html/rfc6265#sec
 `maxAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
 so if both are set, they should point to the same date and time.
 
-##### expires
+### expires
 
 Specifies the `Date` object to be the value for the [`Expires` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.1).
 When no expiration is set, clients consider this a "non-persistent cookie" and delete it when the current session is over.
@@ -106,27 +107,27 @@ The [cookie storage model specification](https://tools.ietf.org/html/rfc6265#sec
 `maxAge` are set, then `maxAge` takes precedence, but it is possible not all clients by obey this,
 so if both are set, they should point to the same date and time.
 
-##### domain
+### domain
 
 Specifies the value for the [`Domain` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.3).
 When no domain is set, clients consider the cookie to apply to the current domain only.
 
-##### path
+### path
 
 Specifies the value for the [`Path` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.4).
 When no path is set, the path is considered the ["default path"](https://tools.ietf.org/html/rfc6265#section-5.1.4).
 
-##### httpOnly
+### httpOnly
 
 Enables the [`HttpOnly` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.6).
 When enabled, clients will not allow client-side JavaScript to see the cookie in `document.cookie`.
 
-##### secure
+### secure
 
 Enables the [`Secure` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.5).
 When enabled, clients will only send the cookie back if the browser has an HTTPS connection.
 
-##### partitioned
+### partitioned
 
 Enables the [`Partitioned` `Set-Cookie` attribute](https://tools.ietf.org/html/draft-cutler-httpbis-partitioned-cookies/).
 When enabled, clients will only send the cookie back when the current domain _and_ top-level domain matches.
@@ -135,7 +136,7 @@ This is an attribute that has not yet been fully standardized, and may change in
 This also means clients may ignore this attribute until they understand it. More information
 about can be found in [the proposal](https://github.com/privacycg/CHIPS).
 
-##### priority
+### priority
 
 Specifies the value for the [`Priority` `Set-Cookie` attribute](https://tools.ietf.org/html/draft-west-cookie-priority-00#section-4.1).
 
@@ -145,7 +146,7 @@ Specifies the value for the [`Priority` `Set-Cookie` attribute](https://tools.ie
 
 More information about priority levels can be found in [the specification](https://tools.ietf.org/html/draft-west-cookie-priority-00#section-4.1).
 
-##### sameSite
+### sameSite
 
 Specifies the value for the [`SameSite` `Set-Cookie` attribute](https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-09#section-5.4.7).
 
@@ -155,6 +156,17 @@ Specifies the value for the [`SameSite` `Set-Cookie` attribute](https://tools.ie
 - `'strict'` will set the `SameSite` attribute to `Strict` for strict same site enforcement.
 
 More information about enforcement levels can be found in [the specification](https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-09#section-5.4.7).
+
+## Encode and decode
+
+Cookie accepts `encode` and `decode` options to serialize and deserialize a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
+Since the value of a cookie has a limited character set (and must be a simple string), these functions are be used to transform values into strings suitable for a cookies value.
+
+The default `encode` function is the global `encodeURIComponent`.
+
+The default `decode` function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
+is thrown it will return the cookie's original value. If you provide your own encode/decode
+scheme you must ensure errors are appropriately handled.
 
 ## Example
 
