@@ -27,7 +27,7 @@ The `str` argument is the string representing a `Cookie` header value and `optio
 optional object containing additional parsing options.
 
 ```js
-const cookies = cookie.parse("foo=bar; equation=E%3Dmc%5E2");
+const cookiesObject = cookie.parse("foo=bar; equation=E%3Dmc%5E2");
 // { foo: 'bar', equation: 'E=mc^2' }
 ```
 
@@ -53,7 +53,7 @@ const cookieHeader = cookie.stringify({ a: "foo", b: "bar" });
 Serialize a [`Set-Cookie` object](#set-cookie-object) into a `Set-Cookie` header string.
 
 ```js
-const setCookie = cookie.serialize({ name: "foo", value: "bar" });
+const setCookieHeader = cookie.serialize({ name: "foo", value: "bar" });
 // foo=bar
 ```
 
@@ -66,7 +66,7 @@ const setCookie = cookie.serialize({ name: "foo", value: "bar" });
 Parse an HTTP `Set-Cookie` header string and return an [object](#set-cookie-object) of all the options.
 
 ```js
-const setCookieObj = cookie.deserialize("foo=bar; httpOnly");
+const setCookieObject = cookie.deserialize("foo=bar; httpOnly");
 // { name: "foo", value: "bar", httpOnly: true }
 ```
 
