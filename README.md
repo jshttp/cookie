@@ -187,7 +187,9 @@ function onRequest(req, res) {
     // Set a new cookie with the name
     res.setHeader(
       "Set-Cookie",
-      cookie.serialize("name", String(query.name), {
+      cookie.serialize({
+        name: "name",
+        value: String(query.name),
         httpOnly: true,
         maxAge: 60 * 60 * 24 * 7, // 1 week
       }),
