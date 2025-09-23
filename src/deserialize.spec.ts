@@ -47,6 +47,39 @@ describe("cookie.deserialize(str)", () => {
     });
   });
 
+  it("ignores unknown attributes", () => {
+    expect(deserialize("key=value; UnknownAttr=somevalue; AnotherOne")).toEqual(
+      { name: "key", value: "value" },
+    );
+  });
+
+  it("should handle attributes with no value", () => {
+    expect(deserialize("key=value; HttpOnly; Secure")).toEqual({
+      name: "key",
+      value: "value",
+      httpOnly: true,
+      secure: true,
+    });
+  });
+
+  it("should handle attributes with extra spaces", () => {
+    expect(deserialize("key=value;    HttpOnly   ;   Secure   ")).toEqual({
+      name: "key",
+      value: "value",
+      httpOnly: true,
+      secure: true,
+    });
+  });
+
+  it("should skip over empty attributes", () => {
+    expect(deserialize("key=value;;; HttpOnly;;; Secure;;")).toEqual({
+      name: "key",
+      value: "value",
+      httpOnly: true,
+      secure: true,
+    });
+  });
+
   describe('with "decode" option', () => {
     it("should use custom decode function", () => {
       const decode = (str: string) => str.replace(/-/g, " ");
