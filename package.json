@@ -16,6 +16,7 @@
   "contributors": [
     "Douglas Christopher Wilson <doug@somethingdoug.com>"
   ],
+  "sideEffects": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
