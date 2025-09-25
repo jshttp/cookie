@@ -14,7 +14,7 @@ describe("cookie.parseSetCookie", () => {
   });
 
   it("should handle missing equals sign", () => {
-    expect(parseSetCookie("key")).toEqual({ name: "key", value: "" });
+    expect(parseSetCookie("value")).toEqual({ name: "", value: "value" });
   });
 
   it("should trim whitespace around key and value", () => {

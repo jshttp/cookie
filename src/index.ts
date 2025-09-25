@@ -63,6 +63,11 @@ const domainValueRegExp =
  */
 const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
 
+/**
+ * RegExp to match max-age-value in RFC 6265 sec 5.6.2
+ */
+const maxAgeRegExp = /^-?\d+$/;
+
 const __toString = Object.prototype.toString;
 
 const NullObject = /* @__PURE__ */ (() => {
@@ -405,7 +410,10 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
   const len = str.length;
   const endIdx = colonIdx === -1 ? len : colonIdx;
   const [name, value] = keyPairSlice(str, 0, endIdx);
-  const setCookie: SetCookie = { name, value: dec(value) };
+  const setCookie: SetCookie =
+    value === undefined
+      ? { name: "", value: dec(name) }
+      : { name, value: dec(value) };
 
   let index = endIdx + 1;
   while (index < len) {
@@ -414,20 +422,13 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
     const [attr, val] = keyPairSlice(str, index, endIdx);
     const name = attr.toLowerCase();
 
-    if (name === "max-age") {
-      const num = Number(val);
-      if (Number.isInteger(num)) {
-        setCookie.maxAge = num;
-      }
+    if (name === "max-age" && val && maxAgeRegExp.test(val)) {
+      setCookie.maxAge = Number(val);
     } else if (name === "domain") {
-      if (domainValueRegExp.test(val)) {
-        setCookie.domain = val;
-      }
+      setCookie.domain = val;
     } else if (name === "path") {
-      if (pathValueRegExp.test(val)) {
-        setCookie.path = val;
-      }
-    } else if (name === "expires") {
+      setCookie.path = val;
+    } else if (name === "expires" && val) {
       const date = new Date(val);
       if (Number.isFinite(date.valueOf())) {
         setCookie.expires = date;
@@ -438,12 +439,12 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
       setCookie.secure = true;
     } else if (name === "partitioned") {
       setCookie.partitioned = true;
-    } else if (name === "priority") {
+    } else if (name === "priority" && val) {
       const priority = val.toLowerCase();
       if (priority === "low" || priority === "medium" || priority === "high") {
         setCookie.priority = priority;
       }
-    } else if (name === "samesite") {
+    } else if (name === "samesite" && val) {
       const sameSite = val.toLowerCase();
       if (sameSite === "lax" || sameSite === "strict" || sameSite === "none") {
         setCookie.sameSite = sameSite;
@@ -481,10 +482,14 @@ function endIndex(str: string, index: number, min: number) {
 /**
  * Slice out a key=value pair between min to max.
  */
-function keyPairSlice(str: string, min: number, max: number): [string, string] {
+function keyPairSlice(
+  str: string,
+  min: number,
+  max: number,
+): [string, string | undefined] {
   const eqIdx = str.indexOf("=", min);
   if (eqIdx === -1 || eqIdx > max) {
-    return [valueSlice(str, min, max), ""];
+    return [valueSlice(str, min, max), undefined];
   }
 
   const key = valueSlice(str, min, eqIdx);
