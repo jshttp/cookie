@@ -92,16 +92,16 @@ export interface ParseOptions {
 /**
  * Cookies object.
  */
-export type Cookies = Record<string, string | undefined>;
+export type Cookie = Record<string, string | undefined>;
 
 /**
- * Parse a cookie header.
+ * Parse a `Cookie` header.
  *
  * Parse the given cookie header string into an object
  * The object has the various cookies as keys(names) => values
  */
-export function parse(str: string, options?: ParseOptions): Cookies {
-  const obj: Cookies = new NullObject();
+export function parseCookie(str: string, options?: ParseOptions): Cookie {
+  const obj: Cookie = new NullObject();
   const len = str.length;
   // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
   if (len < 2) return obj;
@@ -149,15 +149,15 @@ export interface StringifyOptions {
 /**
  * Stringifies an object into an HTTP `Cookie` header.
  */
-export function stringify(
-  cookies: Cookies,
+export function stringifyCookie(
+  cookie: Cookie,
   options?: StringifyOptions,
 ): string {
   const enc = options?.encode || encodeURIComponent;
   const cookieStrings: string[] = [];
 
-  for (const name of Object.keys(cookies)) {
-    const val = cookies[name];
+  for (const name of Object.keys(cookie)) {
+    const val = cookie[name];
     if (val === undefined) continue;
 
     if (!cookieNameRegExp.test(name)) {
@@ -258,20 +258,6 @@ export interface SetCookie {
 }
 
 /**
- * Serialize options.
- */
-export interface SerializeOptions {
-  /**
-   * Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
-   * Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
-   * a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
-   *
-   * @default encodeURIComponent
-   */
-  encode?: (str: string) => string;
-}
-
-/**
  * Serialize data into a cookie header.
  *
  * Serialize a name value pair into a cookie string suitable for
@@ -280,19 +266,19 @@ export interface SerializeOptions {
  * serialize('foo', 'bar', { httpOnly: true })
  *   => "foo=bar; httpOnly"
  */
-export function serialize(
+export function stringifySetCookie(
   cookie: SetCookie,
-  options?: SerializeOptions,
+  options?: StringifyOptions,
 ): string;
-export function serialize(
+export function stringifySetCookie(
   name: string,
   val: string,
-  options?: SerializeOptions & Omit<SetCookie, "name" | "value">,
+  options?: StringifyOptions & Omit<SetCookie, "name" | "value">,
 ): string;
-export function serialize(
+export function stringifySetCookie(
   _name: string | SetCookie,
-  _val?: string | SerializeOptions,
-  _opts?: SerializeOptions & Omit<SetCookie, "name" | "value">,
+  _val?: string | StringifyOptions,
+  _opts?: StringifyOptions & Omit<SetCookie, "name" | "value">,
 ): string {
   const cookie =
     typeof _name === "object"
@@ -401,31 +387,13 @@ export function serialize(
   return str;
 }
 
-export interface DeserializeOptions {
-  /**
-   * Specifies a function that will be used to decode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
-   * Since the value of a cookie has a limited character set (and must be a simple string), this function can be used to decode
-   * a previously-encoded cookie value into a JavaScript string.
-   *
-   * The default function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
-   * is thrown it will return the cookie's original value. If you provide your own encode/decode
-   * scheme you must ensure errors are appropriately handled.
-   *
-   * @default decode
-   */
-  decode?: (str: string) => string | undefined;
-}
-
 /**
  * Deserialize a `Set-Cookie` header into an object.
  *
  * deserialize('foo=bar; httpOnly')
  *   => { name: 'foo', value: 'bar', httpOnly: true }
  */
-export function deserialize(
-  str: string,
-  options?: DeserializeOptions,
-): SetCookie {
+export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
   const colonIdx = str.indexOf(";");
   const dec = options?.decode || decode;
   const len = str.length;
@@ -546,3 +514,8 @@ function decode(str: string): string {
 function isDate(val: any): val is Date {
   return __toString.call(val) === "[object Date]";
 }
+
+/**
+ * Backward compatibility exports.
+ */
+export { stringifySetCookie as serialize, parseCookie as parse };

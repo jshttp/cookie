@@ -20,14 +20,14 @@ const cookie = require("cookie");
 // import * as cookie from 'cookie';
 ```
 
-### cookie.parse(str, options)
+### cookie.parseCookie(str, options)
 
-Parse an HTTP `Cookie` header string and return an [object](#cookies-object) of all cookie name-value pairs.
+Parse an HTTP `Cookie` header string and return an [object](#cookie-object) of all cookie name-value pairs.
 The `str` argument is the string representing a `Cookie` header value and `options` is an
 optional object containing additional parsing options.
 
 ```js
-const cookiesObject = cookie.parse("foo=bar; equation=E%3Dmc%5E2");
+const cookieObject = cookie.parseCookie("foo=bar; equation=E%3Dmc%5E2");
 // { foo: 'bar', equation: 'E=mc^2' }
 ```
 
@@ -35,9 +35,9 @@ const cookiesObject = cookie.parse("foo=bar; equation=E%3Dmc%5E2");
 
 - `decode` Specifies the function to decode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to [`decodeURIComponent`](#encode-and-decode).
 
-### cookie.stringify(cookieObj, options)
+### cookie.stringifyCookie(cookieObj, options)
 
-Stringifies a [cookies object](#cookies-object) into an HTTP `Cookie` header.
+Stringifies a [cookie object](#cookie-object) into an HTTP `Cookie` header.
 
 ```js
 const cookieHeader = cookie.stringify({ a: "foo", b: "bar" });
@@ -48,25 +48,12 @@ const cookieHeader = cookie.stringify({ a: "foo", b: "bar" });
 
 - `encode` Specifies the function to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to [`encodeURIComponent`](#encode-and-decode).
 
-### cookie.serialize(setCookieObj, options)
-
-Serialize a [`Set-Cookie` object](#set-cookie-object) into a `Set-Cookie` header string.
-
-```js
-const setCookieHeader = cookie.serialize({ name: "foo", value: "bar" });
-// foo=bar
-```
-
-#### Options
-
-- `encode` Specifies the function to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to [`encodeURIComponent`](#encode-and-decode).
-
-### cookie.deserialize(str, options)
+### cookie.parseSetCookie(str, options)
 
 Parse an HTTP `Set-Cookie` header string and return an [object](#set-cookie-object) of all the options.
 
 ```js
-const setCookieObject = cookie.deserialize("foo=bar; httpOnly");
+const setCookieObject = cookie.parseSetCookie("foo=bar; httpOnly");
 // { name: "foo", value: "bar", httpOnly: true }
 ```
 
@@ -74,9 +61,25 @@ const setCookieObject = cookie.deserialize("foo=bar; httpOnly");
 
 - `decode` Specifies the function to decode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to [`decodeURIComponent`](#encode-and-decode).
 
-## Cookies object
+### cookie.stringifySetCookie(setCookieObj, options)
 
-The cookies object represents all cookie name-value pairs in a `Cookie` header, where `{ name: "value" }` is used for `name=value`.
+Stringifies a [`Set-Cookie` object](#set-cookie-object) into a `Set-Cookie` header string.
+
+```js
+const setCookieHeader = cookie.stringifySetCookie({
+  name: "foo",
+  value: "bar",
+});
+// foo=bar
+```
+
+#### Options
+
+- `encode` Specifies the function to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to [`encodeURIComponent`](#encode-and-decode).
+
+## Cookie object
+
+The cookie object represents all cookie name-value pairs in a `Cookie` header, where `{ name: "value" }` is used for `name=value`.
 
 ## `Set-Cookie` object
 
@@ -159,8 +162,8 @@ More information about enforcement levels can be found in [the specification](ht
 
 ## Encode and decode
 
-Cookie accepts `encode` and `decode` options to serialize and deserialize a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
-Since the value of a cookie has a limited character set (and must be a simple string), these functions are be used to transform values into strings suitable for a cookies value.
+Cookie accepts `encode` or `decode` options for processing a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
+Since the value of a cookie has a limited character set (and must be a simple string), these functions are used to transform values into strings suitable for a cookies value.
 
 The default `encode` function is the global `encodeURIComponent`.
 
@@ -187,7 +190,7 @@ function onRequest(req, res) {
     // Set a new cookie with the name
     res.setHeader(
       "Set-Cookie",
-      cookie.serialize({
+      cookie.stringifySetCookie({
         name: "name",
         value: String(query.name),
         httpOnly: true,
@@ -203,7 +206,7 @@ function onRequest(req, res) {
   }
 
   // Parse the cookies on the request
-  var cookies = cookie.parse(req.headers.cookie || "");
+  var cookies = cookie.parseCookie(req.headers.cookie || "");
 
   // Get the visitor name set in the cookie
   var name = cookies.name;
