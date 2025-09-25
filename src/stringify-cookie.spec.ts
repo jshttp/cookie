@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { stringifyCookie } from "./index.js";
 
-describe("stringify", () => {
+describe("cookie.stringifyCookie", () => {
   it("should stringify object", () => {
     expect(stringifyCookie({ key: "value" })).toEqual("key=value");
   });

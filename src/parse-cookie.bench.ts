@@ -2,7 +2,7 @@ import { describe, bench } from "vitest";
 import * as cookie from "./index.js";
 import top from "../scripts/parse-top.json";
 
-describe("parse", () => {
+describe("cookie.parseCookie", () => {
   bench("simple", () => {
     cookie.parse("foo=bar");
   });

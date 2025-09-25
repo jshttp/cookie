@@ -1,7 +1,11 @@
 import { describe, it, expect } from "vitest";
 import * as cookie from "./index.js";
 
-describe("cookie.serialize(name, value)", function () {
+describe("cookie.stringifySetCookie", function () {
+  it("should have backward compatible export", function () {
+    expect(cookie.serialize).toBe(cookie.stringifySetCookie);
+  });
+
   it("should serialize name and value", function () {
     expect(cookie.stringifySetCookie("foo", "bar")).toEqual("foo=bar");
   });

@@ -1,7 +1,11 @@
 import { describe, it, expect } from "vitest";
 import * as cookie from "./index.js";
 
-describe("cookie.parse(str)", function () {
+describe("cookie.parseCookie", function () {
+  it("should have backward compatible export", function () {
+    expect(cookie.parse).toBe(cookie.parseCookie);
+  });
+
   it("should parse cookie string to object", function () {
     expect(cookie.parse("foo=bar")).toEqual({ foo: "bar" });
     expect(cookie.parse("foo=123")).toEqual({ foo: "123" });

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { parseSetCookie } from "./index.js";
 
-describe("cookie.deserialize(str)", () => {
-  it("should deserialize cookie string", () => {
+describe("cookie.parseSetCookie", () => {
+  it("should parse a string", () => {
     expect(parseSetCookie("key=value")).toEqual({
       name: "key",
       value: "value",
