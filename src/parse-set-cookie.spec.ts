@@ -127,6 +127,21 @@ describe("cookie.parseSetCookie", () => {
         value: "value",
       });
     });
+
+    it("should ignore max-age with partial digits", () => {
+      expect(parseSetCookie("key=value; Max-Age=123abc")).toEqual({
+        name: "key",
+        value: "value",
+      });
+    });
+
+    it("should parse negative max-age", () => {
+      expect(parseSetCookie("key=value; Max-Age=-1")).toEqual({
+        name: "key",
+        value: "value",
+        maxAge: -1,
+      });
+    });
   });
 
   describe('with "domain"', () => {
