@@ -20,6 +20,12 @@ describe("cookie.stringifySetCookie", function () {
     expect(cookie.stringifySetCookie("foo", "")).toEqual("foo=");
   });
 
+  it("should serialize an object", function () {
+    expect(
+      cookie.stringifySetCookie({ name: "foo", value: "bar +baz" }),
+    ).toEqual("foo=bar%20%2Bbaz");
+  });
+
   it.each([
     ["foo"],
     ["foo,bar"],
