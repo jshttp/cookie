@@ -92,7 +92,7 @@ export interface ParseOptions {
 /**
  * Cookies object.
  */
-export type Cookie = Record<string, string | undefined>;
+export type Cookies = Record<string, string | undefined>;
 
 /**
  * Parse a `Cookie` header.
@@ -100,8 +100,8 @@ export type Cookie = Record<string, string | undefined>;
  * Parse the given cookie header string into an object
  * The object has the various cookies as keys(names) => values
  */
-export function parseCookie(str: string, options?: ParseOptions): Cookie {
-  const obj: Cookie = new NullObject();
+export function parseCookie(str: string, options?: ParseOptions): Cookies {
+  const obj: Cookies = new NullObject();
   const len = str.length;
   // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
   if (len < 2) return obj;
@@ -150,7 +150,7 @@ export interface StringifyOptions {
  * Stringifies an object into an HTTP `Cookie` header.
  */
 export function stringifyCookie(
-  cookie: Cookie,
+  cookie: Cookies,
   options?: StringifyOptions,
 ): string {
   const enc = options?.encode || encodeURIComponent;
