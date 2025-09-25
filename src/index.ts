@@ -258,6 +258,12 @@ export interface SetCookie {
 }
 
 /**
+ * Backward compatibility serialize options.
+ */
+export type SerializeOptions = StringifyOptions &
+  Omit<SetCookie, "name" | "value">;
+
+/**
  * Serialize data into a cookie header.
  *
  * Serialize a name value pair into a cookie string suitable for
@@ -273,12 +279,12 @@ export function stringifySetCookie(
 export function stringifySetCookie(
   name: string,
   val: string,
-  options?: StringifyOptions & Omit<SetCookie, "name" | "value">,
+  options?: SerializeOptions,
 ): string;
 export function stringifySetCookie(
   _name: string | SetCookie,
   _val?: string | StringifyOptions,
-  _opts?: StringifyOptions & Omit<SetCookie, "name" | "value">,
+  _opts?: SerializeOptions,
 ): string {
   const cookie =
     typeof _name === "object"
