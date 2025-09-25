@@ -26,6 +26,15 @@ describe("cookie.stringifySetCookie", function () {
     ).toEqual("foo=bar%20%2Bbaz");
   });
 
+  it("should serialize an object with options", function () {
+    expect(
+      cookie.stringifySetCookie(
+        { name: "foo", value: "bar+baz" },
+        { encode: (x) => x },
+      ),
+    ).toEqual("foo=bar+baz");
+  });
+
   it.each([
     ["foo"],
     ["foo,bar"],
