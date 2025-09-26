@@ -50,11 +50,20 @@ const cookieHeader = cookie.stringify({ a: "foo", b: "bar" });
 
 ### cookie.parseSetCookie(str, options)
 
-Parse an HTTP `Set-Cookie` header string and return an [object](#set-cookie-object) of all the options.
+Parse an HTTP `Set-Cookie` header string and return an [object](#set-cookie-object) of the options.
 
 ```js
 const setCookieObject = cookie.parseSetCookie("foo=bar; httpOnly");
 // { name: "foo", value: "bar", httpOnly: true }
+```
+
+**Note:** Cookie follows the specification and ignores invalid attributes, but does not attempt to normalize or modify any attributes as a browser might. For example:
+
+```js
+cookie.parseSetCookie(
+  "session=abc; max-age=1.5; expires=invalid; custom=value; domain=example.com",
+);
+// { name: "session", value: "abc", domain: "example.com" }
 ```
 
 #### Options
