@@ -115,11 +115,10 @@ export function parseCookie(str: string, options?: ParseOptions): Cookies {
   let index = 0;
 
   do {
-    const eqIdx = str.indexOf("=", index);
+    const eqIdx = eqIndex(str, index, len);
     if (eqIdx === -1) break; // No more cookie pairs.
 
-    const colonIdx = str.indexOf(";", index);
-    const endIdx = colonIdx === -1 ? len : colonIdx;
+    const endIdx = endIndex(str, index, len);
 
     if (eqIdx > endIdx) {
       // backtrack on prior semicolon
@@ -405,49 +404,69 @@ export function stringifySetCookie(
  *   => { name: 'foo', value: 'bar', httpOnly: true }
  */
 export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
-  const colonIdx = str.indexOf(";");
   const dec = options?.decode || decode;
   const len = str.length;
-  const endIdx = colonIdx === -1 ? len : colonIdx;
-  const [name, value] = keyPairSlice(str, 0, endIdx);
+  const endIdx = endIndex(str, 0, len);
+  const eqIdx = eqIndex(str, 0, endIdx);
   const setCookie: SetCookie =
-    value === undefined
-      ? { name: "", value: dec(name) }
-      : { name, value: dec(value) };
+    eqIdx === -1
+      ? { name: "", value: dec(valueSlice(str, 0, endIdx)) }
+      : {
+          name: valueSlice(str, 0, eqIdx),
+          value: dec(valueSlice(str, eqIdx + 1, endIdx)),
+        };
 
   let index = endIdx + 1;
   while (index < len) {
-    const colonIdx = str.indexOf(";", index);
-    const endIdx = colonIdx === -1 ? len : colonIdx;
-    const [attr, val] = keyPairSlice(str, index, endIdx);
+    const endIdx = endIndex(str, index, len);
+    const eqIdx = eqIndex(str, index, endIdx);
+    const attr =
+      eqIdx === -1
+        ? valueSlice(str, index, endIdx)
+        : valueSlice(str, index, eqIdx);
     const name = attr.toLowerCase();
 
-    if (name === "max-age" && val && maxAgeRegExp.test(val)) {
-      setCookie.maxAge = Number(val);
-    } else if (name === "domain") {
-      setCookie.domain = val;
-    } else if (name === "path") {
-      setCookie.path = val;
-    } else if (name === "expires" && val) {
-      const date = new Date(val);
-      if (Number.isFinite(date.valueOf())) {
-        setCookie.expires = date;
+    // Handle boolean attributes.
+    if (eqIdx === -1) {
+      if (name === "httponly") {
+        setCookie.httpOnly = true;
+      } else if (name === "secure") {
+        setCookie.secure = true;
+      } else if (name === "partitioned") {
+        setCookie.partitioned = true;
       }
-    } else if (name === "httponly") {
-      setCookie.httpOnly = true;
-    } else if (name === "secure") {
-      setCookie.secure = true;
-    } else if (name === "partitioned") {
-      setCookie.partitioned = true;
-    } else if (name === "priority" && val) {
-      const priority = val.toLowerCase();
-      if (priority === "low" || priority === "medium" || priority === "high") {
-        setCookie.priority = priority;
-      }
-    } else if (name === "samesite" && val) {
-      const sameSite = val.toLowerCase();
-      if (sameSite === "lax" || sameSite === "strict" || sameSite === "none") {
-        setCookie.sameSite = sameSite;
+    } else {
+      const val = valueSlice(str, eqIdx + 1, endIdx);
+
+      if (name === "max-age") {
+        if (maxAgeRegExp.test(val)) setCookie.maxAge = Number(val);
+      } else if (name === "domain") {
+        setCookie.domain = val;
+      } else if (name === "path") {
+        setCookie.path = val;
+      } else if (name === "expires") {
+        const date = new Date(val);
+        if (Number.isFinite(date.valueOf())) {
+          setCookie.expires = date;
+        }
+      } else if (name === "priority") {
+        const priority = val.toLowerCase();
+        if (
+          priority === "low" ||
+          priority === "medium" ||
+          priority === "high"
+        ) {
+          setCookie.priority = priority;
+        }
+      } else if (name === "samesite") {
+        const sameSite = val.toLowerCase();
+        if (
+          sameSite === "lax" ||
+          sameSite === "strict" ||
+          sameSite === "none"
+        ) {
+          setCookie.sameSite = sameSite;
+        }
       }
     }
 
@@ -458,51 +477,39 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
 }
 
 /**
- * Find starting index of non-whitespace.
+ * Find the `;` character between `min` and `len` in str.
  */
-function startIndex(str: string, index: number, max: number) {
-  do {
-    const code = str.charCodeAt(index);
-    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index;
-  } while (++index < max);
-  return max;
+function endIndex(str: string, min: number, len: number) {
+  const index = str.indexOf(";", min);
+  return index === -1 ? len : index;
 }
 
 /**
- * Find ending index of non-whitespace.
+ * Find the `=` character between `min` and `max` in str.
  */
-function endIndex(str: string, index: number, min: number) {
-  while (index > min) {
-    const code = str.charCodeAt(--index);
-    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index + 1;
-  }
-  return min;
-}
-
-/**
- * Slice out a key=value pair between min to max.
- */
-function keyPairSlice(
-  str: string,
-  min: number,
-  max: number,
-): [string, string | undefined] {
-  const eqIdx = str.indexOf("=", min);
-  if (eqIdx === -1 || eqIdx > max) {
-    return [valueSlice(str, min, max), undefined];
-  }
-
-  const key = valueSlice(str, min, eqIdx);
-  const val = valueSlice(str, eqIdx + 1, max);
-  return [key, val];
+function eqIndex(str: string, min: number, max: number) {
+  const index = str.indexOf("=", min);
+  return index < max ? index : -1;
 }
 
 /**
  * Slice out a value between startPod to max.
  */
 function valueSlice(str: string, min: number, max: number) {
-  const start = startIndex(str, min, max);
-  const end = endIndex(str, max, start);
+  let start = min;
+  let end = max;
+
+  do {
+    const code = str.charCodeAt(start);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) break;
+  } while (++start < end);
+
+  while (end > start) {
+    const code = str.charCodeAt(end - 1);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) break;
+    end--;
+  }
+
   return str.slice(start, end);
 }
 

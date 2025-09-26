@@ -89,9 +89,7 @@ describe("cookie.parseCookie", function () {
       valueOf: "bar",
     });
   });
-});
 
-describe("cookie.parseCookie(str, options)", function () {
   describe('with "decode" option', function () {
     it("should specify alternative value decoder", function () {
       expect(

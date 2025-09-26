@@ -80,9 +80,7 @@ describe("cookie.stringifySetCookie", function () {
       /argument name is invalid/,
     );
   });
-});
 
-describe("cookie.serialize(name, value, options)", function () {
   describe('with "domain" option', function () {
     it.each([
       ["example.com"],
