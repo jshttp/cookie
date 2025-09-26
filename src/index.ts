@@ -63,6 +63,11 @@ const domainValueRegExp =
  */
 const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
 
+/**
+ * RegExp to match max-age-value in RFC 6265 sec 5.6.2
+ */
+const maxAgeRegExp = /^-?\d+$/;
+
 const __toString = Object.prototype.toString;
 
 const NullObject = /* @__PURE__ */ (() => {
@@ -95,12 +100,12 @@ export interface ParseOptions {
 export type Cookies = Record<string, string | undefined>;
 
 /**
- * Parse a cookie header.
+ * Parse a `Cookie` header.
  *
  * Parse the given cookie header string into an object
  * The object has the various cookies as keys(names) => values
  */
-export function parse(str: string, options?: ParseOptions): Cookies {
+export function parseCookie(str: string, options?: ParseOptions): Cookies {
   const obj: Cookies = new NullObject();
   const len = str.length;
   // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
@@ -110,11 +115,10 @@ export function parse(str: string, options?: ParseOptions): Cookies {
   let index = 0;
 
   do {
-    const eqIdx = str.indexOf("=", index);
+    const eqIdx = eqIndex(str, index, len);
     if (eqIdx === -1) break; // No more cookie pairs.
 
-    const colonIdx = str.indexOf(";", index);
-    const endIdx = colonIdx === -1 ? len : colonIdx;
+    const endIdx = endIndex(str, index, len);
 
     if (eqIdx > endIdx) {
       // backtrack on prior semicolon
@@ -122,39 +126,17 @@ export function parse(str: string, options?: ParseOptions): Cookies {
       continue;
     }
 
-    const keyStartIdx = startIndex(str, index, eqIdx);
-    const keyEndIdx = endIndex(str, eqIdx, keyStartIdx);
-    const key = str.slice(keyStartIdx, keyEndIdx);
+    const key = valueSlice(str, index, eqIdx);
 
     // only assign once
     if (obj[key] === undefined) {
-      let valStartIdx = startIndex(str, eqIdx + 1, endIdx);
-      let valEndIdx = endIndex(str, endIdx, valStartIdx);
-
-      const value = dec(str.slice(valStartIdx, valEndIdx));
-      obj[key] = value;
+      obj[key] = dec(valueSlice(str, eqIdx + 1, endIdx));
     }
 
     index = endIdx + 1;
   } while (index < len);
 
   return obj;
-}
-
-function startIndex(str: string, index: number, max: number) {
-  do {
-    const code = str.charCodeAt(index);
-    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index;
-  } while (++index < max);
-  return max;
-}
-
-function endIndex(str: string, index: number, min: number) {
-  while (index > min) {
-    const code = str.charCodeAt(--index);
-    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) return index + 1;
-  }
-  return min;
 }
 
 export interface StringifyOptions {
@@ -171,15 +153,15 @@ export interface StringifyOptions {
 /**
  * Stringifies an object into an HTTP `Cookie` header.
  */
-export function stringify(
-  cookies: Cookies,
+export function stringifyCookie(
+  cookie: Cookies,
   options?: StringifyOptions,
 ): string {
   const enc = options?.encode || encodeURIComponent;
   const cookieStrings: string[] = [];
 
-  for (const name of Object.keys(cookies)) {
-    const val = cookies[name];
+  for (const name of Object.keys(cookie)) {
+    const val = cookie[name];
     if (val === undefined) continue;
 
     if (!cookieNameRegExp.test(name)) {
@@ -199,17 +181,17 @@ export function stringify(
 }
 
 /**
- * Serialize options.
+ * Set-Cookie object.
  */
-export interface SerializeOptions {
+export interface SetCookie {
   /**
-   * Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
-   * Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
-   * a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
-   *
-   * @default encodeURIComponent
+   * Specifies the name of the cookie.
    */
-  encode?: (str: string) => string;
+  name: string;
+  /**
+   * Specifies the string to be the value for the cookie.
+   */
+  value: string | undefined;
   /**
    * Specifies the `number` (in seconds) to be the value for the [`Max-Age` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.2).
    *
@@ -280,6 +262,12 @@ export interface SerializeOptions {
 }
 
 /**
+ * Backward compatibility serialize options.
+ */
+export type SerializeOptions = StringifyOptions &
+  Omit<SetCookie, "name" | "value">;
+
+/**
  * Serialize data into a cookie header.
  *
  * Serialize a name value pair into a cookie string suitable for
@@ -288,77 +276,87 @@ export interface SerializeOptions {
  * serialize('foo', 'bar', { httpOnly: true })
  *   => "foo=bar; httpOnly"
  */
-export function serialize(
+export function stringifySetCookie(
+  cookie: SetCookie,
+  options?: StringifyOptions,
+): string;
+export function stringifySetCookie(
   name: string,
   val: string,
   options?: SerializeOptions,
+): string;
+export function stringifySetCookie(
+  _name: string | SetCookie,
+  _val?: string | StringifyOptions,
+  _opts?: SerializeOptions,
 ): string {
+  const cookie =
+    typeof _name === "object"
+      ? _name
+      : { name: _name, value: String(_val), ..._opts };
+  const options = typeof _val === "object" ? _val : _opts;
   const enc = options?.encode || encodeURIComponent;
 
-  if (!cookieNameRegExp.test(name)) {
-    throw new TypeError(`argument name is invalid: ${name}`);
+  if (!cookieNameRegExp.test(cookie.name)) {
+    throw new TypeError(`argument name is invalid: ${cookie.name}`);
   }
 
-  const value = enc(val);
+  const value = enc(cookie.value || "");
 
   if (!cookieValueRegExp.test(value)) {
-    throw new TypeError(`argument val is invalid: ${val}`);
+    throw new TypeError(`argument val is invalid: ${cookie.value}`);
   }
 
-  let str = name + "=" + value;
-  if (!options) return str;
+  let str = cookie.name + "=" + value;
 
-  if (options.maxAge !== undefined) {
-    if (!Number.isInteger(options.maxAge)) {
-      throw new TypeError(`option maxAge is invalid: ${options.maxAge}`);
+  if (cookie.maxAge !== undefined) {
+    if (!Number.isInteger(cookie.maxAge)) {
+      throw new TypeError(`option maxAge is invalid: ${cookie.maxAge}`);
     }
 
-    str += "; Max-Age=" + options.maxAge;
+    str += "; Max-Age=" + cookie.maxAge;
   }
 
-  if (options.domain) {
-    if (!domainValueRegExp.test(options.domain)) {
-      throw new TypeError(`option domain is invalid: ${options.domain}`);
+  if (cookie.domain) {
+    if (!domainValueRegExp.test(cookie.domain)) {
+      throw new TypeError(`option domain is invalid: ${cookie.domain}`);
     }
 
-    str += "; Domain=" + options.domain;
+    str += "; Domain=" + cookie.domain;
   }
 
-  if (options.path) {
-    if (!pathValueRegExp.test(options.path)) {
-      throw new TypeError(`option path is invalid: ${options.path}`);
+  if (cookie.path) {
+    if (!pathValueRegExp.test(cookie.path)) {
+      throw new TypeError(`option path is invalid: ${cookie.path}`);
     }
 
-    str += "; Path=" + options.path;
+    str += "; Path=" + cookie.path;
   }
 
-  if (options.expires) {
-    if (
-      !isDate(options.expires) ||
-      !Number.isFinite(options.expires.valueOf())
-    ) {
-      throw new TypeError(`option expires is invalid: ${options.expires}`);
+  if (cookie.expires) {
+    if (!isDate(cookie.expires) || !Number.isFinite(cookie.expires.valueOf())) {
+      throw new TypeError(`option expires is invalid: ${cookie.expires}`);
     }
 
-    str += "; Expires=" + options.expires.toUTCString();
+    str += "; Expires=" + cookie.expires.toUTCString();
   }
 
-  if (options.httpOnly) {
+  if (cookie.httpOnly) {
     str += "; HttpOnly";
   }
 
-  if (options.secure) {
+  if (cookie.secure) {
     str += "; Secure";
   }
 
-  if (options.partitioned) {
+  if (cookie.partitioned) {
     str += "; Partitioned";
   }
 
-  if (options.priority) {
+  if (cookie.priority) {
     const priority =
-      typeof options.priority === "string"
-        ? options.priority.toLowerCase()
+      typeof cookie.priority === "string"
+        ? cookie.priority.toLowerCase()
         : undefined;
     switch (priority) {
       case "low":
@@ -371,15 +369,15 @@ export function serialize(
         str += "; Priority=High";
         break;
       default:
-        throw new TypeError(`option priority is invalid: ${options.priority}`);
+        throw new TypeError(`option priority is invalid: ${cookie.priority}`);
     }
   }
 
-  if (options.sameSite) {
+  if (cookie.sameSite) {
     const sameSite =
-      typeof options.sameSite === "string"
-        ? options.sameSite.toLowerCase()
-        : options.sameSite;
+      typeof cookie.sameSite === "string"
+        ? cookie.sameSite.toLowerCase()
+        : cookie.sameSite;
     switch (sameSite) {
       case true:
       case "strict":
@@ -392,11 +390,127 @@ export function serialize(
         str += "; SameSite=None";
         break;
       default:
-        throw new TypeError(`option sameSite is invalid: ${options.sameSite}`);
+        throw new TypeError(`option sameSite is invalid: ${cookie.sameSite}`);
     }
   }
 
   return str;
+}
+
+/**
+ * Deserialize a `Set-Cookie` header into an object.
+ *
+ * deserialize('foo=bar; httpOnly')
+ *   => { name: 'foo', value: 'bar', httpOnly: true }
+ */
+export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
+  const dec = options?.decode || decode;
+  const len = str.length;
+  const endIdx = endIndex(str, 0, len);
+  const eqIdx = eqIndex(str, 0, endIdx);
+  const setCookie: SetCookie =
+    eqIdx === -1
+      ? { name: "", value: dec(valueSlice(str, 0, endIdx)) }
+      : {
+          name: valueSlice(str, 0, eqIdx),
+          value: dec(valueSlice(str, eqIdx + 1, endIdx)),
+        };
+
+  let index = endIdx + 1;
+  while (index < len) {
+    const endIdx = endIndex(str, index, len);
+    const eqIdx = eqIndex(str, index, endIdx);
+    const attr =
+      eqIdx === -1
+        ? valueSlice(str, index, endIdx)
+        : valueSlice(str, index, eqIdx);
+    const name = attr.toLowerCase();
+
+    // Handle boolean attributes.
+    if (eqIdx === -1) {
+      if (name === "httponly") {
+        setCookie.httpOnly = true;
+      } else if (name === "secure") {
+        setCookie.secure = true;
+      } else if (name === "partitioned") {
+        setCookie.partitioned = true;
+      }
+    } else {
+      const val = valueSlice(str, eqIdx + 1, endIdx);
+
+      if (name === "max-age") {
+        if (maxAgeRegExp.test(val)) setCookie.maxAge = Number(val);
+      } else if (name === "domain") {
+        setCookie.domain = val;
+      } else if (name === "path") {
+        setCookie.path = val;
+      } else if (name === "expires") {
+        const date = new Date(val);
+        if (Number.isFinite(date.valueOf())) {
+          setCookie.expires = date;
+        }
+      } else if (name === "priority") {
+        const priority = val.toLowerCase();
+        if (
+          priority === "low" ||
+          priority === "medium" ||
+          priority === "high"
+        ) {
+          setCookie.priority = priority;
+        }
+      } else if (name === "samesite") {
+        const sameSite = val.toLowerCase();
+        if (
+          sameSite === "lax" ||
+          sameSite === "strict" ||
+          sameSite === "none"
+        ) {
+          setCookie.sameSite = sameSite;
+        }
+      }
+    }
+
+    index = endIdx + 1;
+  }
+
+  return setCookie;
+}
+
+/**
+ * Find the `;` character between `min` and `len` in str.
+ */
+function endIndex(str: string, min: number, len: number) {
+  const index = str.indexOf(";", min);
+  return index === -1 ? len : index;
+}
+
+/**
+ * Find the `=` character between `min` and `max` in str.
+ */
+function eqIndex(str: string, min: number, max: number) {
+  const index = str.indexOf("=", min);
+  return index < max ? index : -1;
+}
+
+/**
+ * Slice out a value between startPod to max.
+ */
+function valueSlice(str: string, min: number, max: number) {
+  let start = min;
+  let end = max;
+
+  do {
+    const code = str.charCodeAt(start);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) break;
+  } while (++start < end);
+
+  while (end > start) {
+    const code = str.charCodeAt(end - 1);
+    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) break;
+    end--;
+  }
+
+  return str.slice(start, end);
 }
 
 /**
@@ -418,3 +532,8 @@ function decode(str: string): string {
 function isDate(val: any): val is Date {
   return __toString.call(val) === "[object Date]";
 }
+
+/**
+ * Backward compatibility exports.
+ */
+export { stringifySetCookie as serialize, parseCookie as parse };
