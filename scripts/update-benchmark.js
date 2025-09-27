@@ -1,81 +1,89 @@
 "use strict";
 
-const fs = require("fs");
+const fs = require("fs/promises");
 const http = require("http");
 const https = require("https");
 const path = require("path");
 const topSites = require("top-sites");
 const url = require("url");
 
-const BENCH_COOKIES_FILE = path.join(__dirname, "parse-top.json");
-const domains = topSites.slice(0, 30).map((x) => x.rootDomain);
+const BENCH_COOKIES_FILE = path.join(__dirname, "top-cookie.json");
+const BENCH_SET_COOKIES_FILE = path.join(__dirname, "top-set-cookie.json");
+const domains = topSites.slice(0, 20).map((x) => x.rootDomain);
 
-getAllCookies(domains, function (err, cookies) {
-  if (err) throw err;
+async function main() {
+  const [cookies, setCookies] = await getAllCookies(domains);
 
-  const str = JSON.stringify(
-    Object.fromEntries(
-      Object.keys(cookies)
-        .sort()
-        .map((key) => [key, cookies[key]])
-        .concat([["example.com", ""]]),
-    ),
-    null,
-    2,
+  await fs.writeFile(
+    BENCH_COOKIES_FILE,
+    JSON.stringify(sortObject(cookies), null, 2) + "\n",
   );
 
-  fs.writeFile(BENCH_COOKIES_FILE, `${str}\n`, function (err) {
-    if (err) throw err;
-    console.log("Cookies saved to", BENCH_COOKIES_FILE);
-    process.exit();
-  });
-});
+  await fs.writeFile(
+    BENCH_SET_COOKIES_FILE,
+    JSON.stringify(sortObject(setCookies), null, 2) + "\n",
+  );
 
-function get(href, callback) {
+  console.log("Cookies saved");
+  process.exit();
+}
+
+main();
+
+function get(href) {
   const protocol = url.parse(href, false, true).protocol;
   const proto = protocol === "https:" ? https : http;
 
-  proto
-    .get(href)
-    .on("error", callback)
-    .on("response", function (res) {
-      if (
-        res.headers.location &&
-        res.statusCode >= 300 &&
-        res.statusCode < 400
-      ) {
-        get(url.resolve(href, res.headers.location), callback);
-      } else {
-        callback(null, res);
-      }
-    });
-}
+  return new Promise((resolve, reject) => {
+    proto
+      .get(href)
+      .on("error", reject)
+      .on("response", function (res) {
+        if (
+          res.headers.location &&
+          res.statusCode >= 300 &&
+          res.statusCode < 400
+        ) {
+          return resolve(get(url.resolve(href, res.headers.location)));
+        }
 
-function getAllCookies(domains, callback) {
-  const all = Object.create(null);
-  let wait = domains.length;
-
-  domains.forEach(function (domain) {
-    getCookies(domain, function (err, cookies) {
-      if (!err && cookies.length) {
-        all[domain] = cookies.map(obfuscate).join("; ");
-      }
-      if (!--wait) {
-        callback(null, all);
-      }
-    });
+        return resolve(res);
+      });
   });
 }
 
-function getCookies(domain, callback) {
+async function getAllCookies(domains) {
+  const allCookies = Object.create(null);
+  const allSetCookies = Object.create(null);
+
+  for (const domain of domains) {
+    const setCookies = await getSetCookies(domain);
+    if (!setCookies.length) continue;
+
+    const cookies = toCookies(setCookies);
+    allCookies[domain] = cookies.map(obfuscate).join("; ");
+    allSetCookies[domain] = setCookies.map((header, index) => {
+      const attrs = header.split(";");
+      return [obfuscate(attrs.shift(), index), ...attrs].join("; ");
+    });
+  }
+
+  return [allCookies, allSetCookies];
+}
+
+async function getSetCookies(domain) {
   const href = url.format({ hostname: domain, protocol: "http" });
-  get(href, function (err, res) {
-    if (err) return callback(err);
-    const cookies = (res.headers["set-cookie"] || []).map(function (c) {
-      return c.split(";")[0];
-    });
-    callback(null, cookies);
-  });
+  try {
+    const res = await get(href);
+    return res.headers["set-cookie"] || [];
+  } catch (err) {
+    if (err.code === "ENOTFOUND") return [];
+    throw err;
+  }
+}
+
+function toCookies(setCookies) {
+  return setCookies.map((c) => c.split(";")[0]);
 }
 
 function obfuscate(str, index) {
@@ -95,4 +103,8 @@ function obfuscate(str, index) {
     .replace(/%__/g, function () {
       return "%22";
     });
+}
+
+function sortObject(obj) {
+  return Object.fromEntries(Object.entries(obj).sort());
 }

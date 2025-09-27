@@ -1,8 +1,12 @@
 import { describe, bench } from "vitest";
 import * as cookie from "./index.js";
-import top from "../scripts/parse-top.json";
+import top from "../scripts/top-cookie.json";
 
 describe("cookie.parseCookie", () => {
+  bench("empty", () => {
+    cookie.parseCookie("");
+  });
+
   bench("simple", () => {
     cookie.parseCookie("foo=bar");
   });
