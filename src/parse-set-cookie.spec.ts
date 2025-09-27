@@ -65,6 +65,15 @@ describe("cookie.parseSetCookie", () => {
     });
   });
 
+  it("should ignore value of boolean attributes", () => {
+    expect(parseSetCookie("key=value; HttpOnly=true; Secure=false")).toEqual({
+      name: "key",
+      value: "value",
+      httpOnly: true,
+      secure: true,
+    });
+  });
+
   it("should handle attributes with extra spaces", () => {
     expect(parseSetCookie("key=value;    HttpOnly   ;   Secure   ")).toEqual({
       name: "key",
@@ -130,6 +139,13 @@ describe("cookie.parseSetCookie", () => {
 
     it("should ignore max-age with partial digits", () => {
       expect(parseSetCookie("key=value; Max-Age=123abc")).toEqual({
+        name: "key",
+        value: "value",
+      });
+    });
+
+    it("should ignore max-age with decimals", () => {
+      expect(parseSetCookie("key=value; Max-Age=1.5")).toEqual({
         name: "key",
         value: "value",
       });

@@ -301,7 +301,7 @@ export function stringifySetCookie(
     throw new TypeError(`argument name is invalid: ${cookie.name}`);
   }
 
-  const value = enc(cookie.value || "");
+  const value = cookie.value ? enc(cookie.value) : "";
 
   if (!cookieValueRegExp.test(value)) {
     throw new TypeError(`argument val is invalid: ${cookie.value}`);
@@ -424,32 +424,34 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
       eqIdx === -1
         ? valueSlice(str, index, endIdx)
         : valueSlice(str, index, eqIdx);
-    const name = attr.toLowerCase();
+    const val = eqIdx === -1 ? undefined : valueSlice(str, eqIdx + 1, endIdx);
 
-    // Handle boolean attributes.
-    if (eqIdx === -1) {
-      if (name === "httponly") {
+    switch (attr.toLowerCase()) {
+      case "httponly":
         setCookie.httpOnly = true;
-      } else if (name === "secure") {
+        break;
+      case "secure":
         setCookie.secure = true;
-      } else if (name === "partitioned") {
+        break;
+      case "partitioned":
         setCookie.partitioned = true;
-      }
-    } else {
-      const val = valueSlice(str, eqIdx + 1, endIdx);
-
-      if (name === "max-age") {
-        if (maxAgeRegExp.test(val)) setCookie.maxAge = Number(val);
-      } else if (name === "domain") {
+        break;
+      case "domain":
         setCookie.domain = val;
-      } else if (name === "path") {
+        break;
+      case "path":
         setCookie.path = val;
-      } else if (name === "expires") {
+        break;
+      case "max-age":
+        if (val && maxAgeRegExp.test(val)) setCookie.maxAge = Number(val);
+        break;
+      case "expires":
+        if (!val) break;
         const date = new Date(val);
-        if (Number.isFinite(date.valueOf())) {
-          setCookie.expires = date;
-        }
-      } else if (name === "priority") {
+        if (Number.isFinite(date.valueOf())) setCookie.expires = date;
+        break;
+      case "priority":
+        if (!val) break;
         const priority = val.toLowerCase();
         if (
           priority === "low" ||
@@ -458,7 +460,9 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
         ) {
           setCookie.priority = priority;
         }
-      } else if (name === "samesite") {
+        break;
+      case "samesite":
+        if (!val) break;
         const sameSite = val.toLowerCase();
         if (
           sameSite === "lax" ||
@@ -467,7 +471,7 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
         ) {
           setCookie.sameSite = sameSite;
         }
-      }
+        break;
     }
 
     index = endIdx + 1;
