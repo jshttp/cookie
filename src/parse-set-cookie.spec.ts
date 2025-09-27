@@ -1,7 +1,20 @@
 import { describe, expect, it } from "vitest";
 import { parseSetCookie } from "./index.js";
+import top from "../scripts/top-set-cookie.json";
 
 describe("cookie.parseSetCookie", () => {
+  describe("parse top-sites", () => {
+    Object.entries(top).forEach(([domain, values]) => {
+      describe(domain, () => {
+        values.forEach((value) => {
+          it(value, () => {
+            expect(parseSetCookie(value)).toMatchSnapshot();
+          });
+        });
+      });
+    });
+  });
+
   it("should parse a string", () => {
     expect(parseSetCookie("key=value")).toEqual({
       name: "key",
