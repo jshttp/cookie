@@ -1,7 +1,16 @@
 import { describe, it, expect } from "vitest";
 import * as cookie from "./index.js";
+import top from "../scripts/top-cookie.json";
 
 describe("cookie.parseCookie", function () {
+  describe("parse top-sites", () => {
+    Object.entries(top).forEach(function ([domain, value]) {
+      it(domain, () => {
+        expect(cookie.parseCookie(value)).toMatchSnapshot();
+      });
+    });
+  });
+
   it("should have backward compatible export", function () {
     expect(cookie.parse).toBe(cookie.parseCookie);
   });
