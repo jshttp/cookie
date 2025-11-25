@@ -1,0 +1,16 @@
+{
+  "accounts.google.com": "__Aaaa-AAAA=0:aA00a0AAaAaA0aAAAAaaaaAAa00AaA:0aAAaa0aaa_aA-Aa",
+  "apple.com": "aaa=AA",
+  "cloudflare.com": "_aaaa_aaaaaa=aaaaaa; _bb=BB1.1.11bb111b-b1b1-1bb1-bb1b-b11bb1b11111; ccc_cccccc-ccccccccc_c2={\"cccc_cc2\":{\"c\":\"22cc222c-c2c2-2cc2-cc2c-c22cc2c22222\",\"c\":2222222222222}}; ddd_ddddd={\"DdDD_dddd\":{\"d\":\"DdD3Ddd3DDDdDDddDDD3DDD3DDDdDDd3DDd3DDd3DDD3DdddDDDdDDDDDDdddddDDddDDdD3DDDdDddddddDDd==\",\"d\":3333333333333}}; eeeeee_4EE44E44444E44444E444EE4_EeeeeEee_eeeeeeee=EeE4Eee4EEEeEEeeEEE4EEE4EEEeEEe4EEe4EEe4EEE4EeeeEEEeEEEEEEeeeeeEEeeEEeE4EEEeEeeeeeeEEe==; __ff_ff=Fff.FfFfFffFFFffFFffF5fFFfFfFf5ffFfFFfffF5f-5555555555-5.5.5.5-f5FfF5F5Ff5Ff5fffFFfff5Ff5f5FFFFFFFffFff5FFfFFffff5f5f5FffFF5FffFFFffffffFfffFf5ffff5.fff5ffFff5ff5ffffFffF5F55ffffF_F5FfFFFFFff",
+  "docs.google.com": "__Aaaa-AAAA=0:AaaaaaAAaa0aaa0a0aAAAaaaa0a0aa:0AaaaaAaaaaAaaa0",
+  "drive.google.com": "__Aaaa-AAAA=0:AaA-aaAa-aA0AaaaaAaAAAAAaaAAaA:aaaaAa0aaaa000A0",
+  "linkedin.com": "AAAAAAAAAA=aaaa:0000000000000000000; bbbb=b=1&bbbb=bb-bb; ccccccc=\"c=2&22c222cc-cc22-2ccc-22c2-2cc22ccccc22\"; dddddddd=\"d=3&3333333333333333d33333-d33d-33dd-3333-d33d3333333dDDDdd333D-DD3DdD3dddDDD3ddDd_D3d\"; eeee=\"e=EEEE44:e=E:e=E:e=E:e=E:e=4444:e=4:e=4:e=4444444444:e=4444444444:e=4:eee=EEEEEeE4Eee_Eeeee44EEeeEE4EEE4Ee\"; __ff_ff=f55_5f5f5fFff5fFFfF5f.FFFf5fFfF5F5Ff5_ff.Ff-5555555555-5.5.5.5-.FF5F_FFffffFFfFf.f55ffFFFf5ff5FFffFFFfFf5f5FFf_.FFf5FfFffFf5ffffffF5f5fFFF5FFfFFF55fffFfFFf5FfF55fFFfFFffF",
+  "play.google.com": "AAA=000=AaaaaaAA-0AaAAa0AA0aAaaAAaaAaaAAAAAAaaaaAAaAaA0aA-AAaaAaaaAAAaAa0a-_AaaaA0aaaaaaaA0a0aaAAA0aaaAaAAaaAAaa00A0aAa0a0AAaAAaAaaaA0aAaaaAaAAAAAAAAa0AaaA0aAaAaaaaaaAa0aAa0AAaAAAaAAAAaA0aAAa0aAAaa00Aa0AaAA0",
+  "policies.google.com": "AAA=000=aaA0-aAaaA0Aa0AaAaaaaaAa0aAaaAaaaAaa0aAa0AaaAAaaa0aAa00aAAa00aaaaA0aAAaaaa_0AaAaa0AAAAaaAAAAa0Aaaa-AaAaaAAaa00AA0AaaaA0aa00aAaA00aA0aaAAAAAa0AaAaaaaaaA0aAaAA_aAAAA0AaaAaaAAAaAAaaAAa_AaAAA0aAAAa0aaaaAaaAAA00AaaAAA",
+  "support.google.com": "AAA=000=AaAaAA0AA0AA0000aaAAaa0a0aA0aA0AaaAaAAAaaaAAAA-aAaaAA_00aaA0_-Aa0AA0A0AAAAAAaaaaA0AAaAAaAA0aaa00aAaAaAAAAaaaAAAa0aAaaaaA0_AaaaaAaaaaAa_AA0aaa0aA0a00a00a0aaAAa0AAaaaAAaaAA_0-aaa00aAAaAaaa0AA-AAaA0aaa; BBB=111=BbBbBB1BB1BB1111bbBBbb1b1bB1bB1BbbBbBBBbbbBBBB-bBbbBB_11bbB1_-Bb1BB1B1BBBBBBbbbbB1BBbBBbBB1bbb11bBbBbBBBBbbbBBBb1bBbbbbB1_BbbbbBbbbbBb_BB1bbb1bB1b11b11b1bbBBb1BBbbbBBbbBB_1-bbb11bBBbBbbb1BB-BBbB1bbb",
+  "wa.me": "aa_aaaa_aaaa=aa",
+  "whatsapp.com": "aa_aaaa=aaAaaA0aAaAAa0aAaaAA0A; bb_bbbb_bbbb=bb; cc_cc=2c22c2cc-cc2c-2c22-cc22-c22cc22c2c22",
+  "www.google.com": "AAA=AaAaa0aaAAaA0A0_aA0Aaaa0Aaa0aaaaA0aa0Aaa0aAa0aaaaaAAaAa0AA; BBB=111=BbBbb1bb-bBbBB1b1b1_1BB1bBBBbbBBBbbbbb_b1BBbbBbbBb11-Bbbb1bbBB1bBbBBBb-111bb11BbbbBbBBBBbB11B1Bbb1B1bBBBBbbbbbB1Bbbb_b1bBbBBBbbbBBbb1bbbbbBBB1BB_bBBbBBbb1bbB1Bbb1bBBbBBb1BbBbBBBBb_BbBbbbbbB11bbbBbb1BBbBBb1B1BbBbB-B-B",
+  "youtu.be": "AAA=0; BBB=1BBbB11Bbbb; __Cccccc-CCC=; DDDDDDD_DDDD3_DDDD=DDDdDDdDdd3; EEEEEEE_EEEEEEE_EEEEEEEE=EeEEEeEEEeEeEe%22%22; __Ffffff-FFFFFFF_FFFFF=FFfffFfff5F5FFFFfF_ffffFFffFfF_ffffFFf%22%22",
+  "youtube.com": "AAA=0; BBB=bBBbbbb1BbB; __Cccccc-CCC=; DDDDDDD_DDDD3_DDDD=dDdDddddD3D; EEEEEEE_EEEEEEE_EEEEEEEE=EeEEEeEEEeEeEE%22%22; __Ffffff-FFFFFFF_FFFFF=FFf5fFF5f_FffFFFfffF5555ffFFfffF5555ffF%22"
+}
