@@ -35,6 +35,12 @@ describe("cookie.stringifySetCookie", function () {
     ).toEqual("foo=bar+baz");
   });
 
+  it("should support three argument mode with value in options", function () {
+    expect(
+      cookie.stringifySetCookie("foo", "test", { value: "ignored" } as any),
+    ).toEqual("foo=test");
+  });
+
   it.each([
     ["foo"],
     ["foo,bar"],
