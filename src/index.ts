@@ -293,7 +293,7 @@ export function stringifySetCookie(
   const cookie =
     typeof _name === "object"
       ? _name
-      : { name: _name, value: String(_val), ..._opts };
+      : { ..._opts, name: _name, value: String(_val) };
   const options = typeof _val === "object" ? _val : _opts;
   const enc = options?.encode || encodeURIComponent;
 
