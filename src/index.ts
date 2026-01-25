@@ -521,7 +521,7 @@ function valueSlice(str: string, min: number, max: number) {
  * URL-decode string value. Optimized to skip native call when no %.
  */
 function decode(str: string): string {
-  if (str.indexOf("%") === -1) return str;
+  if (!str.includes("%")) return str;
 
   try {
     return decodeURIComponent(str);
