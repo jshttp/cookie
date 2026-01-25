@@ -500,6 +500,7 @@ function eqIndex(str: string, min: number, max: number) {
  * Slice out a value between startPod to max.
  */
 function valueSlice(str: string, min: number, max: number) {
+  if (min >= max) return "";
   let start = min;
   let end = max;
 
