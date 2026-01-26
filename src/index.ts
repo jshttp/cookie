@@ -500,17 +500,18 @@ function eqIndex(str: string, min: number, max: number) {
  * Slice out a value between startPod to max.
  */
 function valueSlice(str: string, min: number, max: number) {
+  if (min === max) return "";
   let start = min;
   let end = max;
 
   do {
     const code = str.charCodeAt(start);
-    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) break;
+    if (code !== 32 /*   */ && code !== 9 /* \t */) break;
   } while (++start < end);
 
   while (end > start) {
     const code = str.charCodeAt(end - 1);
-    if (code !== 0x20 /*   */ && code !== 0x09 /* \t */) break;
+    if (code !== 32 /*   */ && code !== 9 /* \t */) break;
     end--;
   }
 

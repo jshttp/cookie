@@ -28,12 +28,15 @@
     "format": "ts-scripts format",
     "prepare": "ts-scripts install",
     "prepublishOnly": "npm run build",
+    "size": "size-limit",
     "specs": "ts-scripts specs",
-    "test": "ts-scripts test"
+    "test": "ts-scripts test && npm run size"
   },
   "devDependencies": {
     "@borderless/ts-scripts": "^0.15.0",
+    "@size-limit/preset-small-lib": "^12.0.0",
     "@vitest/coverage-v8": "^3.2.4",
+    "size-limit": "^12.0.0",
     "top-sites": "1.1.194",
     "typescript": "^5.6.2",
     "vitest": "^3.2.4"
@@ -41,6 +44,12 @@
   "engines": {
     "node": ">=18"
   },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "1.5 KB"
+    }
+  ],
   "ts-scripts": {
     "project": "tsconfig.build.json"
   }

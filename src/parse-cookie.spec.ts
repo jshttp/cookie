@@ -29,6 +29,7 @@ describe("cookie.parseCookie", function () {
 
   it("should return empty object", function () {
     expect(cookie.parseCookie("")).toEqual({});
+    expect(cookie.parseCookie(" \t ")).toEqual({});
   });
 
   it("should parse cookie with empty value", function () {
