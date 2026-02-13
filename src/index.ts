@@ -158,9 +158,11 @@ export function stringifyCookie(
   options?: StringifyOptions,
 ): string {
   const enc = options?.encode || encodeURIComponent;
-  const cookieStrings: string[] = [];
+  const keys = Object.keys(cookie);
+  let str = "";
 
-  for (const name of Object.keys(cookie)) {
+  for (let i = 0; i < keys.length; i++) {
+    const name = keys[i];
     const val = cookie[name];
     if (val === undefined) continue;
 
@@ -174,10 +176,11 @@ export function stringifyCookie(
       throw new TypeError(`cookie val is invalid: ${val}`);
     }
 
-    cookieStrings.push(`${name}=${value}`);
+    if (i > 0) str += "; ";
+    str += name + "=" + value;
   }
 
-  return cookieStrings.join("; ");
+  return str;
 }
 
 /**
