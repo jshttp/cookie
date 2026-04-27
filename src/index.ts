@@ -176,7 +176,7 @@ export function stringifyCookie(
       throw new TypeError(`cookie val is invalid: ${val}`);
     }
 
-    if (i > 0) str += "; ";
+    if (str) str += "; ";
     str += name + "=" + value;
   }
 

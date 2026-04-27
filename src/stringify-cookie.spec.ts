@@ -12,6 +12,7 @@ describe("cookie.stringifyCookie", () => {
 
   it("should ignore undefined values", () => {
     expect(stringifyCookie({ a: "1", b: undefined })).toEqual("a=1");
+    expect(stringifyCookie({ a: undefined, b: "2" })).toEqual("b=2");
   });
 
   it("should error on invalid keys", () => {
