@@ -73,8 +73,6 @@ const maxAgeRegExp = /^-?\d+$/;
  */
 const cookieOctetRegExp = /^[!#$&'()*+\-.\/0-9:<=>?@A-Z[\]\^_`a-z{|}~]*$/;
 
-const __toString = Object.prototype.toString;
-
 const NullObject = /* @__PURE__ */ (() => {
   const C = function () {};
   C.prototype = Object.create(null);
@@ -281,42 +279,26 @@ export type SerializeOptions = StringifyOptions &
  * Serialize a name value pair into a cookie string suitable for
  * http headers. An optional options object specifies cookie parameters.
  *
- * serialize('foo', 'bar', { httpOnly: true })
- *   => "foo=bar; httpOnly"
+ * stringifySetCookie({ name: 'foo', value: 'bar', httpOnly: true })
+ *   => "foo=bar; HttpOnly"
  */
 export function stringifySetCookie(
   cookie: SetCookie,
   options?: StringifyOptions,
-): string;
-export function stringifySetCookie(
-  name: string,
-  val: string,
-  options?: SerializeOptions,
-): string;
-export function stringifySetCookie(
-  _name: string | SetCookie,
-  _val?: string | StringifyOptions,
-  _opts?: SerializeOptions,
 ): string {
-  const cookie = typeof _name === "object" ? _name : _opts;
-  const name = typeof _name === "object" ? _name.name : _name;
-  const rawValue = typeof _name === "object" ? _name.value : String(_val);
-  const options = typeof _val === "object" ? _val : _opts;
   const enc = options?.encode || defaultEncode;
 
-  if (!cookieNameRegExp.test(name)) {
-    throw new TypeError(`argument name is invalid: ${name}`);
+  if (!cookieNameRegExp.test(cookie.name)) {
+    throw new TypeError(`argument name is invalid: ${cookie.name}`);
   }
 
-  const value = rawValue ? enc(rawValue) : "";
+  const value = cookie.value ? enc(cookie.value) : "";
 
   if (!cookieValueRegExp.test(value)) {
-    throw new TypeError(`argument val is invalid: ${rawValue}`);
+    throw new TypeError(`argument val is invalid: ${cookie.value}`);
   }
 
-  let str = name + "=" + value;
-
-  if (!cookie) return str;
+  let str = cookie.name + "=" + value;
 
   if (cookie.maxAge !== undefined) {
     if (!Number.isInteger(cookie.maxAge)) {
@@ -343,7 +325,7 @@ export function stringifySetCookie(
   }
 
   if (cookie.expires) {
-    if (!isDate(cookie.expires) || !Number.isFinite(cookie.expires.valueOf())) {
+    if (!Number.isFinite(cookie.expires.valueOf())) {
       throw new TypeError(`option expires is invalid: ${cookie.expires}`);
     }
 
@@ -409,7 +391,7 @@ export function stringifySetCookie(
 /**
  * Deserialize a `Set-Cookie` header into an object.
  *
- * deserialize('foo=bar; httpOnly')
+ * parseSetCookie('foo=bar; HttpOnly')
  *   => { name: 'foo', value: 'bar', httpOnly: true }
  */
 export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
@@ -546,15 +528,3 @@ function decode(str: string): string {
 function defaultEncode(str: string): string {
   return cookieOctetRegExp.test(str) ? str : encodeURIComponent(str);
 }
-
-/**
- * Determine if value is a Date.
- */
-function isDate(val: any): val is Date {
-  return __toString.call(val) === "[object Date]";
-}
-
-/**
- * Backward compatibility exports.
- */
-export { stringifySetCookie as serialize, parseCookie as parse };

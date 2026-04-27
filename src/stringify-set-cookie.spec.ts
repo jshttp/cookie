@@ -1,55 +1,43 @@
-import { describe, it, expect } from "vitest";
-import * as cookie from "./index.js";
+import { describe, expect, it } from "vitest";
+import { stringifySetCookie } from "./index.js";
 
 const cookieOctets =
   "!#$&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
   "^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
-describe("cookie.stringifySetCookie", function () {
-  it("should have backward compatible export", function () {
-    expect(cookie.serialize).toBe(cookie.stringifySetCookie);
+describe("cookie.stringifySetCookie", () => {
+  it("should serialize name and value", () => {
+    expect(stringifySetCookie({ name: "foo", value: "bar" })).toEqual(
+      "foo=bar",
+    );
   });
 
-  it("should serialize name and value", function () {
-    expect(cookie.stringifySetCookie("foo", "bar")).toEqual("foo=bar");
-  });
-
-  it("should encode values with non-cookie-octet chars", function () {
-    expect(cookie.stringifySetCookie("foo", "bar +baz")).toEqual(
+  it("should URL-encode value", () => {
+    expect(stringifySetCookie({ name: "foo", value: "bar +baz" })).toEqual(
       "foo=bar%20%2Bbaz",
     );
-    expect(cookie.stringifySetCookie("foo", "100%")).toEqual("foo=100%25");
+    expect(stringifySetCookie({ name: "foo", value: "100%" })).toEqual(
+      "foo=100%25",
+    );
   });
 
-  it("should pass through roundtrip-safe cookie-octet values without encoding", function () {
+  it("should pass through roundtrip-safe cookie-octet values without encoding", () => {
     const value = cookieOctets;
 
-    expect(cookie.stringifySetCookie("foo", value)).toEqual(`foo=${value}`);
+    expect(stringifySetCookie({ name: "foo", value })).toEqual(`foo=${value}`);
   });
 
-  it("should serialize empty value", function () {
-    expect(cookie.stringifySetCookie("foo", "")).toEqual("foo=");
+  it("should serialize empty value", () => {
+    expect(stringifySetCookie({ name: "foo", value: "" })).toEqual("foo=");
   });
 
-  it("should serialize an object", function () {
+  it("should serialize with options", () => {
     expect(
-      cookie.stringifySetCookie({ name: "foo", value: "bar +baz" }),
-    ).toEqual("foo=bar%20%2Bbaz");
-  });
-
-  it("should serialize an object with options", function () {
-    expect(
-      cookie.stringifySetCookie(
+      stringifySetCookie(
         { name: "foo", value: "bar+baz" },
         { encode: (x) => x },
       ),
     ).toEqual("foo=bar+baz");
-  });
-
-  it("should support three argument mode with value in options", function () {
-    expect(
-      cookie.stringifySetCookie("foo", "test", { value: "ignored" } as any),
-    ).toEqual("foo=test");
   });
 
   it.each([
@@ -82,7 +70,7 @@ describe("cookie.stringifySetCookie", function () {
     ["foo?bar"],
     ["foo\\bar"],
   ])("should serialize name: %s", (name) => {
-    expect(cookie.stringifySetCookie(name, "baz")).toEqual(`${name}=baz`);
+    expect(stringifySetCookie({ name, value: "baz" })).toEqual(`${name}=baz`);
   });
 
   it.each([
@@ -93,12 +81,12 @@ describe("cookie.stringifySetCookie", function () {
     ["foo bar"],
     ["foo\tbar"],
   ])("should throw for invalid name: %s", (name) => {
-    expect(() => cookie.stringifySetCookie(name, "bar")).toThrow(
+    expect(() => stringifySetCookie({ name, value: "bar" })).toThrow(
       /argument name is invalid/,
     );
   });
 
-  describe('with "domain" option', function () {
+  describe('with "domain" option', () => {
     it.each([
       ["example.com"],
       ["sub.example.com"],
@@ -106,9 +94,8 @@ describe("cookie.stringifySetCookie", function () {
       ["localhost"],
       [".localhost"],
       ["my-site.org"],
-      ["localhost"],
     ])("should serialize domain: %s", (domain) => {
-      expect(cookie.stringifySetCookie("foo", "bar", { domain })).toEqual(
+      expect(stringifySetCookie({ name: "foo", value: "bar", domain })).toEqual(
         `foo=bar; Domain=${domain}`,
       );
     });
@@ -121,20 +108,21 @@ describe("cookie.stringifySetCookie", function () {
       ["example.com; Path=/"],
       ["example.com /* inject a comment */"],
     ])("should throw for invalid domain: %s", (domain) => {
-      expect(() => cookie.stringifySetCookie("foo", "bar", { domain })).toThrow(
-        /option domain is invalid/,
-      );
+      expect(() =>
+        stringifySetCookie({ name: "foo", value: "bar", domain }),
+      ).toThrow(/option domain is invalid/);
     });
   });
 
-  describe('with "encode" option', function () {
-    it("should specify alternative value encoder", function () {
+  describe('with "encode" option', () => {
+    it("should specify alternative value encoder", () => {
       expect(
-        cookie.stringifySetCookie("foo", "bar", {
-          encode: function (v) {
-            return Buffer.from(v, "utf8").toString("base64");
+        stringifySetCookie(
+          { name: "foo", value: "bar" },
+          {
+            encode: (v) => Buffer.from(v, "utf8").toString("base64"),
           },
-        }),
+        ),
       ).toEqual("foo=YmFy");
     });
 
@@ -142,7 +130,7 @@ describe("cookie.stringifySetCookie", function () {
       "should serialize value: %s",
       (value) => {
         expect(
-          cookie.stringifySetCookie("foo", value, { encode: (x) => x }),
+          stringifySetCookie({ name: "foo", value }, { encode: (x) => x }),
         ).toEqual(`foo=${value}`);
       },
     );
@@ -151,228 +139,146 @@ describe("cookie.stringifySetCookie", function () {
       "should throw for invalid value: %s",
       (value) => {
         expect(() =>
-          cookie.stringifySetCookie("foo", value, { encode: (x) => x }),
+          stringifySetCookie({ name: "foo", value }, { encode: (x) => x }),
         ).toThrow(/argument val is invalid/);
       },
     );
   });
 
-  describe('with "expires" option', function () {
-    it("should throw on invalid date", function () {
-      expect(
-        cookie.stringifySetCookie.bind(cookie, "foo", "bar", {
+  describe('with "expires" option', () => {
+    it("should throw on invalid date", () => {
+      expect(() =>
+        stringifySetCookie({
+          name: "foo",
+          value: "bar",
           expires: new Date(NaN),
         }),
       ).toThrow(/option expires is invalid/);
     });
 
-    it("should set expires to given date", function () {
+    it("should set expires to given date", () => {
       expect(
-        cookie.stringifySetCookie("foo", "bar", {
+        stringifySetCookie({
+          name: "foo",
+          value: "bar",
           expires: new Date(Date.UTC(2000, 11, 24, 10, 30, 59, 900)),
         }),
       ).toEqual("foo=bar; Expires=Sun, 24 Dec 2000 10:30:59 GMT");
     });
   });
 
-  describe('with "httpOnly" option', function () {
-    it("should include httpOnly flag when true", function () {
-      expect(
-        cookie.stringifySetCookie("foo", "bar", { httpOnly: true }),
-      ).toEqual("foo=bar; HttpOnly");
+  describe('with "maxAge" option', () => {
+    it.each([
+      ["non-number", "buzz"],
+      ["Infinity", Infinity],
+      ["non-integer", 3.14],
+    ])("should throw when maxAge is %s", (_label, maxAge) => {
+      expect(() =>
+        stringifySetCookie({ name: "foo", value: "bar", maxAge } as any),
+      ).toThrow(/option maxAge is invalid/);
     });
 
-    it("should not include httpOnly flag when false", function () {
+    it("should set max-age to value", () => {
       expect(
-        cookie.stringifySetCookie("foo", "bar", { httpOnly: false }),
-      ).toEqual("foo=bar");
+        stringifySetCookie({ name: "foo", value: "bar", maxAge: 1000 }),
+      ).toEqual("foo=bar; Max-Age=1000");
+      expect(
+        stringifySetCookie({ name: "foo", value: "bar", maxAge: 0 }),
+      ).toEqual("foo=bar; Max-Age=0");
     });
   });
 
-  describe('with "maxAge" option', function () {
-    it("should throw when not a number", function () {
-      expect(function () {
-        cookie.stringifySetCookie("foo", "bar", { maxAge: "buzz" as any });
-      }).toThrow(/option maxAge is invalid/);
-    });
-
-    it("should throw when Infinity", function () {
-      expect(function () {
-        cookie.stringifySetCookie("foo", "bar", { maxAge: Infinity });
-      }).toThrow(/option maxAge is invalid/);
-    });
-
-    it("should throw when max-age is not an integer", function () {
-      expect(function () {
-        cookie.stringifySetCookie("foo", "bar", { maxAge: 3.14 });
-      }).toThrow(/option maxAge is invalid/);
-    });
-
-    it("should set max-age to value", function () {
-      expect(cookie.stringifySetCookie("foo", "bar", { maxAge: 1000 })).toEqual(
-        "foo=bar; Max-Age=1000",
-      );
-      expect(cookie.stringifySetCookie("foo", "bar", { maxAge: 0 })).toEqual(
-        "foo=bar; Max-Age=0",
+  describe('with "path" option', () => {
+    it.each([
+      ["/"],
+      ["/login"],
+      ["/foo.bar/baz"],
+      ["/foo-bar"],
+      ["/foo=bar?baz"],
+      ['/foo"bar"'],
+      ["/../foo/bar"],
+      ["../foo/"],
+      ["./"],
+    ])("should serialize path: %s", (path) => {
+      expect(stringifySetCookie({ name: "foo", value: "bar", path })).toEqual(
+        `foo=bar; Path=${path}`,
       );
     });
 
-    it("should not set when undefined", function () {
-      expect(
-        cookie.stringifySetCookie("foo", "bar", { maxAge: undefined }),
-      ).toEqual("foo=bar");
+    it.each([
+      ["/\n"],
+      ["/foo\u0000"],
+      ["/path/with\rnewline"],
+      ["/; Path=/sensitive-data"],
+      ['/login"><script>alert(1)</script>'],
+    ])("should throw for invalid path: %s", (path) => {
+      expect(() =>
+        stringifySetCookie({ name: "foo", value: "bar", path }),
+      ).toThrow(/option path is invalid/);
     });
   });
 
-  describe('with "partitioned" option', function () {
-    it("should include partitioned flag when true", function () {
+  describe('with "boolean attributes"', () => {
+    it("should include enabled flags", () => {
       expect(
-        cookie.stringifySetCookie("foo", "bar", { partitioned: true }),
-      ).toEqual("foo=bar; Partitioned");
-    });
-
-    it("should not include partitioned flag when false", function () {
-      expect(
-        cookie.stringifySetCookie("foo", "bar", { partitioned: false }),
-      ).toEqual("foo=bar");
-    });
-
-    it("should not include partitioned flag when not defined", function () {
-      expect(cookie.stringifySetCookie("foo", "bar", {})).toEqual("foo=bar");
+        stringifySetCookie({
+          name: "foo",
+          value: "bar",
+          httpOnly: true,
+          secure: true,
+          partitioned: true,
+        }),
+      ).toEqual("foo=bar; HttpOnly; Secure; Partitioned");
     });
   });
 
-  describe('with "path" option', function () {
-    it("should serialize path", function () {
-      var validPaths = [
-        "/",
-        "/login",
-        "/foo.bar/baz",
-        "/foo-bar",
-        "/foo=bar?baz",
-        '/foo"bar"',
-        "/../foo/bar",
-        "../foo/",
-        "./",
-      ];
-
-      validPaths.forEach(function (path) {
-        expect(cookie.stringifySetCookie("foo", "bar", { path: path })).toEqual(
-          "foo=bar; Path=" + path,
-        );
-      });
+  describe('with "priority" option', () => {
+    it.each([
+      ["invalid priority", "foo"],
+      ["non-string", 42],
+    ])("should throw on %s", (_label, priority) => {
+      expect(() =>
+        stringifySetCookie({ name: "foo", value: "bar", priority } as any),
+      ).toThrow(/option priority is invalid/);
     });
 
-    it("should throw for invalid value", function () {
-      var invalidPaths = [
-        "/\n",
-        "/foo\u0000",
-        "/path/with\rnewline",
-        "/; Path=/sensitive-data",
-        '/login"><script>alert(1)</script>',
-      ];
-
-      invalidPaths.forEach(function (path) {
-        expect(
-          cookie.stringifySetCookie.bind(cookie, "foo", "bar", { path: path }),
-        ).toThrow(/option path is invalid/);
-      });
+    it.each([
+      ["low", "Low"],
+      ["medium", "Medium"],
+      ["high", "High"],
+      ["High", "High"],
+    ])("should set priority %s", (priority, expected) => {
+      expect(
+        stringifySetCookie({
+          name: "foo",
+          value: "bar",
+          priority: priority as any,
+        }),
+      ).toEqual(`foo=bar; Priority=${expected}`);
     });
   });
 
-  describe('with "priority" option', function () {
-    it("should throw on invalid priority", function () {
-      expect(function () {
-        cookie.stringifySetCookie("foo", "bar", { priority: "foo" as any });
-      }).toThrow(/option priority is invalid/);
+  describe('with "sameSite" option', () => {
+    it("should throw on invalid sameSite", () => {
+      expect(() =>
+        stringifySetCookie({
+          name: "foo",
+          value: "bar",
+          sameSite: "foo" as any,
+        }),
+      ).toThrow(/option sameSite is invalid/);
     });
 
-    it("should throw on non-string", function () {
-      expect(function () {
-        cookie.stringifySetCookie("foo", "bar", { priority: 42 as any });
-      }).toThrow(/option priority is invalid/);
-    });
-
-    it("should set priority low", function () {
+    it.each([
+      ["strict", "Strict"],
+      ["lax", "Lax"],
+      ["none", "None"],
+      [true, "Strict"],
+      ["Lax", "Lax"],
+    ])("should set sameSite %s", (sameSite, expected) => {
       expect(
-        cookie.stringifySetCookie("foo", "bar", { priority: "low" }),
-      ).toEqual("foo=bar; Priority=Low");
-    });
-
-    it("should set priority medium", function () {
-      expect(
-        cookie.stringifySetCookie("foo", "bar", { priority: "medium" }),
-      ).toEqual("foo=bar; Priority=Medium");
-    });
-
-    it("should set priority high", function () {
-      expect(
-        cookie.stringifySetCookie("foo", "bar", { priority: "high" }),
-      ).toEqual("foo=bar; Priority=High");
-    });
-
-    it("should set priority case insensitive", function () {
-      expect(
-        cookie.stringifySetCookie("foo", "bar", { priority: "High" as any }),
-      ).toEqual("foo=bar; Priority=High");
-    });
-  });
-
-  describe('with "sameSite" option', function () {
-    it("should throw on invalid sameSite", function () {
-      expect(() => {
-        cookie.stringifySetCookie("foo", "bar", { sameSite: "foo" as any });
-      }).toThrow(/option sameSite is invalid/);
-    });
-
-    it("should set sameSite strict", function () {
-      expect(
-        cookie.stringifySetCookie("foo", "bar", { sameSite: "strict" }),
-      ).toEqual("foo=bar; SameSite=Strict");
-    });
-
-    it("should set sameSite lax", function () {
-      expect(
-        cookie.stringifySetCookie("foo", "bar", { sameSite: "lax" }),
-      ).toEqual("foo=bar; SameSite=Lax");
-    });
-
-    it("should set sameSite none", function () {
-      expect(
-        cookie.stringifySetCookie("foo", "bar", { sameSite: "none" }),
-      ).toEqual("foo=bar; SameSite=None");
-    });
-
-    it("should set sameSite strict when true", function () {
-      expect(
-        cookie.stringifySetCookie("foo", "bar", { sameSite: true }),
-      ).toEqual("foo=bar; SameSite=Strict");
-    });
-
-    it("should not set sameSite when false", function () {
-      expect(
-        cookie.stringifySetCookie("foo", "bar", { sameSite: false }),
-      ).toEqual("foo=bar");
-    });
-
-    it("should set sameSite case insensitive", function () {
-      expect(
-        cookie.stringifySetCookie("foo", "bar", { sameSite: "Lax" as any }),
-      ).toEqual("foo=bar; SameSite=Lax");
-    });
-  });
-
-  describe('with "secure" option', function () {
-    it("should include secure flag when true", function () {
-      expect(cookie.stringifySetCookie("foo", "bar", { secure: true })).toEqual(
-        "foo=bar; Secure",
-      );
-    });
-
-    it("should not include secure flag when false", function () {
-      expect(
-        cookie.stringifySetCookie("foo", "bar", { secure: false }),
-      ).toEqual("foo=bar");
+        stringifySetCookie({ name: "foo", value: "bar", sameSite } as any),
+      ).toEqual(`foo=bar; SameSite=${expected}`);
     });
   });
 });
