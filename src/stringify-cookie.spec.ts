@@ -36,6 +36,33 @@ describe("cookie.stringifyCookie", () => {
     );
   });
 
+  it("should match encodeURIComponent for default encoding", () => {
+    const mismatches: string[] = [];
+
+    for (let code = 0; code <= 0xffff; code++) {
+      if (code >= 0xd800 && code <= 0xdfff) continue;
+
+      const value = String.fromCharCode(code);
+      const actual = stringifyCookie({ key: value });
+      const expected = `key=${encodeURIComponent(value)}`;
+
+      if (actual !== expected) {
+        mismatches.push(`${code}: ${actual} !== ${expected}`);
+      }
+    }
+
+    for (const value of ["😄", "𝌆", "𠜎"]) {
+      const actual = stringifyCookie({ key: value });
+      const expected = `key=${encodeURIComponent(value)}`;
+
+      if (actual !== expected) {
+        mismatches.push(`${value}: ${actual} !== ${expected}`);
+      }
+    }
+
+    expect(mismatches).toEqual([]);
+  });
+
   it("should error on invalid keys", () => {
     expect(() => stringifyCookie({ "test=": "" })).toThrow(
       /cookie name is invalid/,
