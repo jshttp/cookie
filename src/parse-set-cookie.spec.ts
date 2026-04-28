@@ -164,6 +164,13 @@ describe("cookie.parseSetCookie", () => {
       });
     });
 
+    it("should ignore max-age when not finite", () => {
+      expect(parseSetCookie("key=value; Max-Age=" + "9".repeat(400))).toEqual({
+        name: "key",
+        value: "value",
+      });
+    });
+
     it("should parse negative max-age", () => {
       expect(parseSetCookie("key=value; Max-Age=-1")).toEqual({
         name: "key",
@@ -181,6 +188,13 @@ describe("cookie.parseSetCookie", () => {
         domain: "example.com",
       });
     });
+
+    it("should ignore domain with no value", () => {
+      expect(parseSetCookie("key=value; Domain")).toEqual({
+        name: "key",
+        value: "value",
+      });
+    });
   });
 
   describe('with "path"', () => {
@@ -189,6 +203,13 @@ describe("cookie.parseSetCookie", () => {
         name: "key",
         value: "value",
         path: "/some/path",
+      });
+    });
+
+    it("should ignore path with no value", () => {
+      expect(parseSetCookie("key=value; Path")).toEqual({
+        name: "key",
+        value: "value",
       });
     });
   });
