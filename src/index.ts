@@ -111,7 +111,8 @@ export function parseCookie(str: string, options?: ParseOptions): Cookies {
   // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
   if (len < 2) return obj;
 
-  const dec = options?.decode || decode;
+  const customDecode = options?.decode;
+  const dec = customDecode || decode;
   let index = 0;
 
   do {
@@ -129,7 +130,10 @@ export function parseCookie(str: string, options?: ParseOptions): Cookies {
     const key = valueSlice(str, index, eqIdx);
 
     // only assign once
-    if (obj[key] === undefined) {
+    if (
+      obj[key] === undefined &&
+      (customDecode === undefined || !(key in obj))
+    ) {
       obj[key] = dec(valueSlice(str, eqIdx + 1, endIdx));
     }
 

@@ -110,5 +110,15 @@ describe("cookie.parseCookie", function () {
         }),
       ).toEqual({ foo: "bar" });
     });
+
+    it("should not overwrite undefined decoded duplicates", function () {
+      expect(
+        cookie.parseCookie("foo=bar; foo=baz", {
+          decode: function () {
+            return undefined;
+          },
+        }),
+      ).toEqual({ foo: undefined });
+    });
   });
 });
