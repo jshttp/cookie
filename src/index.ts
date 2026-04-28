@@ -68,6 +68,8 @@ const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
  */
 const maxAgeRegExp = /^-?\d+$/;
 
+const noEncodeRegExp = /^[\w.!~*'()-]*$/;
+
 const __toString = Object.prototype.toString;
 
 const NullObject = /* @__PURE__ */ (() => {
@@ -157,7 +159,7 @@ export function stringifyCookie(
   cookie: Cookies,
   options?: StringifyOptions,
 ): string {
-  const enc = options?.encode || encodeURIComponent;
+  const enc = options?.encode || encode;
   const keys = Object.keys(cookie);
   let str = "";
 
@@ -532,6 +534,13 @@ function decode(str: string): string {
   } catch (e) {
     return str;
   }
+}
+
+/**
+ * URL-encode string value. Optimized to skip native call when no escaping is needed.
+ */
+function encode(str: string): string {
+  return noEncodeRegExp.test(str) ? str : encodeURIComponent(str);
 }
 
 /**
