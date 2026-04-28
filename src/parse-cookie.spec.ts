@@ -112,13 +112,17 @@ describe("cookie.parseCookie", function () {
     });
 
     it("should not overwrite undefined decoded duplicates", function () {
+      let calls = 0;
+
       expect(
         cookie.parseCookie("foo=bar; foo=baz", {
           decode: function () {
-            return undefined;
+            return calls++ === 0 ? undefined : "baz";
           },
         }),
       ).toEqual({ foo: undefined });
+
+      expect(calls).toBe(1);
     });
   });
 });
