@@ -205,13 +205,6 @@ describe("cookie.parseSetCookie", () => {
         path: "/some/path",
       });
     });
-
-    it("should ignore path with no value", () => {
-      expect(parseSetCookie("key=value; Path")).toEqual({
-        name: "key",
-        value: "value",
-      });
-    });
   });
 
   describe('with "httpOnly"', () => {

@@ -443,7 +443,7 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
         if (val !== undefined) setCookie.domain = val;
         break;
       case "path":
-        if (val !== undefined) setCookie.path = val;
+        setCookie.path = val;
         break;
       case "max-age":
         if (val && maxAgeRegExp.test(val)) {
