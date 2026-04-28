@@ -10,12 +10,24 @@ describe("cookie.stringifyCookie", () => {
     cookie.stringifyCookie({ foo: "bar" });
   });
 
+  bench("encode", () => {
+    cookie.stringifyCookie({ foo: "bar baz;%" });
+  });
+
   bench("undefined values", () => {
     cookie.stringifyCookie({
       foo: "bar",
       baz: undefined,
       qux: "quux",
       zap: undefined,
+    });
+  });
+
+  bench("mixed encode", () => {
+    cookie.stringifyCookie({
+      foo: "bar",
+      baz: "quux zap",
+      qux: "quux",
     });
   });
 
