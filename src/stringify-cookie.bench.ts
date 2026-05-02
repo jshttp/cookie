@@ -10,6 +10,10 @@ describe("cookie.stringifyCookie", () => {
     cookie.stringifyCookie({ foo: "bar" });
   });
 
+  bench("rfc cookie-octets", () => {
+    cookie.stringifyCookie({ foo: "a=b+c/d?x%20" });
+  });
+
   bench("encode", () => {
     cookie.stringifyCookie({ foo: "bar baz;%" });
   });
