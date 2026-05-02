@@ -10,10 +10,18 @@ describe("cookie.stringifySetCookie", function () {
     expect(cookie.stringifySetCookie("foo", "bar")).toEqual("foo=bar");
   });
 
-  it("should URL-encode value", function () {
+  it("should encode values with non-cookie-octet chars", function () {
     expect(cookie.stringifySetCookie("foo", "bar +baz")).toEqual(
       "foo=bar%20%2Bbaz",
     );
+  });
+
+  it("should pass through cookie-octet values", function () {
+    const value =
+      "!#$%&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
+      "^_`abcdefghijklmnopqrstuvwxyz{|}~";
+
+    expect(cookie.stringifySetCookie("foo", value)).toEqual(`foo=${value}`);
   });
 
   it("should serialize empty value", function () {

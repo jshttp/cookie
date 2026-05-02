@@ -28,15 +28,30 @@ describe("cookie.stringifyCookie", () => {
     expect(stringifyCookie({ a: "", b: "" })).toEqual("a=; b=");
   });
 
-  it("should URL-encode values by default", () => {
+  it("should encode values with non-cookie-octet chars by default", () => {
     expect(stringifyCookie({ foo: "bar baz" })).toEqual("foo=bar%20baz");
-    expect(stringifyCookie({ foo: "a=b" })).toEqual("foo=a%3Db");
     expect(stringifyCookie({ foo: "hello;world" })).toEqual(
       "foo=hello%3Bworld",
     );
+    expect(stringifyCookie({ foo: 'hello"world' })).toEqual(
+      "foo=hello%22world",
+    );
+    expect(stringifyCookie({ foo: "foo,bar" })).toEqual("foo=foo%2Cbar");
+    expect(stringifyCookie({ foo: "foo\\bar" })).toEqual("foo=foo%5Cbar");
   });
 
-  it("should match encodeURIComponent for default encoding", () => {
+  it("should pass through cookie-octet values by default", () => {
+    const value =
+      "!#$%&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
+      "^_`abcdefghijklmnopqrstuvwxyz{|}~";
+
+    expect(stringifyCookie({ foo: value })).toEqual(`foo=${value}`);
+  });
+
+  it("should match cookie-octet default encoding", () => {
+    const cookieOctets =
+      "!#$%&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
+      "^_`abcdefghijklmnopqrstuvwxyz{|}~";
     const mismatches: string[] = [];
 
     for (let code = 0; code <= 0xffff; code++) {
@@ -44,7 +59,10 @@ describe("cookie.stringifyCookie", () => {
 
       const value = String.fromCharCode(code);
       const actual = stringifyCookie({ key: value });
-      const expected = `key=${encodeURIComponent(value)}`;
+      const encoded = cookieOctets.includes(value)
+        ? value
+        : encodeURIComponent(value);
+      const expected = `key=${encoded}`;
 
       if (actual !== expected) {
         mismatches.push(`${code}: ${actual} !== ${expected}`);
