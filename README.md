@@ -35,7 +35,7 @@ const cookieObject = cookie.parseCookie("foo=bar; equation=E%3Dmc%5E2");
 
 #### Options
 
-- `decode` Specifies the function to decode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to [`decodeURIComponent`](#encode-and-decode).
+- `decode` Specifies the function to decode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to [`decodeURIComponent`](#encode-and-decode). Returning `undefined` will skip the value so a later duplicate can be used.
 
 ### cookie.stringifyCookie(cookieObj, options)
 
@@ -183,6 +183,7 @@ The default `encode` function is the global `encodeURIComponent`.
 The default `decode` function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
 is thrown it will return the cookie's original value. If you provide your own encode/decode
 scheme you must ensure errors are appropriately handled.
+Returning `undefined` from `decode` when parsing a `Cookie` header will skip the value so a later duplicate can be used.
 
 ## Example
 

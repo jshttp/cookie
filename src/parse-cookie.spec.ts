@@ -111,18 +111,19 @@ describe("cookie.parseCookie", function () {
       ).toEqual({ foo: "bar" });
     });
 
-    it("should not overwrite undefined decoded duplicates", function () {
+    it("should skip undefined decoded duplicates", function () {
       let calls = 0;
 
       expect(
         cookie.parseCookie("foo=bar; foo=baz", {
-          decode: function () {
-            return calls++ === 0 ? undefined : "baz";
+          decode: function (value) {
+            calls++;
+            return value === "bar" ? undefined : value;
           },
         }),
-      ).toEqual({ foo: undefined });
+      ).toEqual({ foo: "baz" });
 
-      expect(calls).toBe(1);
+      expect(calls).toBe(2);
     });
   });
 });

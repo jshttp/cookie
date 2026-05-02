@@ -88,6 +88,7 @@ export interface ParseOptions {
    * The default function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
    * is thrown it will return the cookie's original value. If you provide your own encode/decode
    * scheme you must ensure errors are appropriately handled.
+   * Returning `undefined` will skip the value so a later duplicate can be used.
    *
    * @default decode
    */
@@ -111,8 +112,7 @@ export function parseCookie(str: string, options?: ParseOptions): Cookies {
   // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
   if (len < 2) return obj;
 
-  const customDecode = options?.decode;
-  const dec = customDecode || decode;
+  const dec = options?.decode || decode;
   let index = 0;
 
   do {
@@ -130,10 +130,7 @@ export function parseCookie(str: string, options?: ParseOptions): Cookies {
     const key = valueSlice(str, index, eqIdx);
 
     // only assign once
-    if (
-      obj[key] === undefined &&
-      (customDecode === undefined || !(key in obj))
-    ) {
+    if (obj[key] === undefined) {
       obj[key] = dec(valueSlice(str, eqIdx + 1, endIdx));
     }
 
