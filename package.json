@@ -17,8 +17,8 @@
     "Douglas Christopher Wilson <doug@somethingdoug.com>"
   ],
   "sideEffects": false,
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": "./dist/index.js",
   "files": [
     "dist/"
   ],
@@ -42,7 +42,7 @@
     "vitest": "^3.2.4"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "size-limit": [
     {
