@@ -87,7 +87,8 @@ export interface ParseOptions {
    *
    * The default function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
    * is thrown it will return the cookie's original value. If you provide your own encode/decode
-   * scheme you must ensure errors are appropriately handled.
+   * scheme you must ensure errors are appropriately handled. Custom decode functions can return `undefined`,
+   * which will skip the cookie during `parse` and try again with a future cookie of the same name.
    *
    * @default decode
    */
