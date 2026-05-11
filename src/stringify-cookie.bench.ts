@@ -11,7 +11,7 @@ describe("cookie.stringifyCookie", () => {
   });
 
   bench("rfc cookie-octets", () => {
-    cookie.stringifyCookie({ foo: "a=b+c/d?x%20" });
+    cookie.stringifyCookie({ foo: "a=b+c/d?x~" });
   });
 
   bench("encode", () => {

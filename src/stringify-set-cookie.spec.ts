@@ -16,9 +16,9 @@ describe("cookie.stringifySetCookie", function () {
     );
   });
 
-  it("should pass through cookie-octet values", function () {
+  it("should pass through roundtrip-safe cookie-octet values without encoding", function () {
     const value =
-      "!#$%&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
+      "!#$&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
       "^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
     expect(cookie.stringifySetCookie("foo", value)).toEqual(`foo=${value}`);

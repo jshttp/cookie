@@ -38,22 +38,25 @@ describe("cookie.stringifyCookie", () => {
     );
     expect(stringifyCookie({ foo: "foo,bar" })).toEqual("foo=foo%2Cbar");
     expect(stringifyCookie({ foo: "foo\\bar" })).toEqual("foo=foo%5Cbar");
+    expect(stringifyCookie({ foo: "100%" })).toEqual("foo=100%25");
   });
 
-  it("should pass through cookie-octet values by default", () => {
+  it("should pass through roundtrip-safe cookie-octet values without encoding", () => {
     const value =
-      "!#$%&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
+      "!#$&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
       "^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
     expect(stringifyCookie({ foo: value })).toEqual(`foo=${value}`);
   });
 
-  it("should match cookie-octet default encoding", () => {
+  it("should match default encoding for all valid BMP characters", () => {
     const cookieOctets =
-      "!#$%&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
+      "!#$&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
       "^_`abcdefghijklmnopqrstuvwxyz{|}~";
     const mismatches: string[] = [];
 
+    // Check every valid BMP character. Skip surrogate code units because
+    // encodeURIComponent throws on unpaired surrogates.
     for (let code = 0; code <= 0xffff; code++) {
       if (code >= 0xd800 && code <= 0xdfff) continue;
 
@@ -156,6 +159,14 @@ describe("cookie.stringifyCookie", () => {
     it("should roundtrip URL-encoded values", () => {
       const cookies = { session: "abc 123", token: "x=y&z" };
       const str = stringifyCookie(cookies);
+      expect(parseCookie(str)).toEqual(cookies);
+    });
+
+    it("should roundtrip percent-encoded-looking values", () => {
+      const cookies = { foo: "%20" };
+      const str = stringifyCookie(cookies);
+
+      expect(str).toEqual("foo=%2520");
       expect(parseCookie(str)).toEqual(cookies);
     });
 

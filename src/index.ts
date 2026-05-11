@@ -69,9 +69,9 @@ const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
 const maxAgeRegExp = /^-?\d+$/;
 
 /**
- * RegExp to match RFC 6265 cookie-octet values that need no URL encoding.
+ * RegExp to match RFC 6265 cookie-octet values (without % to preserve round-trip) that need no URL encoding.
  */
-const cookieOctetRegExp = /^[!#$%&'()*+\-.\/0-9:<=>?@A-Z[\]\^_`a-z{|}~]*$/;
+const cookieOctetRegExp = /^[!#$&'()*+\-.\/0-9:<=>?@A-Z[\]\^_`a-z{|}~]*$/;
 
 const __toString = Object.prototype.toString;
 
@@ -149,7 +149,7 @@ export interface StringifyOptions {
    * Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
    * Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
    * a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
-   * The default function preserves valid RFC 6265 cookie-octet values and uses `encodeURIComponent` otherwise.
+   * The default function preserves roundtrip-safe cookie-octet values and uses `encodeURIComponent` otherwise.
    *
    * @default encode
    */
@@ -541,7 +541,7 @@ function decode(str: string): string {
 }
 
 /**
- * URL-encode string value. Optimized to skip native call for RFC 6265 cookie-octet values.
+ * URL-encode string value. Optimized to skip native call for roundtrip-safe cookie-octet values.
  */
 function encode(str: string): string {
   return cookieOctetRegExp.test(str) ? str : encodeURIComponent(str);

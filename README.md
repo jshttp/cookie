@@ -48,7 +48,7 @@ const cookieHeader = cookie.stringifyCookie({ a: "foo", b: "bar" });
 
 #### Options
 
-- `encode` Specifies the function to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to preserving valid cookie-octet values and using [`encodeURIComponent`](#encode-and-decode) otherwise.
+- `encode` Specifies the function to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to preserving roundtrip-safe cookie-octet values and using [`encodeURIComponent`](#encode-and-decode) otherwise.
 
 ### cookie.parseSetCookie(str, options)
 
@@ -88,7 +88,7 @@ const setCookieHeader = cookie.stringifySetCookie({
 
 #### Options
 
-- `encode` Specifies the function to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to preserving valid cookie-octet values and using [`encodeURIComponent`](#encode-and-decode) otherwise.
+- `encode` Specifies the function to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to preserving roundtrip-safe cookie-octet values and using [`encodeURIComponent`](#encode-and-decode) otherwise.
 
 ## Cookie object
 
@@ -178,7 +178,7 @@ More information about enforcement levels can be found in [the specification](ht
 Cookie accepts `encode` or `decode` options for processing a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
 Since the value of a cookie has a limited character set (and must be a simple string), these functions are used to transform values into strings suitable for a cookies value.
 
-The default `encode` function preserves valid RFC 6265 cookie-octet values and uses the global `encodeURIComponent` otherwise.
+The default `encode` function preserves roundtrip-safe cookie-octet values and uses the global `encodeURIComponent` otherwise.
 
 The default `decode` function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
 is thrown it will return the cookie's original value. If you provide your own encode/decode
