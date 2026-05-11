@@ -14,6 +14,7 @@ describe("cookie.stringifySetCookie", function () {
     expect(cookie.stringifySetCookie("foo", "bar +baz")).toEqual(
       "foo=bar%20%2Bbaz",
     );
+    expect(cookie.stringifySetCookie("foo", "100%")).toEqual("foo=100%25");
   });
 
   it("should pass through roundtrip-safe cookie-octet values without encoding", function () {
