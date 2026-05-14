@@ -48,7 +48,7 @@ const cookieHeader = cookie.stringifyCookie({ a: "foo", b: "bar" });
 
 #### Options
 
-- `encode` Specifies the function to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to preserving roundtrip-safe cookie-octet values and using [`encodeURIComponent`](#encode-and-decode) otherwise.
+- `encode` Specifies the function to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to [`encodeURIComponent`](#encode-and-decode).
 
 ### cookie.parseSetCookie(str, options)
 
@@ -88,7 +88,7 @@ const setCookieHeader = cookie.stringifySetCookie({
 
 #### Options
 
-- `encode` Specifies the function to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to preserving roundtrip-safe cookie-octet values and using [`encodeURIComponent`](#encode-and-decode) otherwise.
+- `encode` Specifies the function to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1). Defaults to [`encodeURIComponent`](#encode-and-decode).
 
 ## Cookie object
 
