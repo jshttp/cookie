@@ -23,15 +23,15 @@ for (let code = 0; code <= 0xffff; code++) {
   ]);
 }
 
-const astralEncodingCases: Array<[string, string, string]> = [];
-
-for (const value of ["😄", "𝌆", "𠜎"]) {
-  astralEncodingCases.push([
-    `U+${value.codePointAt(0)!.toString(16).toUpperCase()}`,
-    value,
-    `key=${encodeURIComponent(value)}`,
-  ]);
-}
+const astralEncodingCases: Array<[string, string, string]> = [
+  "😄",
+  "𝌆",
+  "𠜎",
+].map((value) => [
+  `U+${value.codePointAt(0)!.toString(16).toUpperCase()}`,
+  value,
+  `key=${encodeURIComponent(value)}`,
+]);
 
 describe("cookie.stringifyCookie", () => {
   it("should stringify object", () => {
