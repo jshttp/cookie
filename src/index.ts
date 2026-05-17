@@ -69,7 +69,7 @@ const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
 const maxAgeRegExp = /^-?\d+$/;
 
 /**
- * RegExp to match RFC 6265 cookie-octet values (without % to preserve round-trip) that need no URL encoding.
+ * RegExp to match RFC 6265 cookie-octet values (without % to preserve roundtrip) that need no URL encoding.
  */
 const cookieOctetRegExp = /^[!#$&'()*+\-.\/0-9:<=>?@A-Z[\]\^_`a-z{|}~]*$/;
 
@@ -150,8 +150,6 @@ export interface StringifyOptions {
    * Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
    * a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
    * The default function preserves roundtrip-safe cookie-octet values and uses `encodeURIComponent` otherwise.
-   *
-   * @default encode
    */
   encode?: (str: string) => string;
 }
@@ -163,7 +161,7 @@ export function stringifyCookie(
   cookie: Cookies,
   options?: StringifyOptions,
 ): string {
-  const enc = options?.encode || encode;
+  const enc = options?.encode || defaultEncode;
   const keys = Object.keys(cookie);
   let str = "";
 
@@ -304,7 +302,7 @@ export function stringifySetCookie(
       ? _name
       : { ..._opts, name: _name, value: String(_val) };
   const options = typeof _val === "object" ? _val : _opts;
-  const enc = options?.encode || encode;
+  const enc = options?.encode || defaultEncode;
 
   if (!cookieNameRegExp.test(cookie.name)) {
     throw new TypeError(`argument name is invalid: ${cookie.name}`);
@@ -543,7 +541,7 @@ function decode(str: string): string {
 /**
  * URL-encode string value. Optimized to skip native call for roundtrip-safe cookie-octet values.
  */
-function encode(str: string): string {
+function defaultEncode(str: string): string {
   return cookieOctetRegExp.test(str) ? str : encodeURIComponent(str);
 }
 
