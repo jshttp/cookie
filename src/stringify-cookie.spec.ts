@@ -1,32 +1,32 @@
 import { describe, expect, it } from "vitest";
 import { stringifyCookie, parseCookie } from "./index.js";
 
-const roundtripSafeCookieOctets =
+const cookieOctets =
   "!#$&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
   "^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
-const defaultBmpEncodingCases: Array<[string, string, string]> = [];
+const bmpEncodingCases: Array<[string, string, string]> = [];
 
 for (let code = 0; code <= 0xffff; code++) {
   // encodeURIComponent throws on unpaired surrogates.
   if (code >= 0xd800 && code <= 0xdfff) continue;
 
   const value = String.fromCharCode(code);
-  const encoded = roundtripSafeCookieOctets.includes(value)
+  const encoded = cookieOctets.includes(value)
     ? value
     : encodeURIComponent(value);
 
-  defaultBmpEncodingCases.push([
+  bmpEncodingCases.push([
     `U+${code.toString(16).toUpperCase().padStart(4, "0")}`,
     value,
     `key=${encoded}`,
   ]);
 }
 
-const defaultAstralEncodingCases: Array<[string, string, string]> = [];
+const astralEncodingCases: Array<[string, string, string]> = [];
 
 for (const value of ["😄", "𝌆", "𠜎"]) {
-  defaultAstralEncodingCases.push([
+  astralEncodingCases.push([
     `U+${value.codePointAt(0)!.toString(16).toUpperCase()}`,
     value,
     `key=${encodeURIComponent(value)}`,
@@ -74,19 +74,19 @@ describe("cookie.stringifyCookie", () => {
   });
 
   it("should pass through roundtrip-safe cookie-octet values without encoding", () => {
-    const value = roundtripSafeCookieOctets;
+    const value = cookieOctets;
 
     expect(stringifyCookie({ foo: value })).toEqual(`foo=${value}`);
   });
 
-  it.each(defaultBmpEncodingCases)(
+  it.each(bmpEncodingCases)(
     "should match default encoding for BMP char %s",
     (_name, value, expected) => {
       expect(stringifyCookie({ key: value })).toEqual(expected);
     },
   );
 
-  it.each(defaultAstralEncodingCases)(
+  it.each(astralEncodingCases)(
     "should match default encoding for astral char %s",
     (_name, value, expected) => {
       expect(stringifyCookie({ key: value })).toEqual(expected);
