@@ -1,6 +1,38 @@
 import { describe, expect, it } from "vitest";
 import { stringifyCookie, parseCookie } from "./index.js";
 
+const roundtripSafeCookieOctets =
+  "!#$&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
+  "^_`abcdefghijklmnopqrstuvwxyz{|}~";
+
+const defaultBmpEncodingCases: Array<[string, string, string]> = [];
+
+for (let code = 0; code <= 0xffff; code++) {
+  // encodeURIComponent throws on unpaired surrogates.
+  if (code >= 0xd800 && code <= 0xdfff) continue;
+
+  const value = String.fromCharCode(code);
+  const encoded = roundtripSafeCookieOctets.includes(value)
+    ? value
+    : encodeURIComponent(value);
+
+  defaultBmpEncodingCases.push([
+    `U+${code.toString(16).toUpperCase().padStart(4, "0")}`,
+    value,
+    `key=${encoded}`,
+  ]);
+}
+
+const defaultAstralEncodingCases: Array<[string, string, string]> = [];
+
+for (const value of ["😄", "𝌆", "𠜎"]) {
+  defaultAstralEncodingCases.push([
+    `U+${value.codePointAt(0)!.toString(16).toUpperCase()}`,
+    value,
+    `key=${encodeURIComponent(value)}`,
+  ]);
+}
+
 describe("cookie.stringifyCookie", () => {
   it("should stringify object", () => {
     expect(stringifyCookie({ key: "value" })).toEqual("key=value");
@@ -42,47 +74,24 @@ describe("cookie.stringifyCookie", () => {
   });
 
   it("should pass through roundtrip-safe cookie-octet values without encoding", () => {
-    const value =
-      "!#$&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
-      "^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    const value = roundtripSafeCookieOctets;
 
     expect(stringifyCookie({ foo: value })).toEqual(`foo=${value}`);
   });
 
-  it("should match default encoding for all valid BMP characters", () => {
-    const cookieOctets =
-      "!#$&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
-      "^_`abcdefghijklmnopqrstuvwxyz{|}~";
-    const mismatches: string[] = [];
+  it.each(defaultBmpEncodingCases)(
+    "should match default encoding for BMP char %s",
+    (_name, value, expected) => {
+      expect(stringifyCookie({ key: value })).toEqual(expected);
+    },
+  );
 
-    // Check every valid BMP character. Skip surrogate code units because
-    // encodeURIComponent throws on unpaired surrogates.
-    for (let code = 0; code <= 0xffff; code++) {
-      if (code >= 0xd800 && code <= 0xdfff) continue;
-
-      const value = String.fromCharCode(code);
-      const actual = stringifyCookie({ key: value });
-      const encoded = cookieOctets.includes(value)
-        ? value
-        : encodeURIComponent(value);
-      const expected = `key=${encoded}`;
-
-      if (actual !== expected) {
-        mismatches.push(`${code}: ${actual} !== ${expected}`);
-      }
-    }
-
-    for (const value of ["😄", "𝌆", "𠜎"]) {
-      const actual = stringifyCookie({ key: value });
-      const expected = `key=${encodeURIComponent(value)}`;
-
-      if (actual !== expected) {
-        mismatches.push(`${value}: ${actual} !== ${expected}`);
-      }
-    }
-
-    expect(mismatches).toEqual([]);
-  });
+  it.each(defaultAstralEncodingCases)(
+    "should match default encoding for astral char %s",
+    (_name, value, expected) => {
+      expect(stringifyCookie({ key: value })).toEqual(expected);
+    },
+  );
 
   it("should error on invalid keys", () => {
     expect(() => stringifyCookie({ "test=": "" })).toThrow(
