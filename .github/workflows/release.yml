@@ -3,7 +3,7 @@ name: release
 on:
   push:
     tags:
-      - "v*"
+      - "v*.*.*"
 
 permissions:
   id-token: write # Required for NPM trusted publishing.
