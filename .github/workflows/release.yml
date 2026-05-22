@@ -25,4 +25,4 @@ jobs:
           node-version: latest
       - run: npm ci
       - run: npm test
-      - run: npm stage publish
+      - run: npm stage publish # Runs prepublish script.
