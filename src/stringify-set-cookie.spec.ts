@@ -126,6 +126,15 @@ describe("cookie.stringifySetCookie", () => {
       ).toEqual("foo=YmFy");
     });
 
+    it("should apply the encoder to an empty value", function () {
+      expect(
+        stringifySetCookie(
+          { name: "foo", value: "" },
+          { encode: (v) => "[" + v + "]" },
+        ),
+      ).toEqual("foo=[]");
+    });
+
     it.each(["foo=bar", 'foo"bar', "foo,bar", "foo\\bar", "foo$bar"])(
       "should serialize value: %s",
       (value) => {

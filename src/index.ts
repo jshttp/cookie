@@ -292,7 +292,7 @@ export function stringifySetCookie(
     throw new TypeError(`argument name is invalid: ${cookie.name}`);
   }
 
-  const value = cookie.value ? enc(cookie.value) : "";
+  const value = cookie.value == null ? "" : enc(cookie.value);
 
   if (!cookieValueRegExp.test(value)) {
     throw new TypeError(`argument val is invalid: ${cookie.value}`);
