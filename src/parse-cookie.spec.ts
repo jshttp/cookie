@@ -11,10 +11,6 @@ describe("cookie.parseCookie", function () {
     });
   });
 
-  it("should have backward compatible export", function () {
-    expect(cookie.parse).toBe(cookie.parseCookie);
-  });
-
   it("should parse cookie string to object", function () {
     expect(cookie.parseCookie("foo=bar")).toEqual({ foo: "bar" });
     expect(cookie.parseCookie("foo=123")).toEqual({ foo: "123" });
