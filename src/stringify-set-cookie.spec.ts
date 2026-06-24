@@ -128,7 +128,10 @@ describe("cookie.stringifySetCookie", () => {
 
     it("should apply the encoder to an empty value", function () {
       expect(
-        cookie.stringifySetCookie("foo", "", { encode: (v) => "[" + v + "]" }),
+        stringifySetCookie(
+          { name: "foo", value: "" },
+          { encode: (v) => "[" + v + "]" },
+        ),
       ).toEqual("foo=[]");
     });
 
