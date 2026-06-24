@@ -38,7 +38,7 @@
     "@types/node": "^26.0.1",
     "@vitest/coverage-v8": "^4.1.9",
     "size-limit": "^12.0.0",
-    "top-sites": "^1.1.225",
+    "top-sites": "1.1.225",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"
   },
