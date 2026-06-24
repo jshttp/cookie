@@ -68,6 +68,11 @@ const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
  */
 const maxAgeRegExp = /^-?\d+$/;
 
+/**
+ * RegExp to match RFC 6265 cookie-octet values (without % to preserve roundtrip) that need no URL encoding.
+ */
+const cookieOctetRegExp = /^[!#$&'()*+\-.\/0-9:<=>?@A-Z[\]\^_`a-z{|}~]*$/;
+
 const __toString = Object.prototype.toString;
 
 const NullObject = /* @__PURE__ */ (() => {
@@ -145,8 +150,7 @@ export interface StringifyOptions {
    * Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
    * Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
    * a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
-   *
-   * @default encodeURIComponent
+   * The default function preserves roundtrip-safe cookie-octet values and uses `encodeURIComponent` otherwise.
    */
   encode?: (str: string) => string;
 }
@@ -158,7 +162,7 @@ export function stringifyCookie(
   cookie: Cookies,
   options?: StringifyOptions,
 ): string {
-  const enc = options?.encode || encodeURIComponent;
+  const enc = options?.encode || defaultEncode;
   const keys = Object.keys(cookie);
   let str = "";
 
@@ -298,7 +302,7 @@ export function stringifySetCookie(
   const name = typeof _name === "object" ? _name.name : _name;
   const rawValue = typeof _name === "object" ? _name.value : String(_val);
   const options = typeof _val === "object" ? _val : _opts;
-  const enc = options?.encode || encodeURIComponent;
+  const enc = options?.encode || defaultEncode;
 
   if (!cookieNameRegExp.test(name)) {
     throw new TypeError(`argument name is invalid: ${name}`);
@@ -534,6 +538,13 @@ function decode(str: string): string {
   } catch (e) {
     return str;
   }
+}
+
+/**
+ * URL-encode string value. Optimized to skip native call for roundtrip-safe cookie-octet values.
+ */
+function defaultEncode(str: string): string {
+  return cookieOctetRegExp.test(str) ? str : encodeURIComponent(str);
 }
 
 /**

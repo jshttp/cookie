@@ -1,6 +1,10 @@
 import { describe, it, expect } from "vitest";
 import * as cookie from "./index.js";
 
+const cookieOctets =
+  "!#$&'()*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]" +
+  "^_`abcdefghijklmnopqrstuvwxyz{|}~";
+
 describe("cookie.stringifySetCookie", function () {
   it("should have backward compatible export", function () {
     expect(cookie.serialize).toBe(cookie.stringifySetCookie);
@@ -10,10 +14,17 @@ describe("cookie.stringifySetCookie", function () {
     expect(cookie.stringifySetCookie("foo", "bar")).toEqual("foo=bar");
   });
 
-  it("should URL-encode value", function () {
+  it("should encode values with non-cookie-octet chars", function () {
     expect(cookie.stringifySetCookie("foo", "bar +baz")).toEqual(
       "foo=bar%20%2Bbaz",
     );
+    expect(cookie.stringifySetCookie("foo", "100%")).toEqual("foo=100%25");
+  });
+
+  it("should pass through roundtrip-safe cookie-octet values without encoding", function () {
+    const value = cookieOctets;
+
+    expect(cookie.stringifySetCookie("foo", value)).toEqual(`foo=${value}`);
   });
 
   it("should serialize empty value", function () {

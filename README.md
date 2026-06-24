@@ -178,7 +178,7 @@ More information about enforcement levels can be found in [the specification](ht
 Cookie accepts `encode` or `decode` options for processing a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
 Since the value of a cookie has a limited character set (and must be a simple string), these functions are used to transform values into strings suitable for a cookies value.
 
-The default `encode` function is the global `encodeURIComponent`.
+The default `encode` function preserves roundtrip-safe cookie-octet values and uses the global `encodeURIComponent` otherwise.
 
 The default `decode` function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
 is thrown it will return the cookie's original value. If you provide your own encode/decode
