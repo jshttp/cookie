@@ -35,11 +35,12 @@
   "devDependencies": {
     "@borderless/ts-scripts": "^0.15.0",
     "@size-limit/preset-small-lib": "^12.0.0",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@types/node": "^26.0.1",
+    "@vitest/coverage-v8": "^4.1.9",
     "size-limit": "^12.0.0",
-    "top-sites": "1.1.194",
-    "typescript": "^5.6.2",
-    "vitest": "^3.2.4"
+    "top-sites": "1.1.225",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   },
   "engines": {
     "node": ">=22"
