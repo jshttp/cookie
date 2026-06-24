@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { parseSetCookie } from "./index.js";
-import top from "../scripts/top-set-cookie.json";
+import top from "../scripts/top-set-cookie.json" with { type: "json" };
 
 describe("cookie.parseSetCookie", () => {
   describe("parse top-sites", () => {

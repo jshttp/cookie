@@ -1,17 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`cookie.parseSetCookie > parse top-sites > accounts.google.com > __Aaaa-AAAA=0:aA00a0AAaAaA0aAAAAaaaaAAa00AaA:0aAAaa0aaa_aA-Aa;  Expires=Sun, 26-Sep-2027 19:02:11 GMT;  Path=/;  Secure;  HttpOnly;  Priority=HIGH 1`] = `
-{
-  "expires": 2027-09-26T19:02:11.000Z,
-  "httpOnly": true,
-  "name": "__Aaaa-AAAA",
-  "path": "/",
-  "priority": "high",
-  "secure": true,
-  "value": "0:aA00a0AAaAaA0aAAAAaaaaAAa00AaA:0aAAaa0aaa_aA-Aa",
-}
-`;
-
 exports[`cookie.parseSetCookie > parse top-sites > apple.com > aaa=AA;  path=/;  domain=.apple.com 1`] = `
 {
   "domain": ".apple.com",
@@ -21,295 +9,434 @@ exports[`cookie.parseSetCookie > parse top-sites > apple.com > aaa=AA;  path=/; 
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > cloudflare.com > __ff_ff=Fff.FfFfFffFFFffFFffF5fFFfFfFf5ffFfFFfffF5f-5555555555-5.5.5.5-f5FfF5F5Ff5Ff5fffFFfff5Ff5f5FFFFFFFffFff5FFfFFffff5f5f5FffFF5FffFFFffffffFfffFf5ffff5.fff5ffFff5ff5ffffFffF5F55ffffF_F5FfFFFFFff;  path=/;  expires=Fri, 26-Sep-25 19:32:08 GMT;  domain=.www.cloudflare.com;  HttpOnly;  Secure 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > cloudflare.com > __ee_ee=EeeeeEEE4e4eee4eeE4e4E.eeEEEEeEEEeE44Ee4eeE-4444444444.444444-4.4.4.4-EeeEEeee4eeEeEEe44EeEee44EeEeeeeE4EeeeEeee4EEeeee_eeEeEeeeeeeE4ee4e4E4EeeEEeeEeEee4Ee444eEeEEEEEEeEE4EeEeE4EEE4eEeeee.EeeEEe4EEEEeE4EEeEEEE4E_eEeee.Ee;  HttpOnly;  SameSite=None;  Secure;  Path=/;  Domain=www.cloudflare.com;  Expires=Wed, 24 Jun 2026 23:00:28 GMT 1`] = `
 {
-  "domain": ".www.cloudflare.com",
-  "expires": 2025-09-26T19:32:08.000Z,
+  "domain": "www.cloudflare.com",
+  "expires": 2026-06-24T23:00:28.000Z,
   "httpOnly": true,
-  "name": "__ff_ff",
-  "path": "/",
-  "secure": true,
-  "value": "Fff.FfFfFffFFFffFFffF5fFFfFfFf5ffFfFFfffF5f-5555555555-5.5.5.5-f5FfF5F5Ff5Ff5fffFFfff5Ff5f5FFFFFFFffFff5FFfFFffff5f5f5FffFF5FffFFFffffffFfffFf5ffff5.fff5ffFff5ff5ffffFffF5F55ffffF_F5FfFFFFFff",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > cloudflare.com > _aaaa_aaaaaa=aaaaaa;  Max-Age=1209600;  path=/;  domain=.www.cloudflare.com;  SameSite=Strict;  Secure 1`] = `
-{
-  "domain": ".www.cloudflare.com",
-  "maxAge": 1209600,
-  "name": "_aaaa_aaaaaa",
-  "path": "/",
-  "sameSite": "strict",
-  "secure": true,
-  "value": "aaaaaa",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > cloudflare.com > _bb=BB1.1.11bb111b-b1b1-1bb1-bb1b-b11bb1b11111;  Domain=.cloudflare.com;  Expires=Mon, 26 Oct 2026 19:02:07 GMT;  Path=/ 1`] = `
-{
-  "domain": ".cloudflare.com",
-  "expires": 2026-10-26T19:02:07.000Z,
-  "name": "_bb",
-  "path": "/",
-  "value": "BB1.1.11bb111b-b1b1-1bb1-bb1b-b11bb1b11111",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > cloudflare.com > ccc_cccccc-ccccccccc_c2={"cccc_cc2":{"c":"22cc222c-c2c2-2cc2-cc2c-c22cc2c22222","c":2222222222222}};  Domain=.cloudflare.com;  Expires=Mon Oct 26 2026 19:02:07 GMT+0000 (Coordinated Universal Time);  HttpOnly;  SameSite=Lax;  Path=/;  Secure 1`] = `
-{
-  "domain": ".cloudflare.com",
-  "expires": 2026-10-26T19:02:07.000Z,
-  "httpOnly": true,
-  "name": "ccc_cccccc-ccccccccc_c2",
-  "path": "/",
-  "sameSite": "lax",
-  "secure": true,
-  "value": "{"cccc_cc2":{"c":"22cc222c-c2c2-2cc2-cc2c-c22cc2c22222","c":2222222222222}}",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > cloudflare.com > ddd_ddddd={"DdDD_dddd":{"d":"DdD3Ddd3DDDdDDddDDD3DDD3DDDdDDd3DDd3DDd3DDD3DdddDDDdDDDDDDdddddDDddDDdD3DDDdDddddddDDd==","d":3333333333333}};  Domain=.cloudflare.com;  Expires=Mon Oct 26 2026 19:02:07 GMT+0000 (Coordinated Universal Time);  HttpOnly;  SameSite=Lax;  Path=/;  Secure 1`] = `
-{
-  "domain": ".cloudflare.com",
-  "expires": 2026-10-26T19:02:07.000Z,
-  "httpOnly": true,
-  "name": "ddd_ddddd",
-  "path": "/",
-  "sameSite": "lax",
-  "secure": true,
-  "value": "{"DdDD_dddd":{"d":"DdD3Ddd3DDDdDDddDDD3DDD3DDDdDDd3DDd3DDd3DDD3DdddDDDdDDDDDDdddddDDddDDdD3DDDdDddddddDDd==","d":3333333333333}}",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > cloudflare.com > eeeeee_4EE44E44444E44444E444EE4_EeeeeEee_eeeeeeee=EeE4Eee4EEEeEEeeEEE4EEE4EEEeEEe4EEe4EEe4EEE4EeeeEEEeEEEEEEeeeeeEEeeEEeE4EEEeEeeeeeeEEe==;  Domain=.cloudflare.com;  Expires=Mon, 26 Oct 2026 19:02:07 GMT;  Path=/;  Secure;  SameSite=Lax 1`] = `
-{
-  "domain": ".cloudflare.com",
-  "expires": 2026-10-26T19:02:07.000Z,
-  "name": "eeeeee_4EE44E44444E44444E444EE4_EeeeeEee_eeeeeeee",
-  "path": "/",
-  "sameSite": "lax",
-  "secure": true,
-  "value": "EeE4Eee4EEEeEEeeEEE4EEE4EEEeEEe4EEe4EEe4EEE4EeeeEEEeEEEEEEeeeeeEEeeEEeE4EEEeEeeeeeeEEe==",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > docs.google.com > __Aaaa-AAAA=0:AaaaaaAAaa0aaa0a0aAAAaaaa0a0aa:0AaaaaAaaaaAaaa0;  Expires=Sun, 26-Sep-2027 19:02:09 GMT;  Path=/;  Secure;  HttpOnly;  Priority=HIGH 1`] = `
-{
-  "expires": 2027-09-26T19:02:09.000Z,
-  "httpOnly": true,
-  "name": "__Aaaa-AAAA",
-  "path": "/",
-  "priority": "high",
-  "secure": true,
-  "value": "0:AaaaaaAAaa0aaa0a0aAAAaaaa0a0aa:0AaaaaAaaaaAaaa0",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > drive.google.com > __Aaaa-AAAA=0:AaA-aaAa-aA0AaaaaAaAAAAAaaAAaA:aaaaAa0aaaa000A0;  Expires=Sun, 26-Sep-2027 19:02:12 GMT;  Path=/;  Secure;  HttpOnly;  Priority=HIGH 1`] = `
-{
-  "expires": 2027-09-26T19:02:12.000Z,
-  "httpOnly": true,
-  "name": "__Aaaa-AAAA",
-  "path": "/",
-  "priority": "high",
-  "secure": true,
-  "value": "0:AaA-aaAa-aA0AaaaaAaAAAAAaaAAaA:aaaaAa0aaaa000A0",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > linkedin.com > __ff_ff=f55_5f5f5fFff5fFFfF5f.FFFf5fFfF5F5Ff5_ff.Ff-5555555555-5.5.5.5-.FF5F_FFffffFFfFf.f55ffFFFf5ff5FFffFFFfFf5f5FFf_.FFf5FfFffFf5ffffffF5f5fFFF5FFfFFF55fffFfFFf5FfF55fFFfFFffF;  path=/;  expires=Fri, 26-Sep-25 19:32:05 GMT;  domain=.linkedin.com;  HttpOnly;  Secure 1`] = `
-{
-  "domain": ".linkedin.com",
-  "expires": 2025-09-26T19:32:05.000Z,
-  "httpOnly": true,
-  "name": "__ff_ff",
-  "path": "/",
-  "secure": true,
-  "value": "f55_5f5f5fFff5fFFfF5f.FFFf5fFfF5F5Ff5_ff.Ff-5555555555-5.5.5.5-.FF5F_FFffffFFfFf.f55ffFFFf5ff5FFffFFFfFf5f5FFf_.FFf5FfFffFf5ffffffF5f5fFFF5FFfFFF55fffFfFFf5FfF55fFFfFFffF",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > linkedin.com > AAAAAAAAAA=aaaa:0000000000000000000;  SameSite=None;  Path=/;  Domain=.www.linkedin.com;  Secure 1`] = `
-{
-  "domain": ".www.linkedin.com",
-  "name": "AAAAAAAAAA",
+  "name": "__ee_ee",
   "path": "/",
   "sameSite": "none",
   "secure": true,
-  "value": "aaaa:0000000000000000000",
+  "value": "EeeeeEEE4e4eee4eeE4e4E.eeEEEEeEEEeE44Ee4eeE-4444444444.444444-4.4.4.4-EeeEEeee4eeEeEEe44EeEee44EeEeeeeE4EeeeEeee4EEeeee_eeEeEeeeeeeE4ee4e4E4EeeEEeeEeEee4Ee444eEeEEEEEEeEE4EeEeE4EEE4eEeeee.EeeEEe4EEEEeE4EEeEEEE4E_eEeee.Ee",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > linkedin.com > bbbb=b=1&bbbb=bb-bb;  SameSite=None;  Path=/;  Domain=linkedin.com;  Secure 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > cloudflare.com > _aa=AA0.0.00000a00-a0a0-00a0-000a-a000aa00aaa0;  Domain=.cloudflare.com;  Expires=Sat, 24 Jul 2027 22:30:27 GMT;  Path=/ 1`] = `
+{
+  "domain": ".cloudflare.com",
+  "expires": 2027-07-24T22:30:27.000Z,
+  "name": "_aa",
+  "path": "/",
+  "value": "AA0.0.00000a00-a0a0-00a0-000a-a000aa00aaa0",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > cloudflare.com > bbb_bbbbbb-bbbbbbbbb_b1={"bbbb_bb1":{"b":"11111b11-b1b1-11b1-111b-b111bb11bbb1","b":1111111111111}};  Domain=.cloudflare.com;  Expires=Sat Jul 24 2027 22:30:27 GMT+0000 (Coordinated Universal Time);  HttpOnly;  SameSite=Lax;  Path=/;  Secure 1`] = `
+{
+  "domain": ".cloudflare.com",
+  "expires": 2027-07-24T22:30:27.000Z,
+  "httpOnly": true,
+  "name": "bbb_bbbbbb-bbbbbbbbb_b1",
+  "path": "/",
+  "sameSite": "lax",
+  "secure": true,
+  "value": "{"bbbb_bb1":{"b":"11111b11-b1b1-11b1-111b-b111bb11bbb1","b":1111111111111}}",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > cloudflare.com > ccc_ccccc={"CcCC_cccc":{"c":"CcCcCCc2CCC2CCC2CcCcCCC2CCC2CCCcCCCcCCC2CCC2CCC2CCC2CCCCCCCccc2cCccCCcC2CCCcCcCccc2cCc==","c":2222222222222}};  Domain=.cloudflare.com;  Expires=Sat Jul 24 2027 22:30:28 GMT+0000 (Coordinated Universal Time);  HttpOnly;  SameSite=Lax;  Path=/;  Secure 1`] = `
+{
+  "domain": ".cloudflare.com",
+  "expires": 2027-07-24T22:30:28.000Z,
+  "httpOnly": true,
+  "name": "ccc_ccccc",
+  "path": "/",
+  "sameSite": "lax",
+  "secure": true,
+  "value": "{"CcCC_cccc":{"c":"CcCcCCc2CCC2CCC2CcCcCCC2CCC2CCCcCCCcCCC2CCC2CCC2CCC2CCCCCCCccc2cCccCCcC2CCCcCcCccc2cCc==","c":2222222222222}}",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > cloudflare.com > dddddd_3DD33D33333D33333D333DD3_DddddDdd_dddddddd=DdDdDDd3DDD3DDD3DdDdDDD3DDD3DDDdDDDdDDD3DDD3DDD3DDD3DDDDDDDddd3dDddDDdD3DDDdDdDddd3dDd==;  Domain=.cloudflare.com;  Expires=Sat, 24 Jul 2027 22:30:28 GMT;  Path=/;  Secure;  SameSite=Lax 1`] = `
+{
+  "domain": ".cloudflare.com",
+  "expires": 2027-07-24T22:30:28.000Z,
+  "name": "dddddd_3DD33D33333D33333D333DD3_DddddDdd_dddddddd",
+  "path": "/",
+  "sameSite": "lax",
+  "secure": true,
+  "value": "DdDdDDd3DDD3DDD3DdDdDDD3DDD3DDDdDDDdDDD3DDD3DDD3DDD3DDDDDDDddd3dDddDDdD3DDDdDdDddd3dDd==",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > docs.google.com > __Aaaa-AAAA=0:0aAaAAAaAa0aAAa0aaaaAaa0aaAAaa:aAaA00AAAA00aa0A;  Expires=Fri, 23-Jun-2028 22:30:26 GMT;  Path=/;  Secure;  HttpOnly;  Priority=HIGH 1`] = `
+{
+  "expires": 2028-06-23T22:30:26.000Z,
+  "httpOnly": true,
+  "name": "__Aaaa-AAAA",
+  "path": "/",
+  "priority": "high",
+  "secure": true,
+  "value": "0:0aAaAAAaAa0aAAa0aaaaAaa0aaAAaa:aAaA00AAAA00aa0A",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > en.wikipedia.org > AAA-Aaaa-Aaaaaa=00-Aaa-0000; Path=/; HttpOnly; secure; Expires=Sun, 26 Jul 2026 12:00:00 GMT 1`] = `
+{
+  "expires": 2026-07-26T12:00:00.000Z,
+  "httpOnly": true,
+  "name": "AAA-Aaaa-Aaaaaa",
+  "path": "/",
+  "secure": true,
+  "value": "00-Aaa-0000",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > en.wikipedia.org > BBB-Bbbb-Bbbbbb-Bbbbbb=11-Bbb-1111; Path=/; Domain=.wikipedia.org; HttpOnly; secure; Expires=Sun, 26 Jul 2026 12:00:00 GMT 1`] = `
+{
+  "domain": ".wikipedia.org",
+  "expires": 2026-07-26T12:00:00.000Z,
+  "httpOnly": true,
+  "name": "BBB-Bbbb-Bbbbbb-Bbbbbb",
+  "path": "/",
+  "secure": true,
+  "value": "11-Bbb-1111",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > en.wikipedia.org > CCC-CC=22c; Path=/; HttpOnly; secure; Expires=Thu, 25 Jun 2026 00:00:00 GMT 1`] = `
+{
+  "expires": 2026-06-25T00:00:00.000Z,
+  "httpOnly": true,
+  "name": "CCC-CC",
+  "path": "/",
+  "secure": true,
+  "value": "22c",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > en.wikipedia.org > DddDD=DD:DD:Ddd_Ddddddddd:33.33:-333.33:d3;  Path=/;  secure;  Domain=.wikipedia.org 1`] = `
+{
+  "domain": ".wikipedia.org",
+  "name": "DddDD",
+  "path": "/",
+  "secure": true,
+  "value": "DD:DD:Ddd_Ddddddddd:33.33:-333.33:d3",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > en.wikipedia.org > EeeeeeeEeeeeEeeee=4.444; Path=/; Secure; SameSite=None; Max-Age=3600 1`] = `
+{
+  "maxAge": 3600,
+  "name": "EeeeeeeEeeeeEeeee",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": "4.444",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > en.wikipedia.org > FFF-Ffff=5f55f5FF-FFFff5ffFfFFFFFFFFFFFfffFFffF5ffFfF55fff5Fff5ffffFfFF5f; Domain=.wikipedia.org; Path=/; HttpOnly; secure; SameSite=None; Expires=Thu, 24 Jun 2027 00:00:00 GMT 1`] = `
+{
+  "domain": ".wikipedia.org",
+  "expires": 2027-06-24T00:00:00.000Z,
+  "httpOnly": true,
+  "name": "FFF-Ffff",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": "5f55f5FF-FFFff5ffFfFFFFFFFFFFFfffFFffF5ffFfF55fff5Fff5ffffFfFF5f",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > linkedin.com > __aa_aa=AAaAAAAAa0aaAAA0aAAaA_AaA0aAAaAA.00AaaaaAAa-0000000000.0000000-0.0.0.0-AAAaAAaAaAA00AaaAaaAAA.aaaAAAaAaaaAAAaaAaa0A0AaAAAa_aAaA0AAaAAaaaAaaAaaAAAA.A0AaaaaAAa0AAaa.AA0aA0a0aaAAaAAAaaAA0aaaAaAaaa_aAa0a;  HttpOnly;  SameSite=None;  Secure;  Path=/;  Domain=linkedin.com;  Expires=Wed, 24 Jun 2026 23:00:23 GMT 1`] = `
 {
   "domain": "linkedin.com",
-  "name": "bbbb",
+  "expires": 2026-06-24T23:00:23.000Z,
+  "httpOnly": true,
+  "name": "__aa_aa",
   "path": "/",
   "sameSite": "none",
   "secure": true,
-  "value": "b=1&bbbb=bb-bb",
+  "value": "AAaAAAAAa0aaAAA0aAAaA_AaA0aAAaAA.00AaaaaAAa-0000000000.0000000-0.0.0.0-AAAaAAaAaAA00AaaAaaAAA.aaaAAAaAaaaAAAaaAaa0A0AaAAAa_aAaA0AAaAAaaaAaaAaaAAAA.A0AaaaaAAa0AAaa.AA0aA0a0aaAAaAAAaaAA0aaaAaAaaa_aAa0a",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > linkedin.com > ccccccc="c=2&22c222cc-cc22-2ccc-22c2-2cc22ccccc22";  domain=.linkedin.com;  Path=/;  Secure;  Expires=Sat, 26-Sep-2026 19:02:05 GMT;  SameSite=None 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > microsoft.com > AAA_AAAAAAA=aaaa;  expires=Wed, 24-Jun-2026 22:30:33 GMT;  path=/;  secure;  SameSite=None 1`] = `
 {
-  "domain": ".linkedin.com",
-  "expires": 2026-09-26T19:02:05.000Z,
-  "name": "ccccccc",
+  "expires": 2026-06-24T22:30:33.000Z,
+  "name": "AAA_AAAAAAA",
   "path": "/",
   "sameSite": "none",
   "secure": true,
-  "value": ""c=2&22c222cc-cc22-2ccc-22c2-2cc22ccccc22"",
+  "value": "aaaa",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > linkedin.com > dddddddd="d=3&3333333333333333d33333-d33d-33dd-3333-d33d3333333dDDDdd333D-DD3DdD3dddDDD3ddDd_D3d";  domain=.www.linkedin.com;  Path=/;  Secure;  Expires=Sat, 26-Sep-2026 19:02:05 GMT;  HttpOnly;  SameSite=None 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > microsoft.com > bb_bbbb=B1BB1111B1111B11B11BBB1111B1B111~111111111111111111111111111111~BBBBbb11B1bbb/bbBBBBBbbB+bB1BB1BB1bBbb1Bbb1bbbBBbBBb/b1Bb11BBbbbbBB+1bBBbbBbb1BBbB11bb1BbbBBBbbBbbBBBBBb1BbBbb11b1BB1BBBbb+BbBbBBB1bB1B1BbBbBB+BBbBBBbB+1Bb+B11bbB111BbBbbbbbb1BbBbB1Bb1Bbb1BbBBBBB111Bb11B+BbBBBbbBBbbbbbbBb1Bbb1B11b11BBbb1B11B1+bbBb+b1Bbbb1bbbbBbBbbBbbBb/bbbB1b+BBB1bbB1bbB1BbBb1BBbBBBbbbbBBBbbBbbbBbbB1/b1BBb1Bb1bBBbBBBb1BbBb/bB/1Bb1bbBBb1BBBBBb1Bb+BBBbb11BBBb+bbBB1bB1Bb1bbBb1BBBbb==;  Domain=.microsoft.com;  Path=/;  Expires=Thu, 25 Jun 2026 00:30:25 GMT;  Max-Age=7200;  HttpOnly 1`] = `
 {
-  "domain": ".www.linkedin.com",
-  "expires": 2026-09-26T19:02:05.000Z,
+  "domain": ".microsoft.com",
+  "expires": 2026-06-25T00:30:25.000Z,
   "httpOnly": true,
-  "name": "dddddddd",
+  "maxAge": 7200,
+  "name": "bb_bbbb",
   "path": "/",
-  "sameSite": "none",
-  "secure": true,
-  "value": ""d=3&3333333333333333d33333-d33d-33dd-3333-d33d3333333dDDDdd333D-DD3DdD3dddDDD3ddDd_D3d"",
+  "value": "B1BB1111B1111B11B11BBB1111B1B111~111111111111111111111111111111~BBBBbb11B1bbb/bbBBBBBbbB+bB1BB1BB1bBbb1Bbb1bbbBBbBBb/b1Bb11BBbbbbBB+1bBBbbBbb1BBbB11bb1BbbBBBbbBbbBBBBBb1BbBbb11b1BB1BBBbb+BbBbBBB1bB1B1BbBbBB+BBbBBBbB+1Bb+B11bbB111BbBbbbbbb1BbBbB1Bb1Bbb1BbBBBBB111Bb11B+BbBBBbbBBbbbbbbBb1Bbb1B11b11BBbb1B11B1+bbBb+b1Bbbb1bbbbBbBbbBbbBb/bbbB1b+BBB1bbB1bbB1BbBb1BBbBBBbbbbBBBbbBbbbBbbB1/b1BBb1Bb1bBBbBBBb1BbBb/bB/1Bb1bbBBb1BBBBBb1Bb+BBBbb11BBBb+bbBB1bB1Bb1bbBb1BBBbb==",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > linkedin.com > eeee="e=EEEE44:e=E:e=E:e=E:e=E:e=4444:e=4:e=4:e=4444444444:e=4444444444:e=4:eee=EEEEEeE4Eee_Eeeee44EEeeEE4EEE4Ee";  Expires=Sat, 27 Sep 2025 19:02:05 GMT;  domain=.linkedin.com;  Path=/;  Secure 1`] = `
-{
-  "domain": ".linkedin.com",
-  "expires": 2025-09-27T19:02:05.000Z,
-  "name": "eeee",
-  "path": "/",
-  "secure": true,
-  "value": ""e=EEEE44:e=E:e=E:e=E:e=E:e=4444:e=4:e=4:e=4444444444:e=4444444444:e=4:eee=EEEEEeE4Eee_Eeeee44EEeeEE4EEE4Ee"",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > play.google.com > AAA=000=AaaaaaAA-0AaAAa0AA0aAaaAAaaAaaAAAAAAaaaaAAaAaA0aA-AAaaAaaaAAAaAa0a-_AaaaA0aaaaaaaA0a0aaAAA0aaaAaAAaaAAaa00A0aAa0a0AAaAAaAaaaA0aAaaaAaAAAAAAAAa0AaaA0aAaAaaaaaaAa0aAa0AAaAAAaAAAAaA0aAAa0aAAaa00Aa0AaAA0;  expires=Sat, 28-Mar-2026 19:02:09 GMT;  path=/;  domain=.google.com;  HttpOnly 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > play.google.com > AAA=000=aaaaAaaA0AAAaAA0aAAaaAA-AaA0Aa0_aaaaaaAAaAa0AaaA0A-aaaAaa-aaaaaAaAAaAaAaa0AA0AAaAaaAAAaAaaaAAaa-AAAA_aAaaaA0aA0AaaaAaAA0AAaAAa000AaAAa_aaaAaa_aaaaAAAA0aA_aaA0AAAaaaAaAaaAaAaaaa0AAaaAaaAaAaAaA0A0a0aAA0Aaa;  expires=Thu, 24-Dec-2026 22:30:26 GMT;  path=/;  domain=.google.com;  HttpOnly 1`] = `
 {
   "domain": ".google.com",
-  "expires": 2026-03-28T19:02:09.000Z,
+  "expires": 2026-12-24T22:30:26.000Z,
   "httpOnly": true,
   "name": "AAA",
   "path": "/",
-  "value": "000=AaaaaaAA-0AaAAa0AA0aAaaAAaaAaaAAAAAAaaaaAAaAaA0aA-AAaaAaaaAAAaAa0a-_AaaaA0aaaaaaaA0a0aaAAA0aaaAaAAaaAAaa00A0aAa0a0AAaAAaAaaaA0aAaaaAaAAAAAAAAa0AaaA0aAaAaaaaaaAa0aAa0AAaAAAaAAAAaA0aAAa0aAAaa00Aa0AaAA0",
+  "value": "000=aaaaAaaA0AAAaAA0aAAaaAA-AaA0Aa0_aaaaaaAAaAa0AaaA0A-aaaAaa-aaaaaAaAAaAaAaa0AA0AAaAaaAAAaAaaaAAaa-AAAA_aAaaaA0aA0AaaaAaAA0AAaAAa000AaAAa_aaaAaa_aaaaAAAA0aA_aaA0AAAaaaAaAaaAaAaaaa0AAaaAaaAaAaAaA0A0a0aAA0Aaa",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > policies.google.com > AAA=000=aaA0-aAaaA0Aa0AaAaaaaaAa0aAaaAaaaAaa0aAa0AaaAAaaa0aAa00aAAa00aaaaA0aAAaaaa_0AaAaa0AAAAaaAAAAa0Aaaa-AaAaaAAaa00AA0AaaaA0aa00aAaA00aA0aaAAAAAa0AaAaaaaaaA0aAaAA_aAAAA0AaaAaaAAAaAAaaAAa_AaAAA0aAAAa0aaaaAaaAAA00AaaAAA;  expires=Sat, 28-Mar-2026 19:02:10 GMT;  path=/;  domain=.google.com;  HttpOnly 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > policies.google.com > AAA=000=Aa_aAAA0aAAAaAaaAAaa0A-Aa0Aa_aAaA-aAAAaAAAaA0AaAaA0AaAAa0_aaAA0aAAAAaA_aAAAAaaaAa000aAaAAaA0AAaa0A_0aaAAAaaaAaA0a00AAA0a0aAAaaaAaAaAaaaAAaAAaAAAaaA0AAaaaA0AAaaaAaA0AAaaAa-aaAAAaAaa_aaa0AAaAAAAAAaA0aa_aaAa;  expires=Thu, 24-Dec-2026 22:30:28 GMT;  path=/;  domain=.google.com;  HttpOnly 1`] = `
 {
   "domain": ".google.com",
-  "expires": 2026-03-28T19:02:10.000Z,
+  "expires": 2026-12-24T22:30:28.000Z,
   "httpOnly": true,
   "name": "AAA",
   "path": "/",
-  "value": "000=aaA0-aAaaA0Aa0AaAaaaaaAa0aAaaAaaaAaa0aAa0AaaAAaaa0aAa00aAAa00aaaaA0aAAaaaa_0AaAaa0AAAAaaAAAAa0Aaaa-AaAaaAAaa00AA0AaaaA0aa00aAaA00aA0aaAAAAAa0AaAaaaaaaA0aAaAA_aAAAA0AaaAaaAAAaAAaaAAa_AaAAA0aAAAa0aaaaAaaAAA00AaaAAA",
+  "value": "000=Aa_aAAA0aAAAaAaaAAaa0A-Aa0Aa_aAaA-aAAAaAAAaA0AaAaA0AaAAa0_aaAA0aAAAAaA_aAAAAaaaAa000aAaAAaA0AAaa0A_0aaAAAaaaAaA0a00AAA0a0aAAaaaAaAaAaaaAAaAAaAAAaaA0AAaaaA0AAaaaAaA0AAaaAa-aaAAAaAaa_aaa0AAaAAAAAAaA0aa_aaAa",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > support.google.com > AAA=000=AaAaAA0AA0AA0000aaAAaa0a0aA0aA0AaaAaAAAaaaAAAA-aAaaAA_00aaA0_-Aa0AA0A0AAAAAAaaaaA0AAaAAaAA0aaa00aAaAaAAAAaaaAAAa0aAaaaaA0_AaaaaAaaaaAa_AA0aaa0aA0a00a00a0aaAAa0AAaaaAAaaAA_0-aaa00aAAaAaaa0AA-AAaA0aaa;  expires=Sat, 28-Mar-2026 19:02:08 GMT;  path=/;  domain=.google.com;  HttpOnly 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > support.google.com > AAA=000=a0a0a0aAA00AAAaaaaAAaa0AAAa0aAaaaaaaAaAAaaaAA-A0Aa-AAaaAAA_A_AAAa00AAaaaaAa0A0AAAAAaaAA0A0aAaa0aA0AaaAAaaAaaaAAAaAAaa0aaaAAAAaAaAaaa0AAaaaaaaaaAa0a0A00AaaaAAaAAaaAaaAaaaaAAAaAaaAaAa00a0A-aaA0A_AaaaAAAa0Aa;  expires=Thu, 24-Dec-2026 22:30:27 GMT;  path=/;  domain=.google.com;  HttpOnly 1`] = `
 {
   "domain": ".google.com",
-  "expires": 2026-03-28T19:02:08.000Z,
+  "expires": 2026-12-24T22:30:27.000Z,
   "httpOnly": true,
   "name": "AAA",
   "path": "/",
-  "value": "000=AaAaAA0AA0AA0000aaAAaa0a0aA0aA0AaaAaAAAaaaAAAA-aAaaAA_00aaA0_-Aa0AA0A0AAAAAAaaaaA0AAaAAaAA0aaa00aAaAaAAAAaaaAAAa0aAaaaaA0_AaaaaAaaaaAa_AA0aaa0aA0a00a00a0aaAAa0AAaaaAAaaAA_0-aaa00aAAaAaaa0AA-AAaA0aaa",
+  "value": "000=a0a0a0aAA00AAAaaaaAAaa0AAAa0aAaaaaaaAaAAaaaAA-A0Aa-AAaaAAA_A_AAAa00AAaaaaAa0A0AAAAAaaAA0A0aAaa0aA0AaaAAaaAaaaAAAaAAaa0aaaAAAAaAaAaaa0AAaaaaaaaaAa0a0A00AaaaAAaAAaaAaaAaaaaAAAaAaaAaAa00a0A-aaA0A_AaaaAAAa0Aa",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > support.google.com > BBB=111=BbBbBB1BB1BB1111bbBBbb1b1bB1bB1BbbBbBBBbbbBBBB-bBbbBB_11bbB1_-Bb1BB1B1BBBBBBbbbbB1BBbBBbBB1bbb11bBbBbBBBBbbbBBBb1bBbbbbB1_BbbbbBbbbbBb_BB1bbb1bB1b11b11b1bbBBb1BBbbbBBbbBB_1-bbb11bBBbBbbb1BB-BBbB1bbb;  expires=Sat, 28-Mar-2026 19:02:08 GMT;  path=/;  domain=.google.com;  HttpOnly 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > support.google.com > BBB=111=b1b1b1bBB11BBBbbbbBBbb1BBBb1bBbbbbbbBbBBbbbBB-B1Bb-BBbbBBB_B_BBBb11BBbbbbBb1B1BBBBBbbBB1B1bBbb1bB1BbbBBbbBbbbBBBbBBbb1bbbBBBBbBbBbbb1BBbbbbbbbbBb1b1B11BbbbBBbBBbbBbbBbbbbBBBbBbbBbBb11b1B-bbB1B_BbbbBBBb1Bb;  expires=Thu, 24-Dec-2026 22:30:27 GMT;  path=/;  domain=.google.com;  HttpOnly 1`] = `
 {
   "domain": ".google.com",
-  "expires": 2026-03-28T19:02:08.000Z,
+  "expires": 2026-12-24T22:30:27.000Z,
   "httpOnly": true,
   "name": "BBB",
   "path": "/",
-  "value": "111=BbBbBB1BB1BB1111bbBBbb1b1bB1bB1BbbBbBBBbbbBBBB-bBbbBB_11bbB1_-Bb1BB1B1BBBBBBbbbbB1BBbBBbBB1bbb11bBbBbBBBBbbbBBBb1bBbbbbB1_BbbbbBbbbbBb_BB1bbb1bB1b11b11b1bbBBb1BBbbbBBbbBB_1-bbb11bBBbBbbb1BB-BBbB1bbb",
+  "value": "111=b1b1b1bBB11BBBbbbbBBbb1BBBb1bBbbbbbbBbBBbbbBB-B1Bb-BBbbBBB_B_BBBb11BBbbbbBb1B1BBBBBbbBB1B1bBbb1bB1BbbBBbbBbbbBBBbBBbb1bbbBBBBbBbBbbb1BBbbbbbbbbBb1b1B11BbbbBBbBBbbBbbBbbbbBBBbBbbBbBb11b1B-bbB1B_BbbbBBBb1Bb",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > wa.me > aa_aaaa_aaaa=aa;  expires=Fri, 03-Oct-2025 19:02:11 GMT;  Max-Age=604800;  path=/;  domain=.whatsapp.com;  secure 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > t.me > aaaa_aaaa=a0a000aa000000aaaa_00000000000000000000;  expires=Thu, 25 Jun 2026 09:37:14 GMT;  path=/;  samesite=None;  secure;  HttpOnly 1`] = `
+{
+  "expires": 2026-06-25T09:37:14.000Z,
+  "httpOnly": true,
+  "name": "aaaa_aaaa",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": "a0a000aa000000aaaa_00000000000000000000",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > tiktok.com > aaaaa=0%22AAaaaAAaAaAAaaa0AAAaaaA0_AaaAaaaaa0aAaaAaa0%220000000000%220000000aaaa00000a0a000aa0a000a0000000a00a0000000000000000aa00aaa;  Domain=.tiktok.com;  Path=/;  Expires=Sat, 19 Jun 2027 22:30:32 GMT;  HttpOnly;  Secure 1`] = `
+{
+  "domain": ".tiktok.com",
+  "expires": 2027-06-19T22:30:32.000Z,
+  "httpOnly": true,
+  "name": "aaaaa",
+  "path": "/",
+  "secure": true,
+  "value": "0"AAaaaAAaAaAAaaa0AAAaaaA0_AaaAaaaaa0aAaaAaa0"0000000000"0000000aaaa00000a0a000aa0a000a0000000a00a0000000000000000aa00aaa",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > tiktok.com > bb_bbbb_bbbbb=1BbBbbb1-Bbb1bBb1BbBbBBbbBBBBBbbbbBB;  path=/;  domain=.tiktok.com;  samesite=lax;  secure;  httponly 1`] = `
+{
+  "domain": ".tiktok.com",
+  "httpOnly": true,
+  "name": "bb_bbbb_bbbbb",
+  "path": "/",
+  "sameSite": "lax",
+  "secure": true,
+  "value": "1BbBbbb1-Bbb1bBb1BbBbBBbbBBBBBbbbbBB",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > tiktok.com > cc_ccccc_ccccc=/CCcCcCcCc2ccc22CCcCCc==;  path=/;  expires=Mon, 21 Dec 2026 22:30:32 GMT;  domain=.tiktok.com;  secure;  httponly 1`] = `
+{
+  "domain": ".tiktok.com",
+  "expires": 2026-12-21T22:30:32.000Z,
+  "httpOnly": true,
+  "name": "cc_ccccc_ccccc",
+  "path": "/",
+  "secure": true,
+  "value": "/CCcCcCcCc2ccc22CCcCCc==",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > wa.me > aa_aaaa_aaaa=aa;  expires=Wed, 01-Jul-2026 22:30:31 GMT;  Max-Age=604800;  path=/;  domain=.whatsapp.com;  secure;  SameSite=Lax 1`] = `
 {
   "domain": ".whatsapp.com",
-  "expires": 2025-10-03T19:02:11.000Z,
+  "expires": 2026-07-01T22:30:31.000Z,
   "maxAge": 604800,
   "name": "aa_aaaa_aaaa",
   "path": "/",
+  "sameSite": "lax",
   "secure": true,
   "value": "aa",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > whatsapp.com > aa_aaaa=aaAaaA0aAaAAa0aAaaAA0A;  path=/;  domain=.whatsapp.com;  secure;  httponly 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > whatsapp.com > aa_aaaa=AaAAAaaaAAaaAAAaAA_000;  path=/;  domain=.whatsapp.com;  secure;  httponly;  SameSite=Lax 1`] = `
 {
   "domain": ".whatsapp.com",
   "httpOnly": true,
   "name": "aa_aaaa",
   "path": "/",
+  "sameSite": "lax",
   "secure": true,
-  "value": "aaAaaA0aAaAAa0aAaaAA0A",
+  "value": "AaAAAaaaAAaaAAAaAA_000",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > whatsapp.com > bb_bbbb_bbbb=bb;  expires=Fri, 03-Oct-2025 19:02:08 GMT;  Max-Age=604800;  path=/;  domain=.whatsapp.com;  secure 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > whatsapp.com > bb_bbbb_bbbb=bb;  expires=Wed, 01-Jul-2026 22:30:24 GMT;  Max-Age=604800;  path=/;  domain=.whatsapp.com;  secure;  SameSite=Lax 1`] = `
 {
   "domain": ".whatsapp.com",
-  "expires": 2025-10-03T19:02:08.000Z,
+  "expires": 2026-07-01T22:30:24.000Z,
   "maxAge": 604800,
   "name": "bb_bbbb_bbbb",
   "path": "/",
+  "sameSite": "lax",
   "secure": true,
   "value": "bb",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > whatsapp.com > cc_cc=2c22c2cc-cc2c-2c22-cc22-c22cc22c2c22;  expires=Thu, 25-Dec-2025 19:02:08 GMT;  Max-Age=7776000;  path=/;  domain=.www.whatsapp.com;  secure;  httponly;  SameSite=Lax 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > whatsapp.com > cc_cc=22222c22-c2c2-22cc-c2cc-2ccccc2222c2;  expires=Tue, 22-Sep-2026 22:30:24 GMT;  Max-Age=7776000;  path=/;  domain=.www.whatsapp.com;  secure;  httponly;  SameSite=Lax 1`] = `
 {
   "domain": ".www.whatsapp.com",
-  "expires": 2025-12-25T19:02:08.000Z,
+  "expires": 2026-09-22T22:30:24.000Z,
   "httpOnly": true,
   "maxAge": 7776000,
   "name": "cc_cc",
   "path": "/",
   "sameSite": "lax",
   "secure": true,
-  "value": "2c22c2cc-cc2c-2c22-cc22-c22cc22c2c22",
+  "value": "22222c22-c2c2-22cc-c2cc-2ccccc2222c2",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > www.google.com > AAA=AaAaa0aaAAaA0A0_aA0Aaaa0Aaa0aaaaA0aa0Aaa0aAa0aaaaaAAaAa0AA;  expires=Wed, 25-Mar-2026 19:02:04 GMT;  path=/;  domain=.google.com;  Secure;  HttpOnly;  SameSite=lax 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > www.google.com > __Aaaaaa-AAAA=AAaAaa0a0AAAAaaAAA0aaaAAAA0aaA0Aaa0AAAaaAaa000-aaAaAaaaAAaaAAaaaAaaaaAAaaaAAaaAaAa0AaaaaaAAa000AaAaA;  expires=Wed, 24-Jun-2026 22:35:22 GMT;  path=/;  domain=.google.com;  Secure;  SameSite=strict 1`] = `
 {
   "domain": ".google.com",
-  "expires": 2026-03-25T19:02:04.000Z,
-  "httpOnly": true,
-  "name": "AAA",
+  "expires": 2026-06-24T22:35:22.000Z,
+  "name": "__Aaaaaa-AAAA",
   "path": "/",
-  "sameSite": "lax",
+  "sameSite": "strict",
   "secure": true,
-  "value": "AaAaa0aaAAaA0A0_aA0Aaaa0Aaa0aaaaA0aa0Aaa0aAa0aaaaaAAaAa0AA",
+  "value": "AAaAaa0a0AAAAaaAAA0aaaAAAA0aaA0Aaa0AAAaaAaa000-aaAaAaaaAAaaAAaaaAaaaaAAaaaAAaaAaAa0AaaaaaAAa000AaAaA",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > www.google.com > BBB=111=BbBbb1bb-bBbBB1b1b1_1BB1bBBBbbBBBbbbbb_b1BBbbBbbBb11-Bbbb1bbBB1bBbBBBb-111bb11BbbbBbBBBBbB11B1Bbb1B1bBBBBbbbbbB1Bbbb_b1bBbBBBbbbBBbb1bbbbbBBB1BB_bBBbBBbb1bbB1Bbb1bBBbBBb1BbBbBBBBb_BbBbbbbbB11bbbBbb1BBbBBb1B1BbBbB-B-B;  expires=Sat, 28-Mar-2026 19:02:04 GMT;  path=/;  domain=.google.com;  HttpOnly 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > www.google.com > BBB=BbBBBbbbBBbbbbbBbBbb1bbbBBB1B1B1BBbBb1b1BbBBB1bb1b1bbbbbBB;  expires=Mon, 21-Dec-2026 22:30:22 GMT;  path=/;  domain=.google.com;  Secure;  HttpOnly;  SameSite=lax 1`] = `
 {
   "domain": ".google.com",
-  "expires": 2026-03-28T19:02:04.000Z,
+  "expires": 2026-12-21T22:30:22.000Z,
   "httpOnly": true,
   "name": "BBB",
   "path": "/",
-  "value": "111=BbBbb1bb-bBbBB1b1b1_1BB1bBBBbbBBBbbbbb_b1BBbbBbbBb11-Bbbb1bbBB1bBbBBBb-111bb11BbbbBbBBBBbB11B1Bbb1B1bBBBBbbbbbB1Bbbb_b1bBbBBBbbbBBbb1bbbbbBBB1BB_bBBbBBbb1bbB1Bbb1bBBbBBb1BbBbBBBBb_BbBbbbbbB11bbbBbb1BBbBBb1B1BbBbB-B-B",
+  "sameSite": "lax",
+  "secure": true,
+  "value": "BbBBBbbbBBbbbbbBbBbb1bbbBBB1B1B1BBbBb1b1BbBBB1bb1b1bbbbbBB",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > youtu.be > __Cccccc-CCC=;  Domain=.youtube.com;  Expires=Sat, 31-Dec-2022 19:02:10 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=lax 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > www.google.com > CCC=222=c22cCcccCC2cCCCcCCcCCCCcCccCcccccC22CcCCC2Cc2ccc2CCcC2CCCCCccCcc_C2CcC2CCC2c2cCCc22c-cc2cCCCCcccCc2ccc_cC2cCCCCCCcC2CcCCccc2CCc2CCcc2cCC2ccccCCC22CcCCCccc2CcCCCC22CccCCCccCcCC2CccC2ccccC2CCCccc2cccccCccCC2c2cc2cCCcCCccCC2c;  expires=Thu, 24-Dec-2026 22:30:22 GMT;  path=/;  domain=.google.com;  HttpOnly 1`] = `
 {
-  "domain": ".youtube.com",
-  "expires": 2022-12-31T19:02:10.000Z,
+  "domain": ".google.com",
+  "expires": 2026-12-24T22:30:22.000Z,
   "httpOnly": true,
-  "name": "__Cccccc-CCC",
+  "name": "CCC",
+  "path": "/",
+  "value": "222=c22cCcccCC2cCCCcCCcCCCCcCccCcccccC22CcCCC2Cc2ccc2CCcC2CCCCCccCcc_C2CcC2CCC2c2cCCc22c-cc2cCCCCcccCc2ccc_cC2cCCCCCCcC2CcCCccc2CCc2CCcc2cCC2ccccCCC22CcCCCccc2CcCCCC22CccCCCccCcCC2CccC2ccccC2CCCccc2cccccCccCC2c2cc2cCCcCCccCC2c",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > x.com > __ff_ff=5FFFfffFfffF5ff5FFfFfFffFffFffFFFF_fFf5ffFf-5555555555.555555-5.5.5.5-fF5_FFffFFFfFF5FffFFFFfFfFfFF.5ffffFFfF5FF5f5FfFf.ffFffFffFffFFffffFFFff55ff5f5ffFff5FFFffFfffF.F5ffF55ff5Ff5F5FfffFfFfF555fFF_5;  HttpOnly;  SameSite=None;  Secure;  Path=/;  Domain=x.com;  Expires=Wed, 24 Jun 2026 23:00:30 GMT 1`] = `
+{
+  "domain": "x.com",
+  "expires": 2026-06-24T23:00:30.000Z,
+  "httpOnly": true,
+  "name": "__ff_ff",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": "5FFFfffFfffF5ff5FFfFfFffFffFffFFFF_fFf5ffFf-5555555555.555555-5.5.5.5-fF5_FFffFFFfFF5FffFFFFfFfFfFF.5ffffFFfF5FF5f5FfFf.ffFffFffFffFFffffFFFff55ff5f5ffFff5FFFffFfffF.F5ffF55ff5Ff5F5FfffFfFfF555fFF_5",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > x.com > aaaaa_aa_aaaaaaaaa=a0%22000000000000000000;  Max-Age=63072000;  Expires=Fri, 23 Jun 2028 22:30:30 GMT;  Path=/;  Domain=.x.com;  Secure;  SameSite=None 1`] = `
+{
+  "domain": ".x.com",
+  "expires": 2028-06-23T22:30:30.000Z,
+  "maxAge": 63072000,
+  "name": "aaaaa_aa_aaaaaaaaa",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": "a0"000000000000000000",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > x.com > bbbbb_bb_bbb=b1%22111111111111111111;  Max-Age=63072000;  Expires=Fri, 23 Jun 2028 22:30:30 GMT;  Path=/;  Domain=.x.com;  Secure;  SameSite=None 1`] = `
+{
+  "domain": ".x.com",
+  "expires": 2028-06-23T22:30:30.000Z,
+  "maxAge": 63072000,
+  "name": "bbbbb_bb_bbb",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": "b1"111111111111111111",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > x.com > ccccccccccccccc_cc="c2_/cccc22cC+C2CC2cC2cc2c==";  Max-Age=63072000;  Expires=Fri, 23 Jun 2028 22:30:30 GMT;  Path=/;  Domain=.x.com;  Secure;  SameSite=None 1`] = `
+{
+  "domain": ".x.com",
+  "expires": 2028-06-23T22:30:30.000Z,
+  "maxAge": 63072000,
+  "name": "ccccccccccccccc_cc",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": ""c2_/cccc22cC+C2CC2cC2cc2c=="",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > x.com > ddddd_dd=d3%22333333333333333333;  Max-Age=63072000;  Expires=Fri, 23 Jun 2028 22:30:30 GMT;  Path=/;  Domain=.x.com;  Secure;  SameSite=None 1`] = `
+{
+  "domain": ".x.com",
+  "expires": 2028-06-23T22:30:30.000Z,
+  "maxAge": 63072000,
+  "name": "ddddd_dd",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": "d3"333333333333333333",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > x.com > ee4=;  Max-Age=-1782340229;  Expires=Thu, 01 Jan 1970 00:00:01 GMT;  Path=/;  Domain=.x.com;  Secure;  SameSite=Lax 1`] = `
+{
+  "domain": ".x.com",
+  "expires": 1970-01-01T00:00:01.000Z,
+  "maxAge": -1782340229,
+  "name": "ee4",
   "path": "/",
   "sameSite": "lax",
   "secure": true,
@@ -317,76 +444,39 @@ exports[`cookie.parseSetCookie > parse top-sites > youtu.be > __Cccccc-CCC=;  Do
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > youtu.be > __Ffffff-FFFFFFF_FFFFF=FFfffFfff5F5FFFFfF_ffffFFffFfF_ffffFFf%22%22;  Domain=youtube.com;  Expires=Wed, 25-Mar-2026 19:02:10 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=none;  Partitioned 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > youtu.be > __Aaaaaa-AAAA=00.AA=aAAaaaaA0AAaAaaAAA0A00aAaAAa0aaaa-AaaA0AAaa0AAAaaaaaa00aaaAAaaAaAA0a0aA_Aa0AAAaAaAAaaaAaAAaaA-a0aAaAAaAAaaAAA0A_aaAaAaAAaaaAa0aA0AAaAaAaaa000aaaaa_AAAaAAa0aaA00aAAAA0A0AaAaAAAA0AaAaaaAaaAaaaaAAaAAAa0AaaAA0A0AAAaaA0aaAaaAa0Aaaa-aa0Aa00A_aaaaaAaAaaaA0AAAAa0aaAaaAAaa0AaAaaAA0AAaaA0AaaAAAa0A0AAAaAAAAa-0A-AaAaA0aAAa0aA0AaaaAaa0aAA0-a00A-AaAaA0AA;  expires=Mon, 21-Dec-2026 22:30:29 GMT;  path=/;  domain=.youtube.com;  Secure;  HttpOnly;  SameSite=none 1`] = `
+{
+  "domain": ".youtube.com",
+  "expires": 2026-12-21T22:30:29.000Z,
+  "httpOnly": true,
+  "name": "__Aaaaaa-AAAA",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": "00.AA=aAAaaaaA0AAaAaaAAA0A00aAaAAa0aaaa-AaaA0AAaa0AAAaaaaaa00aaaAAaaAaAA0a0aA_Aa0AAAaAaAAaaaAaAAaaA-a0aAaAAaAAaaAAA0A_aaAaAaAAaaaAa0aA0AAaAaAaaa000aaaaa_AAAaAAa0aaA00aAAAA0A0AaAaAAAA0AaAaaaAaaAaaaaAAaAAAa0AaaAA0A0AAAaaA0aaAaaAa0Aaaa-aa0Aa00A_aaaaaAaAaaaA0AAAAa0aaAaaAAaa0AaAaaAA0AAaaA0AaaAAAa0A0AAAaAAAAa-0A-AaAaA0aAAa0aA0AaaaAaa0aAA0-a00A-AaAaA0AA",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > youtu.be > __Dddddd-DDDDDDD_DDDDD=DDDd3dDdddD3dDDDddd33ddddDDDddd33ddddDD%22;  Domain=youtube.com;  Expires=Mon, 21-Dec-2026 22:30:29 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=none;  Partitioned 1`] = `
 {
   "domain": "youtube.com",
-  "expires": 2026-03-25T19:02:10.000Z,
+  "expires": 2026-12-21T22:30:29.000Z,
   "httpOnly": true,
-  "name": "__Ffffff-FFFFFFF_FFFFF",
+  "name": "__Dddddd-DDDDDDD_DDDDD",
   "partitioned": true,
   "path": "/",
   "sameSite": "none",
   "secure": true,
-  "value": "FFfffFfff5F5FFFFfF_ffffFFffFfF_ffffFFf""",
+  "value": "DDDd3dDdddD3dDDDddd33ddddDDDddd33ddddDD"",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > youtu.be > AAA=0;  Domain=.youtube.com;  Expires=Fri, 26-Sep-2025 19:32:10 GMT;  Path=/;  Secure;  HttpOnly 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > youtu.be > __Eeeeee-EEE=;  Domain=.youtube.com;  Expires=Thu, 28-Sep-2023 22:30:29 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=lax 1`] = `
 {
   "domain": ".youtube.com",
-  "expires": 2025-09-26T19:32:10.000Z,
+  "expires": 2023-09-28T22:30:29.000Z,
   "httpOnly": true,
-  "name": "AAA",
-  "path": "/",
-  "secure": true,
-  "value": "0",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > youtu.be > BBB=1BBbB11Bbbb;  Domain=.youtube.com;  Path=/;  Secure;  HttpOnly;  SameSite=none 1`] = `
-{
-  "domain": ".youtube.com",
-  "httpOnly": true,
-  "name": "BBB",
-  "path": "/",
-  "sameSite": "none",
-  "secure": true,
-  "value": "1BBbB11Bbbb",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > youtu.be > DDDDDDD_DDDD3_DDDD=DDDdDDdDdd3;  Domain=.youtube.com;  Expires=Wed, 25-Mar-2026 19:02:10 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=none 1`] = `
-{
-  "domain": ".youtube.com",
-  "expires": 2026-03-25T19:02:10.000Z,
-  "httpOnly": true,
-  "name": "DDDDDDD_DDDD3_DDDD",
-  "path": "/",
-  "sameSite": "none",
-  "secure": true,
-  "value": "DDDdDDdDdd3",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > youtu.be > EEEEEEE_EEEEEEE_EEEEEEEE=EeEEEeEEEeEeEe%22%22;  Domain=.youtube.com;  Expires=Wed, 25-Mar-2026 19:02:10 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=none 1`] = `
-{
-  "domain": ".youtube.com",
-  "expires": 2026-03-25T19:02:10.000Z,
-  "httpOnly": true,
-  "name": "EEEEEEE_EEEEEEE_EEEEEEEE",
-  "path": "/",
-  "sameSite": "none",
-  "secure": true,
-  "value": "EeEEEeEEEeEeEe""",
-}
-`;
-
-exports[`cookie.parseSetCookie > parse top-sites > youtube.com > __Cccccc-CCC=;  Domain=.youtube.com;  Expires=Sat, 31-Dec-2022 19:02:04 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=lax 1`] = `
-{
-  "domain": ".youtube.com",
-  "expires": 2022-12-31T19:02:04.000Z,
-  "httpOnly": true,
-  "name": "__Cccccc-CCC",
+  "name": "__Eeeeee-EEE",
   "path": "/",
   "sameSite": "lax",
   "secure": true,
@@ -394,66 +484,142 @@ exports[`cookie.parseSetCookie > parse top-sites > youtube.com > __Cccccc-CCC=; 
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > youtube.com > __Ffffff-FFFFFFF_FFFFF=FFf5fFF5f_FffFFFfffF5555ffFFfffF5555ffF%22;  Domain=youtube.com;  Expires=Wed, 25-Mar-2026 19:02:04 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=none;  Partitioned 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > youtu.be > BBB=1;  Domain=.youtube.com;  Expires=Wed, 24-Jun-2026 23:00:29 GMT;  Path=/;  Secure;  HttpOnly 1`] = `
+{
+  "domain": ".youtube.com",
+  "expires": 2026-06-24T23:00:29.000Z,
+  "httpOnly": true,
+  "name": "BBB",
+  "path": "/",
+  "secure": true,
+  "value": "1",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > youtu.be > CCC=22CcCccCCCC;  Domain=.youtube.com;  Path=/;  Secure;  HttpOnly;  SameSite=none 1`] = `
+{
+  "domain": ".youtube.com",
+  "httpOnly": true,
+  "name": "CCC",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": "22CcCccCCCC",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > youtu.be > FFFFFFF_FFFF5_FFFF=FffffffF5FF;  Domain=.youtube.com;  Expires=Mon, 21-Dec-2026 22:30:29 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=none 1`] = `
+{
+  "domain": ".youtube.com",
+  "expires": 2026-12-21T22:30:29.000Z,
+  "httpOnly": true,
+  "name": "FFFFFFF_FFFF5_FFFF",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": "FffffffF5FF",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > youtu.be > GGGGGGG_GGGGGGG_GGGGGGGG=GgGGGgGGGgGgGg%22%22;  Domain=.youtube.com;  Expires=Mon, 21-Dec-2026 22:30:29 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=none 1`] = `
+{
+  "domain": ".youtube.com",
+  "expires": 2026-12-21T22:30:29.000Z,
+  "httpOnly": true,
+  "name": "GGGGGGG_GGGGGGG_GGGGGGGG",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": "GgGGGgGGGgGgGg""",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > youtube.com > __Aaaaaa-AAAA=00.AA=a0Aa00aAAA0aaAA0AAAAaaaaAaaaaaAa00AA0AaAaAAA0aAaaaAAaaaAAaAAaaaAA_0AaAAAaaaaaaA00aAa0aa000aaAaAaaaa0aa0aAAA0AaaAaAa0aa0AAa_aaaAa0aaaAAAAAAAaaaAaaAaa0AA_0a-aAAaAaAAaaaa0aAa0aAa-aa0aA0aaaaA0AAA0a_AAA-00AAaAaAAA0aAAAA0Aaa0AAAaAA-aAa0a0AA00A_aaaAA-aaaa00AAAaA0a000aaA0Aaaa0AaAaaA0AaA0A0aAAaAaAaAaAAaAAAAaaa-0aAAaa00aAA_0AaAAaAAaA0aaaa0AA0AAaa0aaA;  expires=Mon, 21-Dec-2026 22:30:22 GMT;  path=/;  domain=.youtube.com;  Secure;  HttpOnly;  SameSite=none 1`] = `
+{
+  "domain": ".youtube.com",
+  "expires": 2026-12-21T22:30:22.000Z,
+  "httpOnly": true,
+  "name": "__Aaaaaa-AAAA",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": "00.AA=a0Aa00aAAA0aaAA0AAAAaaaaAaaaaaAa00AA0AaAaAAA0aAaaaAAaaaAAaAAaaaAA_0AaAAAaaaaaaA00aAa0aa000aaAaAaaaa0aa0aAAA0AaaAaAa0aa0AAa_aaaAa0aaaAAAAAAAaaaAaaAaa0AA_0a-aAAaAaAAaaaa0aAa0aAa-aa0aA0aaaaA0AAA0a_AAA-00AAaAaAAA0aAAAA0Aaa0AAAaAA-aAa0a0AA00A_aaaAA-aaaa00AAAaA0a000aaA0Aaaa0AaAaaA0AaA0A0aAAaAaAaAaAAaAAAAaaa-0aAAaa00aAA_0AaAAaAAaA0aaaa0AA0AAaa0aaA",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > youtube.com > __Dddddd-DDDDDDD_DDDDD=DDddddDd3DDdDdD3dddd3dDDDdd3dddd3dDDDd%22%22;  Domain=youtube.com;  Expires=Mon, 21-Dec-2026 22:30:22 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=none;  Partitioned 1`] = `
 {
   "domain": "youtube.com",
-  "expires": 2026-03-25T19:02:04.000Z,
+  "expires": 2026-12-21T22:30:22.000Z,
   "httpOnly": true,
-  "name": "__Ffffff-FFFFFFF_FFFFF",
+  "name": "__Dddddd-DDDDDDD_DDDDD",
   "partitioned": true,
   "path": "/",
   "sameSite": "none",
   "secure": true,
-  "value": "FFf5fFF5f_FffFFFfffF5555ffFFfffF5555ffF"",
+  "value": "DDddddDd3DDdDdD3dddd3dDDDdd3dddd3dDDDd""",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > youtube.com > AAA=0;  Domain=.youtube.com;  Expires=Fri, 26-Sep-2025 19:32:04 GMT;  Path=/;  Secure;  HttpOnly 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > youtube.com > __Eeeeee-EEE=;  Domain=.youtube.com;  Expires=Thu, 28-Sep-2023 22:30:22 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=lax 1`] = `
 {
   "domain": ".youtube.com",
-  "expires": 2025-09-26T19:32:04.000Z,
+  "expires": 2023-09-28T22:30:22.000Z,
   "httpOnly": true,
-  "name": "AAA",
+  "name": "__Eeeeee-EEE",
   "path": "/",
+  "sameSite": "lax",
   "secure": true,
-  "value": "0",
+  "value": "",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > youtube.com > BBB=bBBbbbb1BbB;  Domain=.youtube.com;  Path=/;  Secure;  HttpOnly;  SameSite=none 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > youtube.com > BBB=1;  Domain=.youtube.com;  Expires=Wed, 24-Jun-2026 23:00:22 GMT;  Path=/;  Secure;  HttpOnly 1`] = `
 {
   "domain": ".youtube.com",
+  "expires": 2026-06-24T23:00:22.000Z,
   "httpOnly": true,
   "name": "BBB",
   "path": "/",
-  "sameSite": "none",
   "secure": true,
-  "value": "bBBbbbb1BbB",
+  "value": "1",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > youtube.com > DDDDDDD_DDDD3_DDDD=dDdDddddD3D;  Domain=.youtube.com;  Expires=Wed, 25-Mar-2026 19:02:04 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=none 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > youtube.com > CCC=Ccc22c-cccc;  Domain=.youtube.com;  Path=/;  Secure;  HttpOnly;  SameSite=none 1`] = `
 {
   "domain": ".youtube.com",
-  "expires": 2026-03-25T19:02:04.000Z,
   "httpOnly": true,
-  "name": "DDDDDDD_DDDD3_DDDD",
+  "name": "CCC",
   "path": "/",
   "sameSite": "none",
   "secure": true,
-  "value": "dDdDddddD3D",
+  "value": "Ccc22c-cccc",
 }
 `;
 
-exports[`cookie.parseSetCookie > parse top-sites > youtube.com > EEEEEEE_EEEEEEE_EEEEEEEE=EeEEEeEEEeEeEE%22%22;  Domain=.youtube.com;  Expires=Wed, 25-Mar-2026 19:02:04 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=none 1`] = `
+exports[`cookie.parseSetCookie > parse top-sites > youtube.com > FFFFFFF_FFFF5_FFFF=5fFf5fF5F5F;  Domain=.youtube.com;  Expires=Mon, 21-Dec-2026 22:30:22 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=none 1`] = `
 {
   "domain": ".youtube.com",
-  "expires": 2026-03-25T19:02:04.000Z,
+  "expires": 2026-12-21T22:30:22.000Z,
   "httpOnly": true,
-  "name": "EEEEEEE_EEEEEEE_EEEEEEEE",
+  "name": "FFFFFFF_FFFF5_FFFF",
   "path": "/",
   "sameSite": "none",
   "secure": true,
-  "value": "EeEEEeEEEeEeEE""",
+  "value": "5fFf5fF5F5F",
+}
+`;
+
+exports[`cookie.parseSetCookie > parse top-sites > youtube.com > GGGGGGG_GGGGGGG_GGGGGGGG=GgGGGgGGGgGgGG%22%22;  Domain=.youtube.com;  Expires=Mon, 21-Dec-2026 22:30:22 GMT;  Path=/;  Secure;  HttpOnly;  SameSite=none 1`] = `
+{
+  "domain": ".youtube.com",
+  "expires": 2026-12-21T22:30:22.000Z,
+  "httpOnly": true,
+  "name": "GGGGGGG_GGGGGGG_GGGGGGGG",
+  "path": "/",
+  "sameSite": "none",
+  "secure": true,
+  "value": "GgGGGgGGGgGgGG""",
 }
 `;

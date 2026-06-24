@@ -1,6 +1,6 @@
 import { describe, bench } from "vitest";
 import * as cookie from "./index.js";
-import top from "../scripts/top-set-cookie.json";
+import top from "../scripts/top-set-cookie.json" with { type: "json" };
 
 describe("parse top-sites", () => {
   Object.entries(top).forEach(function ([domain, values]) {

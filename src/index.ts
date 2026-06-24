@@ -68,7 +68,10 @@ const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
  */
 const maxAgeRegExp = /^-?\d+$/;
 
-const __toString = Object.prototype.toString;
+/**
+ * RegExp to match RFC 6265 cookie-octet values (without % to preserve roundtrip) that need no URL encoding.
+ */
+const cookieOctetRegExp = /^[!#$&'()*+\-.\/0-9:<=>?@A-Z[\]\^_`a-z{|}~]*$/;
 
 const NullObject = /* @__PURE__ */ (() => {
   const C = function () {};
@@ -145,8 +148,7 @@ export interface StringifyOptions {
    * Specifies a function that will be used to encode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
    * Since value of a cookie has a limited character set (and must be a simple string), this function can be used to encode
    * a value into a string suited for a cookie's value, and should mirror `decode` when parsing.
-   *
-   * @default encodeURIComponent
+   * The default function preserves roundtrip-safe cookie-octet values and uses `encodeURIComponent` otherwise.
    */
   encode?: (str: string) => string;
 }
@@ -158,7 +160,7 @@ export function stringifyCookie(
   cookie: Cookies,
   options?: StringifyOptions,
 ): string {
-  const enc = options?.encode || encodeURIComponent;
+  const enc = options?.encode || defaultEncode;
   const keys = Object.keys(cookie);
   let str = "";
 
@@ -277,42 +279,26 @@ export type SerializeOptions = StringifyOptions &
  * Serialize a name value pair into a cookie string suitable for
  * http headers. An optional options object specifies cookie parameters.
  *
- * serialize('foo', 'bar', { httpOnly: true })
- *   => "foo=bar; httpOnly"
+ * stringifySetCookie({ name: 'foo', value: 'bar', httpOnly: true })
+ *   => "foo=bar; HttpOnly"
  */
 export function stringifySetCookie(
   cookie: SetCookie,
   options?: StringifyOptions,
-): string;
-export function stringifySetCookie(
-  name: string,
-  val: string,
-  options?: SerializeOptions,
-): string;
-export function stringifySetCookie(
-  _name: string | SetCookie,
-  _val?: string | StringifyOptions,
-  _opts?: SerializeOptions,
 ): string {
-  const cookie = typeof _name === "object" ? _name : _opts;
-  const name = typeof _name === "object" ? _name.name : _name;
-  const rawValue = typeof _name === "object" ? _name.value : String(_val);
-  const options = typeof _val === "object" ? _val : _opts;
-  const enc = options?.encode || encodeURIComponent;
+  const enc = options?.encode || defaultEncode;
 
-  if (!cookieNameRegExp.test(name)) {
-    throw new TypeError(`argument name is invalid: ${name}`);
+  if (!cookieNameRegExp.test(cookie.name)) {
+    throw new TypeError(`argument name is invalid: ${cookie.name}`);
   }
 
-  const value = rawValue != null ? enc(rawValue) : "";
+  const value = cookie.value == null ? "" : enc(cookie.value);
 
   if (!cookieValueRegExp.test(value)) {
-    throw new TypeError(`argument val is invalid: ${rawValue}`);
+    throw new TypeError(`argument val is invalid: ${cookie.value}`);
   }
 
-  let str = name + "=" + value;
-
-  if (!cookie) return str;
+  let str = cookie.name + "=" + value;
 
   if (cookie.maxAge !== undefined) {
     if (!Number.isInteger(cookie.maxAge)) {
@@ -339,7 +325,7 @@ export function stringifySetCookie(
   }
 
   if (cookie.expires) {
-    if (!isDate(cookie.expires) || !Number.isFinite(cookie.expires.valueOf())) {
+    if (!Number.isFinite(cookie.expires.valueOf())) {
       throw new TypeError(`option expires is invalid: ${cookie.expires}`);
     }
 
@@ -405,7 +391,7 @@ export function stringifySetCookie(
 /**
  * Deserialize a `Set-Cookie` header into an object.
  *
- * deserialize('foo=bar; httpOnly')
+ * parseSetCookie('foo=bar; HttpOnly')
  *   => { name: 'foo', value: 'bar', httpOnly: true }
  */
 export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
@@ -537,13 +523,8 @@ function decode(str: string): string {
 }
 
 /**
- * Determine if value is a Date.
+ * URL-encode string value. Optimized to skip native call for roundtrip-safe cookie-octet values.
  */
-function isDate(val: any): val is Date {
-  return __toString.call(val) === "[object Date]";
+function defaultEncode(str: string): string {
+  return cookieOctetRegExp.test(str) ? str : encodeURIComponent(str);
 }
-
-/**
- * Backward compatibility exports.
- */
-export { stringifySetCookie as serialize, parseCookie as parse };

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import * as cookie from "./index.js";
-import top from "../scripts/top-cookie.json";
+import top from "../scripts/top-cookie.json" with { type: "json" };
 
 describe("cookie.parseCookie", function () {
   describe("parse top-sites", () => {
@@ -9,10 +9,6 @@ describe("cookie.parseCookie", function () {
         expect(cookie.parseCookie(value)).toMatchSnapshot();
       });
     });
-  });
-
-  it("should have backward compatible export", function () {
-    expect(cookie.parse).toBe(cookie.parseCookie);
   });
 
   it("should parse cookie string to object", function () {
