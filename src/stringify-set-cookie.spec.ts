@@ -230,6 +230,18 @@ describe("cookie.stringifySetCookie", () => {
         }),
       ).toEqual("foo=bar; HttpOnly; Secure; Partitioned");
     });
+
+    it("should not include disabled flags", () => {
+      expect(
+        stringifySetCookie({
+          name: "foo",
+          value: "bar",
+          httpOnly: false,
+          secure: false,
+          partitioned: false,
+        }),
+      ).toEqual("foo=bar");
+    });
   });
 
   describe('with "priority" option', () => {
