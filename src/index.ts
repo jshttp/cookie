@@ -87,7 +87,8 @@ export interface ParseOptions {
    *
    * The default function is the global `decodeURIComponent`, wrapped in a `try..catch`. If an error
    * is thrown it will return the cookie's original value. If you provide your own encode/decode
-   * scheme you must ensure errors are appropriately handled.
+   * scheme you must ensure errors are appropriately handled. Custom decode functions can return `undefined`,
+   * which will skip the cookie during `parse` and try again with a future cookie of the same name.
    *
    * @default decode
    */
@@ -293,24 +294,25 @@ export function stringifySetCookie(
   _val?: string | StringifyOptions,
   _opts?: SerializeOptions,
 ): string {
-  const cookie =
-    typeof _name === "object"
-      ? _name
-      : { ..._opts, name: _name, value: String(_val) };
+  const cookie = typeof _name === "object" ? _name : _opts;
+  const name = typeof _name === "object" ? _name.name : _name;
+  const rawValue = typeof _name === "object" ? _name.value : String(_val);
   const options = typeof _val === "object" ? _val : _opts;
   const enc = options?.encode || encodeURIComponent;
 
-  if (!cookieNameRegExp.test(cookie.name)) {
-    throw new TypeError(`argument name is invalid: ${cookie.name}`);
+  if (!cookieNameRegExp.test(name)) {
+    throw new TypeError(`argument name is invalid: ${name}`);
   }
 
-  const value = cookie.value ? enc(cookie.value) : "";
+  const value = rawValue ? enc(rawValue) : "";
 
   if (!cookieValueRegExp.test(value)) {
-    throw new TypeError(`argument val is invalid: ${cookie.value}`);
+    throw new TypeError(`argument val is invalid: ${rawValue}`);
   }
 
-  let str = cookie.name + "=" + value;
+  let str = name + "=" + value;
+
+  if (!cookie) return str;
 
   if (cookie.maxAge !== undefined) {
     if (!Number.isInteger(cookie.maxAge)) {
