@@ -10,4 +10,9 @@ describe("parse top-sites", () => {
       }
     });
   });
+
+  const semicolons = "a;".repeat(100_000);
+  bench("100k semicolons", () => {
+    cookie.parseSetCookie(semicolons);
+  });
 });

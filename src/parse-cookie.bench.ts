@@ -33,6 +33,11 @@ describe("cookie.parseCookie", () => {
   bench("100 cookies", () => {
     cookie.parseCookie(cookies100);
   });
+
+  const semicolons = ";".repeat(100_000);
+  bench("100k semicolons", () => {
+    cookie.parseCookie(semicolons);
+  });
 });
 
 describe("parse top-sites", () => {
