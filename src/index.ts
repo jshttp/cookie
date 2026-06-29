@@ -400,12 +400,12 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
   const endIdx = endIndex(str, 0, len);
   let eqIdx = eqIndex(str, 0, len);
   const setCookie: SetCookie =
-    eqIdx >= endIdx
-      ? { name: "", value: dec(valueSlice(str, 0, endIdx)) }
-      : {
+    eqIdx < endIdx
+      ? {
           name: valueSlice(str, 0, eqIdx),
           value: dec(valueSlice(str, eqIdx + 1, endIdx)),
-        };
+        }
+      : { name: "", value: dec(valueSlice(str, 0, endIdx)) };
 
   let index = endIdx + 1;
   while (index < len) {
