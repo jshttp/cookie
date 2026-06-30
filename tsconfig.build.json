@@ -1,4 +1,8 @@
 {
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": false,
+    "inlineSources": false
+  },
   "exclude": ["src/**/*.spec.ts", "src/**/*.bench.ts"]
 }
