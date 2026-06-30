@@ -1,6 +1,6 @@
 {
   "name": "cookie",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "HTTP server cookie parsing and serialization",
   "keywords": [
     "cookie",
