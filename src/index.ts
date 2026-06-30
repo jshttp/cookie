@@ -120,7 +120,7 @@ export function parseCookie(str: string, options?: ParseOptions): Cookies {
 
   do {
     const eqIdx = eqIndex(str, index, len);
-    if (eqIdx === -1) break; // No more cookie pairs.
+    if (eqIdx === len) break; // No more cookie pairs.
 
     const endIdx = endIndex(str, index, len);
 
@@ -398,24 +398,25 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
   const dec = options?.decode || decode;
   const len = str.length;
   const endIdx = endIndex(str, 0, len);
-  const eqIdx = eqIndex(str, 0, endIdx);
+  let eqIdx = eqIndex(str, 0, len);
   const setCookie: SetCookie =
-    eqIdx === -1
-      ? { name: "", value: dec(valueSlice(str, 0, endIdx)) }
-      : {
+    eqIdx < endIdx
+      ? {
           name: valueSlice(str, 0, eqIdx),
           value: dec(valueSlice(str, eqIdx + 1, endIdx)),
-        };
+        }
+      : { name: "", value: dec(valueSlice(str, 0, endIdx)) };
 
   let index = endIdx + 1;
   while (index < len) {
     const endIdx = endIndex(str, index, len);
-    const eqIdx = eqIndex(str, index, endIdx);
+    if (eqIdx < index) eqIdx = eqIndex(str, index, len);
+
     const attr =
-      eqIdx === -1
-        ? valueSlice(str, index, endIdx)
-        : valueSlice(str, index, eqIdx);
-    const val = eqIdx === -1 ? undefined : valueSlice(str, eqIdx + 1, endIdx);
+      eqIdx < endIdx
+        ? valueSlice(str, index, eqIdx)
+        : valueSlice(str, index, endIdx);
+    const val = eqIdx < endIdx ? valueSlice(str, eqIdx + 1, endIdx) : undefined;
 
     switch (attr.toLowerCase()) {
       case "httponly":
@@ -472,7 +473,7 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
 }
 
 /**
- * Find the `;` character between `min` and `len` in str.
+ * Find the next `;` character, or return `len`.
  */
 function endIndex(str: string, min: number, len: number) {
   const index = str.indexOf(";", min);
@@ -480,11 +481,11 @@ function endIndex(str: string, min: number, len: number) {
 }
 
 /**
- * Find the `=` character between `min` and `max` in str.
+ * Find the next `=` character, or return `len`.
  */
-function eqIndex(str: string, min: number, max: number) {
+function eqIndex(str: string, min: number, len: number) {
   const index = str.indexOf("=", min);
-  return index < max ? index : -1;
+  return index === -1 ? len : index;
 }
 
 /**
