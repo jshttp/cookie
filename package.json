@@ -53,5 +53,9 @@
   ],
   "ts-scripts": {
     "project": "tsconfig.build.json"
+  },
+  "homepage": "https://github.com/jshttp/cookie",
+  "bugs": {
+    "url": "https://github.com/jshttp/cookie/issues"
   }
 }
