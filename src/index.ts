@@ -29,6 +29,11 @@ const cookieNameRegExp = /^[\u0021-\u003A\u003C\u003E-\u007E]+$/;
 const cookieValueRegExp = /^[\u0021-\u003A\u003C-\u007E]*$/;
 
 /**
+ * RegExp to match invalid cookie values to be encoded, including `%` for roundtrip safety.
+ */
+const cookieOctetInvalidRegExp = /[\u0000-\u0020\u007F-\uFFFF",;\\%]/;
+
+/**
  * RegExp to match domain-value in RFC 6265 sec 4.1.1
  *
  * domain-value      = <subdomain>
@@ -67,11 +72,6 @@ const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
  * RegExp to match max-age-value in RFC 6265 sec 5.6.2
  */
 const maxAgeRegExp = /^-?\d+$/;
-
-/**
- * RegExp to match RFC 6265 cookie-octet values (without % to preserve roundtrip) that need no URL encoding.
- */
-const cookieOctetRegExp = /^[!#$&'()*+\-.\/0-9:<=>?@A-Z[\]\^_`a-z{|}~]*$/;
 
 const NullObject = /* @__PURE__ */ (() => {
   const C = function () {};
@@ -175,7 +175,7 @@ export function stringifyCookie(
 
     const value = enc(val);
 
-    if (!cookieValueRegExp.test(value)) {
+    if (enc !== defaultEncode && !cookieValueRegExp.test(value)) {
       throw new TypeError(`cookie val is invalid: ${val}`);
     }
 
@@ -294,7 +294,7 @@ export function stringifySetCookie(
 
   const value = cookie.value == null ? "" : enc(cookie.value);
 
-  if (!cookieValueRegExp.test(value)) {
+  if (enc !== defaultEncode && !cookieValueRegExp.test(value)) {
     throw new TypeError(`argument val is invalid: ${cookie.value}`);
   }
 
@@ -527,5 +527,5 @@ function decode(str: string): string {
  * URL-encode string value. Optimized to skip native call for roundtrip-safe cookie-octet values.
  */
 function defaultEncode(str: string): string {
-  return cookieOctetRegExp.test(str) ? str : encodeURIComponent(str);
+  return cookieOctetInvalidRegExp.test(str) ? encodeURIComponent(str) : str;
 }
