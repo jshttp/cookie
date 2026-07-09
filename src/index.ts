@@ -301,7 +301,7 @@ export function stringifySetCookie(
   let str = cookie.name + "=" + value;
 
   if (cookie.maxAge !== undefined) {
-    if (!Number.isInteger(cookie.maxAge)) {
+    if (!Number.isSafeInteger(cookie.maxAge)) {
       throw new TypeError(`option maxAge is invalid: ${cookie.maxAge}`);
     }
 

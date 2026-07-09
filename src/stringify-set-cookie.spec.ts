@@ -181,6 +181,7 @@ describe("cookie.stringifySetCookie", () => {
       ["non-number", "buzz"],
       ["Infinity", Infinity],
       ["non-integer", 3.14],
+      ["unsafe integer", 1e21],
     ])("should throw when maxAge is %s", (_label, maxAge) => {
       expect(() =>
         stringifySetCookie({ name: "foo", value: "bar", maxAge } as any),
