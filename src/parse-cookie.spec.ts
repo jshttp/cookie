@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, expectTypeOf } from "vitest";
 import * as cookie from "./index.js";
 import top from "../scripts/top-cookie.json" with { type: "json" };
 
@@ -120,6 +120,28 @@ describe("cookie.parseCookie", function () {
       ).toEqual({ foo: "baz" });
 
       expect(calls).toBe(2);
+    });
+  });
+
+  describe("types", function () {
+    it("should return Record<string, string> with the default decode", function () {
+      const result = cookie.parseCookie("foo=bar");
+      expectTypeOf(result).toEqualTypeOf<Record<string, string>>();
+      expectTypeOf(result.foo).toEqualTypeOf<string>();
+    });
+
+    it("should mirror a custom decode return type", function () {
+      const withNumber = cookie.parseCookie("foo=1", {
+        decode: (value: string) => Number(value),
+      });
+      expectTypeOf(withNumber).toEqualTypeOf<Record<string, number>>();
+
+      const withOptional = cookie.parseCookie("foo=bar", {
+        decode: (value: string) => (value === "bar" ? undefined : value),
+      });
+      expectTypeOf(withOptional).toEqualTypeOf<
+        Record<string, string | undefined>
+      >();
     });
   });
 });
