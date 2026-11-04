@@ -29,6 +29,11 @@ const cookieNameRegExp = /^[\u0021-\u003A\u003C\u003E-\u007E]+$/;
 const cookieValueRegExp = /^[\u0021-\u003A\u003C-\u007E]*$/;
 
 /**
+ * RegExp to match invalid cookie values to be encoded, including `%` for roundtrip safety.
+ */
+const cookieOctetInvalidRegExp = /[\u0000-\u0020\u007F-\uFFFF",;\\%]/;
+
+/**
  * RegExp to match domain-value in RFC 6265 sec 4.1.1
  *
  * domain-value      = <subdomain>
@@ -67,11 +72,6 @@ const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
  * RegExp to match max-age-value in RFC 6265 sec 5.6.2
  */
 const maxAgeRegExp = /^-?\d+$/;
-
-/**
- * RegExp to match RFC 6265 cookie-octet values (without % to preserve roundtrip) that need no URL encoding.
- */
-const cookieOctetRegExp = /^[!#$&'()*+\-.\/0-9:<=>?@A-Z[\]\^_`a-z{|}~]*$/;
 
 const NullObject = /* @__PURE__ */ (() => {
   const C = function () {};
@@ -115,7 +115,7 @@ export function parseCookie(str: string, options?: ParseOptions): Cookies {
   // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
   if (len < 2) return obj;
 
-  const dec = options?.decode || decode;
+  const dec = options?.decode ?? defaultDecode;
   let index = 0;
 
   do {
@@ -160,7 +160,7 @@ export function stringifyCookie(
   cookie: Cookies,
   options?: StringifyOptions,
 ): string {
-  const enc = options?.encode || defaultEncode;
+  const enc = options?.encode ?? defaultEncode;
   const keys = Object.keys(cookie);
   let str = "";
 
@@ -175,8 +175,8 @@ export function stringifyCookie(
 
     const value = enc(val);
 
-    if (!cookieValueRegExp.test(value)) {
-      throw new TypeError(`cookie val is invalid: ${val}`);
+    if (enc !== defaultEncode && !cookieValueRegExp.test(value)) {
+      throw new TypeError(`cookie value is invalid: ${val}`);
     }
 
     if (str) str += "; ";
@@ -208,6 +208,7 @@ export interface SetCookie {
   maxAge?: number;
   /**
    * Specifies the `Date` object to be the value for the [`Expires` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.1).
+   * When serializing, the UTC year must be between 1601 and 9999 inclusive.
    * When no expiration is set, clients consider this a "non-persistent cookie" and delete it when the current session is over.
    *
    * The [cookie storage model specification](https://tools.ietf.org/html/rfc6265#section-5.3) states that if both `expires` and
@@ -286,23 +287,23 @@ export function stringifySetCookie(
   cookie: SetCookie,
   options?: StringifyOptions,
 ): string {
-  const enc = options?.encode || defaultEncode;
+  const enc = options?.encode ?? defaultEncode;
 
   if (!cookieNameRegExp.test(cookie.name)) {
-    throw new TypeError(`argument name is invalid: ${cookie.name}`);
+    throw new TypeError(`cookie name is invalid: ${cookie.name}`);
   }
 
   const value = cookie.value == null ? "" : enc(cookie.value);
 
-  if (!cookieValueRegExp.test(value)) {
-    throw new TypeError(`argument val is invalid: ${cookie.value}`);
+  if (enc !== defaultEncode && !cookieValueRegExp.test(value)) {
+    throw new TypeError(`cookie value is invalid: ${cookie.value}`);
   }
 
   let str = cookie.name + "=" + value;
 
   if (cookie.maxAge !== undefined) {
     if (!Number.isSafeInteger(cookie.maxAge)) {
-      throw new TypeError(`option maxAge is invalid: ${cookie.maxAge}`);
+      throw new TypeError(`cookie maxAge is invalid: ${cookie.maxAge}`);
     }
 
     str += "; Max-Age=" + cookie.maxAge;
@@ -310,7 +311,7 @@ export function stringifySetCookie(
 
   if (cookie.domain) {
     if (!domainValueRegExp.test(cookie.domain)) {
-      throw new TypeError(`option domain is invalid: ${cookie.domain}`);
+      throw new TypeError(`cookie domain is invalid: ${cookie.domain}`);
     }
 
     str += "; Domain=" + cookie.domain;
@@ -318,15 +319,16 @@ export function stringifySetCookie(
 
   if (cookie.path) {
     if (!pathValueRegExp.test(cookie.path)) {
-      throw new TypeError(`option path is invalid: ${cookie.path}`);
+      throw new TypeError(`cookie path is invalid: ${cookie.path}`);
     }
 
     str += "; Path=" + cookie.path;
   }
 
   if (cookie.expires) {
-    if (!Number.isFinite(cookie.expires.valueOf())) {
-      throw new TypeError(`option expires is invalid: ${cookie.expires}`);
+    const year = cookie.expires.getUTCFullYear();
+    if (!(year >= 1601 && year <= 9999)) {
+      throw new TypeError(`cookie expires is invalid: ${cookie.expires}`);
     }
 
     str += "; Expires=" + cookie.expires.toUTCString();
@@ -360,7 +362,7 @@ export function stringifySetCookie(
         str += "; Priority=High";
         break;
       default:
-        throw new TypeError(`option priority is invalid: ${cookie.priority}`);
+        throw new TypeError(`cookie priority is invalid: ${cookie.priority}`);
     }
   }
 
@@ -381,7 +383,7 @@ export function stringifySetCookie(
         str += "; SameSite=None";
         break;
       default:
-        throw new TypeError(`option sameSite is invalid: ${cookie.sameSite}`);
+        throw new TypeError(`cookie sameSite is invalid: ${cookie.sameSite}`);
     }
   }
 
@@ -395,7 +397,7 @@ export function stringifySetCookie(
  *   => { name: 'foo', value: 'bar', httpOnly: true }
  */
 export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
-  const dec = options?.decode || decode;
+  const dec = options?.decode ?? defaultDecode;
   const len = str.length;
   const endIdx = endIndex(str, 0, len);
   let eqIdx = eqIndex(str, 0, len);
@@ -513,7 +515,7 @@ function valueSlice(str: string, min: number, max: number) {
 /**
  * URL-decode string value. Optimized to skip native call when no %.
  */
-function decode(str: string): string {
+function defaultDecode(str: string): string {
   if (str.indexOf("%") === -1) return str;
 
   try {
@@ -527,5 +529,5 @@ function decode(str: string): string {
  * URL-encode string value. Optimized to skip native call for roundtrip-safe cookie-octet values.
  */
 function defaultEncode(str: string): string {
-  return cookieOctetRegExp.test(str) ? str : encodeURIComponent(str);
+  return cookieOctetInvalidRegExp.test(str) ? encodeURIComponent(str) : str;
 }
