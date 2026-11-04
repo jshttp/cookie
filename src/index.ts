@@ -80,9 +80,14 @@ const NullObject = /* @__PURE__ */ (() => {
 })() as unknown as { new (): any };
 
 /**
+ * Cookie value decoder.
+ */
+export type Decoder = (str: string) => unknown;
+
+/**
  * Parse options.
  */
-export interface ParseOptions {
+export interface ParseOptions<Dec extends Decoder = (str: string) => string> {
   /**
    * Specifies a function that will be used to decode a [cookie-value](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1).
    * Since the value of a cookie has a limited character set (and must be a simple string), this function can be used to decode
@@ -95,13 +100,17 @@ export interface ParseOptions {
    *
    * @default decode
    */
-  decode?: (str: string) => string | undefined;
+  decode?: Dec;
 }
 
 /**
  * Cookies object.
+ *
+ * With the default decoder, values are always strings. When a custom `decode`
+ * can return other types (including `undefined`), the return type of
+ * `parseCookie` mirrors that decoder via generics.
  */
-export type Cookies = Record<string, string | undefined>;
+export type Cookies<V = string> = Record<string, V>;
 
 /**
  * Parse a `Cookie` header.
@@ -109,13 +118,16 @@ export type Cookies = Record<string, string | undefined>;
  * Parse the given cookie header string into an object
  * The object has the various cookies as keys(names) => values
  */
-export function parseCookie(str: string, options?: ParseOptions): Cookies {
-  const obj: Cookies = new NullObject();
+export function parseCookie<Dec extends Decoder = (str: string) => string>(
+  str: string,
+  options?: ParseOptions<Dec>,
+): Cookies<ReturnType<Dec>> {
+  const obj: Cookies<ReturnType<Dec>> = new NullObject();
   const len = str.length;
   // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
   if (len < 2) return obj;
 
-  const dec = options?.decode || decode;
+  const dec = (options?.decode || decode) as Dec;
   let index = 0;
 
   do {
@@ -134,7 +146,7 @@ export function parseCookie(str: string, options?: ParseOptions): Cookies {
 
     // only assign once
     if (obj[key] === undefined) {
-      obj[key] = dec(valueSlice(str, eqIdx + 1, endIdx));
+      obj[key] = dec(valueSlice(str, eqIdx + 1, endIdx)) as ReturnType<Dec>;
     }
 
     index = endIdx + 1;
@@ -157,7 +169,7 @@ export interface StringifyOptions {
  * Stringifies an object into an HTTP `Cookie` header.
  */
 export function stringifyCookie(
-  cookie: Cookies,
+  cookie: Cookies<string | undefined>,
   options?: StringifyOptions,
 ): string {
   const enc = options?.encode || defaultEncode;
