@@ -208,6 +208,7 @@ export interface SetCookie {
   maxAge?: number;
   /**
    * Specifies the `Date` object to be the value for the [`Expires` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.1).
+   * When serializing, the UTC year must be between 1601 and 9999 inclusive.
    * When no expiration is set, clients consider this a "non-persistent cookie" and delete it when the current session is over.
    *
    * The [cookie storage model specification](https://tools.ietf.org/html/rfc6265#section-5.3) states that if both `expires` and
@@ -325,7 +326,8 @@ export function stringifySetCookie(
   }
 
   if (cookie.expires) {
-    if (!Number.isFinite(cookie.expires.valueOf())) {
+    const year = cookie.expires.getUTCFullYear();
+    if (!(year >= 1601 && year <= 9999)) {
       throw new TypeError(`cookie expires is invalid: ${cookie.expires}`);
     }
 
