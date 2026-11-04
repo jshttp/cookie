@@ -110,7 +110,7 @@ describe("cookie.stringifyCookie", () => {
 
   it("should error on invalid values", () => {
     expect(() => stringifyCookie({ test: ";" }, { encode: (x) => x })).toThrow(
-      /cookie val is invalid/,
+      /cookie value is invalid/,
     );
   });
 
@@ -154,7 +154,7 @@ describe("cookie.stringifyCookie", () => {
     it("should throw when custom encoder produces invalid value", () => {
       expect(() =>
         stringifyCookie({ foo: "bar" }, { encode: () => "invalid value" }),
-      ).toThrow(/cookie val is invalid/);
+      ).toThrow(/cookie value is invalid/);
     });
   });
 
