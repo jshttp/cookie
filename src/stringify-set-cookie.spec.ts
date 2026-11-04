@@ -82,7 +82,7 @@ describe("cookie.stringifySetCookie", () => {
     ["foo\tbar"],
   ])("should throw for invalid name: %s", (name) => {
     expect(() => stringifySetCookie({ name, value: "bar" })).toThrow(
-      /argument name is invalid/,
+      /cookie name is invalid/,
     );
   });
 
@@ -110,7 +110,7 @@ describe("cookie.stringifySetCookie", () => {
     ])("should throw for invalid domain: %s", (domain) => {
       expect(() =>
         stringifySetCookie({ name: "foo", value: "bar", domain }),
-      ).toThrow(/option domain is invalid/);
+      ).toThrow(/cookie domain is invalid/);
     });
   });
 
@@ -149,7 +149,7 @@ describe("cookie.stringifySetCookie", () => {
       (value) => {
         expect(() =>
           stringifySetCookie({ name: "foo", value }, { encode: (x) => x }),
-        ).toThrow(/argument val is invalid/);
+        ).toThrow(/cookie value is invalid/);
       },
     );
   });
@@ -162,7 +162,7 @@ describe("cookie.stringifySetCookie", () => {
           value: "bar",
           expires: new Date(NaN),
         }),
-      ).toThrow(/option expires is invalid/);
+      ).toThrow(/cookie expires is invalid/);
     });
 
     it.each([-1, 0, 49, 50, 69, 99, 1600, 10000])(
@@ -172,7 +172,7 @@ describe("cookie.stringifySetCookie", () => {
         expires.setUTCFullYear(year);
         expect(() =>
           stringifySetCookie({ name: "foo", value: "bar", expires }),
-        ).toThrow(/option expires is invalid/);
+        ).toThrow(/cookie expires is invalid/);
       },
     );
 
@@ -206,7 +206,7 @@ describe("cookie.stringifySetCookie", () => {
     ])("should throw when maxAge is %s", (_label, maxAge) => {
       expect(() =>
         stringifySetCookie({ name: "foo", value: "bar", maxAge } as any),
-      ).toThrow(/option maxAge is invalid/);
+      ).toThrow(/cookie maxAge is invalid/);
     });
 
     it("should set max-age to value", () => {
@@ -245,7 +245,7 @@ describe("cookie.stringifySetCookie", () => {
     ])("should throw for invalid path: %s", (path) => {
       expect(() =>
         stringifySetCookie({ name: "foo", value: "bar", path }),
-      ).toThrow(/option path is invalid/);
+      ).toThrow(/cookie path is invalid/);
     });
   });
 
@@ -282,7 +282,7 @@ describe("cookie.stringifySetCookie", () => {
     ])("should throw on %s", (_label, priority) => {
       expect(() =>
         stringifySetCookie({ name: "foo", value: "bar", priority } as any),
-      ).toThrow(/option priority is invalid/);
+      ).toThrow(/cookie priority is invalid/);
     });
 
     it.each([
@@ -309,7 +309,7 @@ describe("cookie.stringifySetCookie", () => {
           value: "bar",
           sameSite: "foo" as any,
         }),
-      ).toThrow(/option sameSite is invalid/);
+      ).toThrow(/cookie sameSite is invalid/);
     });
 
     it.each([
