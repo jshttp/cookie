@@ -442,7 +442,8 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
       case "expires":
         if (!val) break;
         const date = new Date(val);
-        if (Number.isFinite(date.valueOf())) setCookie.expires = date;
+        const year = date.getUTCFullYear();
+        if (year >= 1601 && year <= 9999) setCookie.expires = date;
         break;
       case "priority":
         if (!val) break;

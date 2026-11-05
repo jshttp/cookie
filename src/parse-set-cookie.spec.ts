@@ -132,6 +132,42 @@ describe("cookie.parseSetCookie", () => {
         value: "value",
       });
     });
+
+    it.each([1500, 1600, 10000])(
+      "should ignore expires outside cookie year bounds: %s",
+      (year) => {
+        const expires = new Date(0);
+        expires.setUTCFullYear(year);
+        expect(
+          parseSetCookie(`key=value; Expires=${expires.toUTCString()}; Path=/`),
+        ).toEqual({ name: "key", value: "value", path: "/" });
+      },
+    );
+
+    it.each([1500, 1600, 10000])(
+      "should keep a valid expires when a later year %s is invalid",
+      (year) => {
+        const invalid = new Date(0);
+        invalid.setUTCFullYear(year);
+        const expires = new Date("Wed, 21 Oct 2015 07:28:00 GMT");
+        expect(
+          parseSetCookie(
+            `key=value; Expires=${expires.toUTCString()}; Expires=${invalid.toUTCString()}`,
+          ),
+        ).toEqual({ name: "key", value: "value", expires });
+      },
+    );
+
+    it.each([1601, 9999])(
+      "should preserve expires at the supported year boundary %s",
+      (year) => {
+        const expires = new Date(0);
+        expires.setUTCFullYear(year);
+        expect(
+          parseSetCookie(`key=value; Expires=${expires.toUTCString()}`),
+        ).toEqual({ name: "key", value: "value", expires });
+      },
+    );
   });
 
   describe('with "max-age"', () => {
