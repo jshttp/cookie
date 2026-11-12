@@ -1,4 +1,12 @@
 /**
+ * Bounds for the `Expires` attribute year, per RFC 6265bis. Dates outside
+ * these bounds are clamped to the closest bound on serialization, matching
+ * the year clamping the specification's cookie-date algorithm applies.
+ */
+const MIN_COOKIE_EXPIRES_DATE = new Date("1601-01-01T00:00:00.000Z");
+const MAX_COOKIE_EXPIRES_DATE = new Date("9999-12-31T23:59:59.999Z");
+
+/**
  * RegExp to match cookie-name in RFC 6265 sec 4.1.1
  * This refers out to the obsoleted definition of token in RFC 2616 sec 2.2
  * which has been replaced by the token definition in RFC 7230 appendix B.
@@ -208,7 +216,7 @@ export interface SetCookie {
   maxAge?: number;
   /**
    * Specifies the `Date` object to be the value for the [`Expires` `Set-Cookie` attribute](https://tools.ietf.org/html/rfc6265#section-5.2.1).
-   * When serializing, the UTC year must be between 1601 and 9999 inclusive.
+   * When serializing, dates with a UTC year outside 1601–9999 are clamped to the nearest bound.
    * When no expiration is set, clients consider this a "non-persistent cookie" and delete it when the current session is over.
    *
    * The [cookie storage model specification](https://tools.ietf.org/html/rfc6265#section-5.3) states that if both `expires` and
@@ -326,12 +334,24 @@ export function stringifySetCookie(
   }
 
   if (cookie.expires) {
-    const year = cookie.expires.getUTCFullYear();
-    if (!(year >= 1601 && year <= 9999)) {
+    const time = cookie.expires.getTime();
+
+    if (Number.isNaN(time)) {
       throw new TypeError(`cookie expires is invalid: ${cookie.expires}`);
     }
 
-    str += "; Expires=" + cookie.expires.toUTCString();
+    // Clamp out-of-range dates to the closest representable bound instead of
+    // throwing. This mirrors the year clamping the cookie-date algorithm in
+    // RFC 6265bis applies and how user agents treat dates they cannot
+    // represent. See https://github.com/jshttp/cookie/issues/293.
+    const expires =
+      time > MAX_COOKIE_EXPIRES_DATE.getTime()
+        ? MAX_COOKIE_EXPIRES_DATE
+        : time < MIN_COOKIE_EXPIRES_DATE.getTime()
+          ? MIN_COOKIE_EXPIRES_DATE
+          : cookie.expires;
+
+    str += "; Expires=" + expires.toUTCString();
   }
 
   if (cookie.httpOnly) {

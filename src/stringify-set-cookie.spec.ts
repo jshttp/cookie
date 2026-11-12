@@ -165,16 +165,24 @@ describe("cookie.stringifySetCookie", () => {
       ).toThrow(/cookie expires is invalid/);
     });
 
-    it.each([-1, 0, 49, 50, 69, 99, 1600, 10000])(
-      "should reject expires with UTC year %s outside cookie bounds",
+    it.each([-1, 0, 49, 50, 69, 99, 1600])(
+      "should clamp expires with UTC year %s below cookie bounds to 1601-01-01",
       (year) => {
         const expires = new Date(0);
         expires.setUTCFullYear(year);
-        expect(() =>
-          stringifySetCookie({ name: "foo", value: "bar", expires }),
-        ).toThrow(/cookie expires is invalid/);
+        expect(stringifySetCookie({ name: "foo", value: "bar", expires })).toBe(
+          "foo=bar; Expires=Mon, 01 Jan 1601 00:00:00 GMT",
+        );
       },
     );
+
+    it("should clamp expires with UTC year above cookie bounds to 9999-12-31", () => {
+      const expires = new Date(0);
+      expires.setUTCFullYear(10000);
+      expect(stringifySetCookie({ name: "foo", value: "bar", expires })).toBe(
+        "foo=bar; Expires=Fri, 31 Dec 9999 23:59:59 GMT",
+      );
+    });
 
     it.each([1601, 1970, 9999])(
       "should preserve expires with supported UTC year %s",
