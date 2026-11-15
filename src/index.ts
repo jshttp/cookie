@@ -73,6 +73,21 @@ const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
  */
 const maxAgeRegExp = /^-?\d+$/;
 
+/**
+ * RegExp to match a delimiter in the cookie-date grammar in RFC 6265 sec 5.1.1
+ *
+ * delimiter         = %x09 / %x20-2F / %x3B-40 / %x5B-60 / %x7B-7E
+ */
+const cookieDateDelimiterRegExp = /[\t -\/;-@[-`{-~]+/;
+
+/**
+ * RegExp to match hms-time in RFC 6265 sec 5.1.1
+ *
+ * hms-time          = time-field ":" time-field ":" time-field
+ * time-field        = 1*2DIGIT
+ */
+const cookieTimeRegExp = /^(\d\d?):(\d\d?):(\d\d?)(?!\d)/;
+
 const NullObject = /* @__PURE__ */ (() => {
   const C = function () {};
   C.prototype = Object.create(null);
@@ -441,8 +456,8 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
         break;
       case "expires":
         if (!val) break;
-        const date = new Date(val);
-        if (Number.isFinite(date.valueOf())) setCookie.expires = date;
+        const date = parseCookieDate(val);
+        if (date) setCookie.expires = date;
         break;
       case "priority":
         if (!val) break;
@@ -472,6 +487,46 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
   }
 
   return setCookie;
+}
+
+/**
+ * Parse a cookie date per RFC 6265 sec 5.1.1. Unlike `Date` string parsing,
+ * the result does not depend on the JS engine or the local time zone.
+ */
+function parseCookieDate(str: string): Date | undefined {
+  let time: RegExpExecArray | null | undefined;
+  let day: number | undefined;
+  let month: number | undefined;
+  let year: number | undefined;
+
+  for (const token of str.split(cookieDateDelimiterRegExp)) {
+    if (!time && (time = cookieTimeRegExp.exec(token))) continue;
+
+    const digits = /^\d*/.exec(token)![0].length;
+    const index = "janfebmaraprmayjunjulaugsepoctnovdec".indexOf(
+      token.slice(0, 3).toLowerCase(),
+    );
+
+    if (day === undefined && digits && digits < 3) {
+      day = parseInt(token, 10);
+    } else if (month === undefined && token.length > 2 && !(index % 3)) {
+      month = index / 3;
+    } else if (year === undefined && digits > 1 && digits < 5) {
+      year = parseInt(token, 10);
+      if (year < 70) year += 2000;
+      else if (year < 100) year += 1900;
+    }
+  }
+
+  if (!time || !day || month === undefined || !year || year < 1601) return;
+
+  const hours = +time[1];
+  const minutes = +time[2];
+  const seconds = +time[3];
+  if (hours > 23 || minutes > 59 || seconds > 59) return;
+
+  const date = new Date(Date.UTC(year, month, day, hours, minutes, seconds));
+  if (date.getUTCDate() === day) return date;
 }
 
 /**
