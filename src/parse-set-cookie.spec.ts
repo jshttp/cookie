@@ -132,6 +132,59 @@ describe("cookie.parseSetCookie", () => {
         value: "value",
       });
     });
+
+    it.each([
+      ["Wed, 21 Oct 2015 07:28:00 GMT", Date.UTC(2015, 9, 21, 7, 28, 0)],
+      ["Wed, 21-Oct-2015 07:28:00 GMT", Date.UTC(2015, 9, 21, 7, 28, 0)],
+      ["Wednesday, 21-Oct-15 07:28:00 GMT", Date.UTC(2015, 9, 21, 7, 28, 0)],
+      ["Sun, 06 Nov 94 08:49:37 GMT", Date.UTC(1994, 10, 6, 8, 49, 37)],
+      ["Thu, 01-Jan-70 00:00:01 GMT", Date.UTC(1970, 0, 1, 0, 0, 1)],
+      ["Sun Nov  6 08:49:37 1994", Date.UTC(1994, 10, 6, 8, 49, 37)],
+      ["21 october 2015 7:8:9", Date.UTC(2015, 9, 21, 7, 8, 9)],
+      ["Tue, 31 Dec 9999 23:59:59 GMT", Date.UTC(9999, 11, 31, 23, 59, 59)],
+    ])("should parse cookie date %j", (expires, time) => {
+      expect(parseSetCookie(`key=value; Expires=${expires}`)).toEqual({
+        name: "key",
+        value: "value",
+        expires: new Date(time),
+      });
+    });
+
+    it.each([
+      "1",
+      "2015",
+      "Oct 2015",
+      "21 Oct 2015",
+      "2015-10-21T07:28:00Z",
+      "Wed, 30 Feb 2015 07:28:00 GMT",
+      "Wed, 21 Oct 2015 24:00:00 GMT",
+      "Wed, 21 Oct 2015 07:60:00 GMT",
+      "Wed, 32 Oct 2015 07:28:00 GMT",
+      "Wed, 21 Oct 1600 07:28:00 GMT",
+    ])("should ignore expires that is not a cookie date: %j", (expires) => {
+      expect(parseSetCookie(`key=value; Expires=${expires}`)).toEqual({
+        name: "key",
+        value: "value",
+      });
+    });
+
+    it("should read expires as UTC whatever the local time zone", () => {
+      const tz = process.env.TZ;
+      process.env.TZ = "America/New_York";
+
+      try {
+        expect(
+          parseSetCookie("key=value; Expires=Wed, 21 Oct 2015 07:28:00"),
+        ).toEqual({
+          name: "key",
+          value: "value",
+          expires: new Date(Date.UTC(2015, 9, 21, 7, 28, 0)),
+        });
+      } finally {
+        if (tz === undefined) delete process.env.TZ;
+        else process.env.TZ = tz;
+      }
+    });
   });
 
   describe('with "max-age"', () => {
