@@ -116,21 +116,171 @@ describe("cookie.parseSetCookie", () => {
   });
 
   describe("with expires", () => {
-    it("should parse valid expires date", () => {
+    it("should parse valid RFC 1123 expires date", () => {
       expect(
         parseSetCookie("key=value; Expires=Wed, 21 Oct 2015 07:28:00 GMT"),
       ).toEqual({
         name: "key",
         value: "value",
-        expires: new Date("Wed, 21 Oct 2015 07:28:00 GMT"),
+        expires: new Date(Date.UTC(2015, 9, 21, 7, 28, 0)),
       });
     });
 
-    it("should ignore invalid expires date", () => {
+    it("should parse valid RFC 850 expires date with 2-digit year (0-69)", () => {
+      expect(
+        parseSetCookie("key=value; Expires=Wednesday, 21-Oct-15 07:28:00 GMT"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+        expires: new Date(Date.UTC(2015, 9, 21, 7, 28, 0)),
+      });
+    });
+
+    it("should parse valid RFC 850 expires date with 2-digit year (70-99)", () => {
+      expect(
+        parseSetCookie("key=value; Expires=Wednesday, 21-Oct-85 07:28:00 GMT"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+        expires: new Date(Date.UTC(1985, 9, 21, 7, 28, 0)),
+      });
+    });
+
+    it("should parse valid asctime expires date", () => {
+      expect(
+        parseSetCookie("key=value; Expires=Wed Oct 21 07:28:00 2015"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+        expires: new Date(Date.UTC(2015, 9, 21, 7, 28, 0)),
+      });
+    });
+
+    it("should parse valid asctime expires date with extra space for single-digit day", () => {
+      expect(
+        parseSetCookie("key=value; Expires=Wed Oct  7 07:28:00 2015"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+        expires: new Date(Date.UTC(2015, 9, 7, 7, 28, 0)),
+      });
+    });
+
+    it("should parse valid leap year date (Feb 29)", () => {
+      expect(
+        parseSetCookie("key=value; Expires=Sat, 29 Feb 2020 00:00:00 GMT"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+        expires: new Date(Date.UTC(2020, 1, 29, 0, 0, 0)),
+      });
+    });
+
+    it("should ignore invalid numbers and non-dates", () => {
+      expect(parseSetCookie("key=value; Expires=1")).toEqual({
+        name: "key",
+        value: "value",
+      });
+      expect(parseSetCookie("key=value; Expires=2015")).toEqual({
+        name: "key",
+        value: "value",
+      });
       expect(parseSetCookie("key=value; Expires=InvalidDate")).toEqual({
         name: "key",
         value: "value",
       });
+      expect(parseSetCookie("key=value; Expires=")).toEqual({
+        name: "key",
+        value: "value",
+      });
+    });
+
+    it("should ignore calendar dates that do not exist", () => {
+      // 30 Feb 2015 does not exist
+      expect(
+        parseSetCookie("key=value; Expires=Wed, 30 Feb 2015 07:28:00 GMT"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+      });
+      // 29 Feb 2019 is not a leap year
+      expect(
+        parseSetCookie("key=value; Expires=Fri, 29 Feb 2019 07:28:00 GMT"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+      });
+      // 31 Nov 2015 does not exist (Nov has 30 days)
+      expect(
+        parseSetCookie("key=value; Expires=Wed, 31 Nov 2015 07:28:00 GMT"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+      });
+    });
+
+    it("should ignore out-of-range dates according to RFC 6265", () => {
+      // year < 1601
+      expect(
+        parseSetCookie("key=value; Expires=Wed, 21 Oct 1600 07:28:00 GMT"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+      });
+      // day < 1
+      expect(
+        parseSetCookie("key=value; Expires=Wed, 00 Oct 2015 07:28:00 GMT"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+      });
+      // day > 31
+      expect(
+        parseSetCookie("key=value; Expires=Wed, 32 Oct 2015 07:28:00 GMT"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+      });
+      // hour > 23
+      expect(
+        parseSetCookie("key=value; Expires=Wed, 21 Oct 2015 24:00:00 GMT"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+      });
+      // minute > 59
+      expect(
+        parseSetCookie("key=value; Expires=Wed, 21 Oct 2015 07:60:00 GMT"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+      });
+      // second > 59
+      expect(
+        parseSetCookie("key=value; Expires=Wed, 21 Oct 2015 07:28:60 GMT"),
+      ).toEqual({
+        name: "key",
+        value: "value",
+      });
+    });
+
+    it("should generate proper UTC timestamp regardless of local timezone", () => {
+      const parsed = parseSetCookie(
+        "key=value; Expires=Wed, 21 Oct 2015 07:28:00 GMT",
+      );
+      expect(parsed.expires?.getTime()).toBe(Date.UTC(2015, 9, 21, 7, 28, 0));
+      expect(parsed.expires?.toISOString()).toBe("2015-10-21T07:28:00.000Z");
+
+      // RFC 6265 parses in UTC even when GMT timezone token is absent
+      const parsedNoZone = parseSetCookie(
+        "key=value; Expires=21 Oct 2015 07:28:00",
+      );
+      expect(parsedNoZone.expires?.getTime()).toBe(
+        Date.UTC(2015, 9, 21, 7, 28, 0),
+      );
+      expect(parsedNoZone.expires?.toISOString()).toBe(
+        "2015-10-21T07:28:00.000Z",
+      );
     });
   });
 

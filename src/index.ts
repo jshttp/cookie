@@ -73,6 +73,44 @@ const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
  */
 const maxAgeRegExp = /^-?\d+$/;
 
+/**
+ * RegExp to match cookie-date delimiters in RFC 6265 sec 5.1.1.
+ */
+const dateDelimRegExp = /[^\t\x20-\x2f\x3b-\x40\x5b-\x60\x7b-\x7e]+/g;
+
+/**
+ * RegExp to match time in RFC 6265 sec 5.1.1.
+ */
+const timeRegExp = /^(\d{1,2}):(\d{1,2}):(\d{1,2})(?!\d)/;
+
+/**
+ * RegExp to match day-of-month in RFC 6265 sec 5.1.1.
+ */
+const dayOfMonthRegExp = /^(\d{1,2})(?!\d)/;
+
+/**
+ * RegExp to match year in RFC 6265 sec 5.1.1.
+ */
+const yearRegExp = /^(\d{2,4})(?!\d)/;
+
+/**
+ * Month names for RFC 6265 sec 5.1.1.
+ */
+const monthNames = [
+  "jan",
+  "feb",
+  "mar",
+  "apr",
+  "may",
+  "jun",
+  "jul",
+  "aug",
+  "sep",
+  "oct",
+  "nov",
+  "dec",
+];
+
 const NullObject = /* @__PURE__ */ (() => {
   const C = function () {};
   C.prototype = Object.create(null);
@@ -441,8 +479,8 @@ export function parseSetCookie(str: string, options?: ParseOptions): SetCookie {
         break;
       case "expires":
         if (!val) break;
-        const date = new Date(val);
-        if (Number.isFinite(date.valueOf())) setCookie.expires = date;
+        const date = parseDate(val);
+        if (date) setCookie.expires = date;
         break;
       case "priority":
         if (!val) break;
@@ -530,4 +568,91 @@ function defaultDecode(str: string): string {
  */
 function defaultEncode(str: string): string {
   return cookieOctetInvalidRegExp.test(str) ? encodeURIComponent(str) : str;
+}
+
+/**
+ * Parse a cookie date string according to RFC 6265 Section 5.1.1.
+ */
+function parseDate(str: string): Date | undefined {
+  const tokens = str.match(dateDelimRegExp);
+  if (!tokens) return;
+
+  let hour: number | undefined;
+  let minute: number | undefined;
+  let second: number | undefined;
+  let day: number | undefined;
+  let month: number | undefined;
+  let year: number | undefined;
+
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+
+    if (hour === undefined) {
+      const match = timeRegExp.exec(token);
+      if (match) {
+        hour = Number(match[1]);
+        minute = Number(match[2]);
+        second = Number(match[3]);
+        continue;
+      }
+    }
+
+    if (day === undefined) {
+      const match = dayOfMonthRegExp.exec(token);
+      if (match) {
+        day = Number(match[1]);
+        continue;
+      }
+    }
+
+    if (month === undefined) {
+      const idx = monthNames.indexOf(token.slice(0, 3).toLowerCase());
+      if (idx !== -1) {
+        month = idx;
+        continue;
+      }
+    }
+
+    if (year === undefined) {
+      const match = yearRegExp.exec(token);
+      if (match) {
+        year = Number(match[1]);
+        continue;
+      }
+    }
+  }
+
+  if (
+    hour === undefined ||
+    day === undefined ||
+    month === undefined ||
+    year === undefined
+  ) {
+    return;
+  }
+
+  if (year >= 70 && year <= 99) year += 1900;
+  else if (year >= 0 && year <= 69) year += 2000;
+
+  if (
+    day < 1 ||
+    day > 31 ||
+    year < 1601 ||
+    hour > 23 ||
+    minute! > 59 ||
+    second! > 59
+  ) {
+    return;
+  }
+
+  const date = new Date(Date.UTC(year, month, day, hour, minute, second));
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month ||
+    date.getUTCDate() !== day
+  ) {
+    return;
+  }
+
+  return date;
 }
